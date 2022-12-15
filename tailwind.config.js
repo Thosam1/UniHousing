@@ -1,7 +1,15 @@
 module.exports = {
-  content: ["./**/*.tsx"], // so that tailwind can target and be used on all tsx files
+  content: ["./components/*.tsx", "./screens/*.tsx"], // so that tailwind can target and be used on all tsx files
   theme: {
-    fontFamily:{},
+
+    fontFamily: {
+      // 'sans': ['ui-sans-serif', 'system-ui'],
+      // 'serif': ['ui-serif', 'Georgia'],
+      // 'mono': ['ui-monospace', 'SFMono-Regular'],
+      // 'display': ['Oswald', 'Georgia'],
+      // 'body': ['"Open Sans"'],
+    },
+
     extend: {
       colors: {
         'button_primary': '#307ff4',
@@ -22,6 +30,9 @@ module.exports = {
         'text_subtitle' : '#96969a'
 
 
+      },
+      fontFamily:{
+        'satoshi': ['Satoshi'],
       },
     },
   },

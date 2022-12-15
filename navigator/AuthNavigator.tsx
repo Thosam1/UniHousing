@@ -31,6 +31,7 @@ const AuthNavigator = () => {
         component={IntroductionScreen}
         options={{
           title: "Introduction",
+          headerShown: false,
         }}
       />
       <AuthStack.Screen
@@ -38,6 +39,7 @@ const AuthNavigator = () => {
         component={SignInScreen}
         options={{
           title: "Sign in",
+          headerShown: false,
           // When logging out, a pop animation feels intuitive
           // You can remove this if you want the default 'push' animation
           //   animationTypeForReplace: authData ? "pop" : "push",
@@ -48,6 +50,7 @@ const AuthNavigator = () => {
         component={SignUpScreen}
         options={{
           title: "Sign up",
+          headerShown: false,
         }}
       />
 
@@ -56,6 +59,7 @@ const AuthNavigator = () => {
         component={EmailVerificationScreen}
         options={{
           title: "Email Verification",
+          headerShown: false,
         }}
       />
       <AuthStack.Screen
@@ -63,6 +67,7 @@ const AuthNavigator = () => {
         component={ForgotPasswordScreen}
         options={{
           title: "Forgot Password",
+          headerShown: false,
         }}
       />
       <AuthStack.Screen
@@ -70,6 +75,7 @@ const AuthNavigator = () => {
         component={ResetPasswordScreen}
         options={{
           title: "Reset Password",
+          headerShown: false,
         }}
       />
       <AuthStack.Screen
@@ -77,6 +83,7 @@ const AuthNavigator = () => {
         component={SplashScreen}
         options={{
           title: "Splash Screen",
+          headerShown: false,
         }}
       />
     </AuthStack.Navigator>
