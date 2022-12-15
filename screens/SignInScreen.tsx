@@ -33,7 +33,7 @@ const SignInScreen = () => {
   // method when signing in
   const login = () => {
     Keyboard.dismiss();
-  }
+  };
 
   const switchToSignUp = () => {
     Keyboard.dismiss();
@@ -42,9 +42,9 @@ const SignInScreen = () => {
   };
 
   const resetAllFields = () => {
-    setEmail("")
-    setPassword("")
-  }
+    setEmail("");
+    setPassword("");
+  };
 
   return (
     <KeyboardAvoidingView

@@ -44,7 +44,7 @@ const IntroductionScreen = () => {
           studies, we are here to help you get a room for your budget
         </Text>
 
-        <Button title="Get Started" color="#307ff4" style={[tw("py-2 px-4"), { width: 400 }]} onPress={switchToSignIn}  />
+        <Button title="Get Started" style={[tw("py-2 px-4"), { width: 400 }]} onPress={switchToSignIn}  />
 
         <Text style={[tw("text-center py-2"), { fontSize: 15 }]}>
           Don't have an account ? <Text onPress={switchToSignUp} style={{ color: '#19e266' }}>Sign Up</Text>
