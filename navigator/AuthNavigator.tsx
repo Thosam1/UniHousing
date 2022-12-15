@@ -7,6 +7,7 @@ import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 import SplashScreen from "../screens/SplashScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import IntroductionScreen from "../screens/IntroductionScreen";
+import SignUpScreen from "../screens/SignUpScreen";
 
 // type definitions
 export type AuthStackParamList = {
@@ -44,7 +45,7 @@ const AuthNavigator = () => {
       />
       <AuthStack.Screen
         name="SignUp"
-        component={SignInScreen}
+        component={SignUpScreen}
         options={{
           title: "Sign up",
         }}
