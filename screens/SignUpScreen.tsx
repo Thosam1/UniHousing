@@ -17,6 +17,9 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "../navigator/AuthNavigator";
 import { Button, Image } from "@rneui/themed";
 
+import { validateRegister } from "../utils/client_side_validation/auth_validation";
+import Toast from "react-native-toast-message";
+
 type IntroductionSignUpScreenNavigationProp =
   NativeStackNavigationProp<AuthStackParamList>;
 
@@ -24,14 +27,49 @@ const SignUpScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<IntroductionSignUpScreenNavigationProp>();
 
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [loading, isLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // method when signing in
   const register = () => {
+    setLoading(true);
     Keyboard.dismiss();
+
+    // Perform client-side verification
+    const clientRegisterValidation: [boolean, string] = validateRegister(
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword
+    );
+
+    if (clientRegisterValidation[0] === false) {
+      Toast.show({
+        type: "error",
+        text1: clientRegisterValidation[1],
+      });
+      setLoading(false);
+      return;
+    }
+
+    // send request to the server
+    const response = true; // method to the api
+    // api.account.loginRequest(email, password, rememberMe, () => {setLoading(false)}, () => {
+    //   setFailed(true);
+    // })
+
+    // Everything went well
+    Toast.show({
+      type: "success",
+      text1: clientRegisterValidation[1],
+    });
+    setLoading(false);
   };
 
   const switchToSignIn = () => {
@@ -41,9 +79,13 @@ const SignUpScreen = () => {
   };
 
   const resetAllFields = () => {
-    setEmail("")
-    setPassword("")
-  }
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setLoading(false);
+  };
 
   return (
     <KeyboardAvoidingView
@@ -75,6 +117,21 @@ const SignUpScreen = () => {
               </Text>
             </View>
 
+            <View style={tw("flex flex-row py-6")}>
+              <TextInput
+                placeholder="First Name"
+                style={tw("px-4")}
+                value={firstName}
+                onChangeText={setFirstName}
+              />
+              <TextInput
+                placeholder="Last Name"
+                style={tw("px-4")}
+                value={lastName}
+                onChangeText={setLastName}
+              />
+            </View>
+
             <TextInput
               placeholder="Email"
               style={[tw("py-6")]}
@@ -90,20 +147,29 @@ const SignUpScreen = () => {
               secureTextEntry
             />
 
+            <TextInput
+              placeholder="Confirm Password"
+              style={[tw("py-6")]}
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry
+            />
+
             <Button
-              title="Sign in"
+              title="Sign Up"
               style={[tw("py-2 px-4"), { width: 400 }]}
               onPress={register}
             />
             <View>
               <Text style={[tw("text-center py-2"), { fontSize: 15 }]}>
-                Already have an account ? {" "}
+                Already have an account ?{" "}
                 <Text onPress={switchToSignIn} style={{ color: "#19e266" }}>
                   Sign In
                 </Text>
               </Text>
             </View>
 
+            <Toast />
           </View>
         </TouchableWithoutFeedback>
       </SafeAreaView>

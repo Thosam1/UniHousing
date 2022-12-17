@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  ScrollView,
   SafeAreaView,
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -11,23 +10,32 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import Checkbox from "expo-checkbox";
+
 import { Button, Image } from "@rneui/themed";
 import React, { useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
-import { CompositeNavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "../navigator/AuthNavigator";
 import { AppStackParamList } from "../navigator/AppNavigator";
 import { RootStackParamList } from "../navigator/RootNavigator";
-import { BottomTabNavigationProp, BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import {
+  BottomTabNavigationProp,
+  BottomTabScreenProps,
+} from "@react-navigation/bottom-tabs";
 import { TabStackParamList } from "../navigator/TabNavigator";
 
-import { validateLogin } from '../utils/client_side_validation/auth_validation';
-import Toast from 'react-native-toast-message';
-
+import { validateLogin } from "../utils/client_side_validation/auth_validation";
+import Toast from "react-native-toast-message";
 
 type IntroductionSignInScreenNavigationProp = CompositeNavigationProp<
-  NativeStackNavigationProp<AuthStackParamList, "SignIn">, NativeStackNavigationProp<RootStackParamList>>;
+  NativeStackNavigationProp<AuthStackParamList, "SignIn">,
+  NativeStackNavigationProp<RootStackParamList>
+>;
 
 const SignInScreen = () => {
   const tw = useTailwind();
@@ -35,6 +43,7 @@ const SignInScreen = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
   const [failed, setFailed] = useState(false); // todo Change back to false !!!
 
@@ -45,19 +54,18 @@ const SignInScreen = () => {
     setLoading(true);
     Keyboard.dismiss();
 
-    Toast.show({
-      type: 'success',
-      text1: 'Success Information',
-      text2: "Subtext detail info"
-    })
-
-    setEmail("WHAT THE FUCK IS THIS NOT WORKING")
-
     // Perform client-side verification
-    const clientLoginValidation: [boolean, string] = validateLogin(email, password);
+    const clientLoginValidation: [boolean, string] = validateLogin(
+      email,
+      password
+    );
 
-    if(clientLoginValidation[0] === false) {
-
+    if (clientLoginValidation[0] === false) {
+      Toast.show({
+        type: "error",
+        text1: clientLoginValidation[1],
+      });
+      setLoading(false);
       return;
     }
 
@@ -67,13 +75,13 @@ const SignInScreen = () => {
     //   setFailed(true);
     // })
 
-    // if(response) {
-    //   navigation.navigate("Home");
-    // } else {
-    //   setFailed(true);
-    // }
+    // Everything went well
+    Toast.show({
+      type: "success",
+      text1: clientLoginValidation[1],
+    });
+    setLoading(false);
   };
-
 
   const switchToSignUp = () => {
     Keyboard.dismiss();
@@ -84,12 +92,14 @@ const SignInScreen = () => {
   const switchToForgotPassword = () => {
     Keyboard.dismiss();
     resetAllFields();
-    navigation.navigate("ForgotPassword"); 
-  }
+    navigation.navigate("ForgotPassword");
+  };
 
   const resetAllFields = () => {
     setEmail("");
     setPassword("");
+    setRememberMe(false);
+    setLoading(false);
   };
 
   return (
@@ -137,15 +147,26 @@ const SignInScreen = () => {
               secureTextEntry
             />
 
+            <View style={tw("flex flex-row py-3")}>
+              <Checkbox
+                value={rememberMe}
+                onValueChange={setRememberMe}
+                disabled={loading}
+              />
+              <Text style={{ paddingLeft: 8, fontSize: 14 }}>Remember Me</Text>
+            </View>
+
             <Button
-              title="Sign in"
+              title="Sign In"
               style={[tw("py-2 px-4"), { width: 400 }]}
+              disabled={email.length === 0 || password.length === 0}
               onPress={login}
+              loading={loading}
             />
 
             <View>
               <Text style={[tw("text-center py-2"), { fontSize: 15 }]}>
-                Don't have an account ? {" "}
+                Don't have an account ?{" "}
                 <Text onPress={switchToSignUp} style={{ color: "#19e266" }}>
                   Sign Up
                 </Text>
@@ -154,13 +175,21 @@ const SignInScreen = () => {
 
             {failed === true ? (
               <View>
-                <Text onPress={switchToForgotPassword} style={[tw("text-center py-2"), { fontSize: 15, color: "#e21966" }]}>
+                <Text
+                  onPress={switchToForgotPassword}
+                  style={[
+                    tw("text-center py-2"),
+                    { fontSize: 15, color: "#e21966" },
+                  ]}
+                >
                   Forgot your password ?
                 </Text>
               </View>
             ) : (
               <></>
             )}
+
+            <Toast />
           </View>
         </TouchableWithoutFeedback>
       </SafeAreaView>

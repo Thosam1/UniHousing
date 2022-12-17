@@ -58,6 +58,11 @@
 			"width": "100%"
 		}
 	},
+	"flex-row": {
+		"style": {
+			"flexDirection": "row"
+		}
+	},
 	"items-center": {
 		"style": {
 			"alignItems": "center"
@@ -85,6 +90,12 @@
 		"style": {
 			"paddingTop": 24,
 			"paddingBottom": 24
+		}
+	},
+	"py-3": {
+		"style": {
+			"paddingTop": 12,
+			"paddingBottom": 12
 		}
 	},
 	"pt-4": {
