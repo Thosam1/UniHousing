@@ -75,12 +75,24 @@ const SignInScreen = () => {
     //   setFailed(true);
     // })
 
+    const serverResponse: [boolean, string] = [true, "server message"]
+
+    if(!response) {
+      Toast.show({
+        type: "error",
+        text1: serverResponse[1],
+      });
+      setLoading(false);
+      return;
+    }
+
     // Everything went well
     Toast.show({
       type: "success",
-      text1: clientLoginValidation[1],
+      text1: serverResponse[1],
     });
     setLoading(false);
+    return;
   };
 
   const switchToSignUp = () => {

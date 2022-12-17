@@ -64,12 +64,24 @@ const SignUpScreen = () => {
     //   setFailed(true);
     // })
 
+    const serverResponse: [boolean, string] = [true, "server message"]
+
+    if(!response) {
+      Toast.show({
+        type: "error",
+        text1: serverResponse[1],
+      });
+      setLoading(false);
+      return;
+    }
+
     // Everything went well
     Toast.show({
       type: "success",
-      text1: clientRegisterValidation[1],
+      text1: serverResponse[1],
     });
     setLoading(false);
+    return;
   };
 
   const switchToSignIn = () => {
@@ -117,10 +129,10 @@ const SignUpScreen = () => {
               </Text>
             </View>
 
-            <View style={tw("flex flex-row py-6")}>
+            <View style={tw("flex flex-row py-6 px-6")}>
               <TextInput
                 placeholder="First Name"
-                style={tw("px-4")}
+                style={[tw("px-4 ")]}
                 value={firstName}
                 onChangeText={setFirstName}
               />
@@ -159,6 +171,13 @@ const SignUpScreen = () => {
               title="Sign Up"
               style={[tw("py-2 px-4"), { width: 400 }]}
               onPress={register}
+              disabled={
+                firstName.length === 0 ||
+                lastName.length === 0 ||
+                email.length === 0 ||
+                password.length === 0 ||
+                confirmPassword.length === 0
+              }
             />
             <View>
               <Text style={[tw("text-center py-2"), { fontSize: 15 }]}>

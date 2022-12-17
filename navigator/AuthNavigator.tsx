@@ -25,7 +25,11 @@ const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 
 const AuthNavigator = () => {
   return (
-    <AuthStack.Navigator>
+    <AuthStack.Navigator screenOptions={{
+      contentStyle:{
+        backgroundColor:'#FFFFFF'
+      }
+    }}>
       <AuthStack.Screen
         name="Introduction"
         component={IntroductionScreen}
