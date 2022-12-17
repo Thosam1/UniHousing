@@ -14,32 +14,78 @@ import {
 import { Button, Image } from "@rneui/themed";
 import React, { useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
-import { useNavigation } from "@react-navigation/native";
+import { CompositeNavigationProp, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "../navigator/AuthNavigator";
+import { AppStackParamList } from "../navigator/AppNavigator";
+import { RootStackParamList } from "../navigator/RootNavigator";
+import { BottomTabNavigationProp, BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { TabStackParamList } from "../navigator/TabNavigator";
 
-type IntroductionSignInScreenNavigationProp =
-  NativeStackNavigationProp<AuthStackParamList>;
+import { validateLogin } from '../utils/client_side_validation/auth_validation';
+import Toast from 'react-native-toast-message';
+
+
+type IntroductionSignInScreenNavigationProp = CompositeNavigationProp<
+  NativeStackNavigationProp<AuthStackParamList, "SignIn">, NativeStackNavigationProp<RootStackParamList>>;
 
 const SignInScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<IntroductionSignInScreenNavigationProp>();
 
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [loading, isLoading] = useState(false);
+  const [failed, setFailed] = useState(false); // todo Change back to false !!!
+
+  const [loading, setLoading] = useState(false);
 
   // method when signing in
   const login = () => {
+    setLoading(true);
     Keyboard.dismiss();
+
+    Toast.show({
+      type: 'success',
+      text1: 'Success Information',
+      text2: "Subtext detail info"
+    })
+
+    setEmail("WHAT THE FUCK IS THIS NOT WORKING")
+
+    // Perform client-side verification
+    const clientLoginValidation: [boolean, string] = validateLogin(email, password);
+
+    if(clientLoginValidation[0] === false) {
+
+      return;
+    }
+
+    // send request to the server
+    const response = true; // method to the api
+    // api.account.loginRequest(email, password, rememberMe, () => {setLoading(false)}, () => {
+    //   setFailed(true);
+    // })
+
+    // if(response) {
+    //   navigation.navigate("Home");
+    // } else {
+    //   setFailed(true);
+    // }
   };
+
 
   const switchToSignUp = () => {
     Keyboard.dismiss();
     resetAllFields();
     navigation.navigate("SignUp");
   };
+
+  const switchToForgotPassword = () => {
+    Keyboard.dismiss();
+    resetAllFields();
+    navigation.navigate("ForgotPassword"); 
+  }
 
   const resetAllFields = () => {
     setEmail("");
@@ -99,12 +145,22 @@ const SignInScreen = () => {
 
             <View>
               <Text style={[tw("text-center py-2"), { fontSize: 15 }]}>
-                Don't have an account ?{" "}
+                Don't have an account ? {" "}
                 <Text onPress={switchToSignUp} style={{ color: "#19e266" }}>
                   Sign Up
                 </Text>
               </Text>
             </View>
+
+            {failed === true ? (
+              <View>
+                <Text onPress={switchToForgotPassword} style={[tw("text-center py-2"), { fontSize: 15, color: "#e21966" }]}>
+                  Forgot your password ?
+                </Text>
+              </View>
+            ) : (
+              <></>
+            )}
           </View>
         </TouchableWithoutFeedback>
       </SafeAreaView>

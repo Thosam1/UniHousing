@@ -2,7 +2,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import TabNavigator from "./TabNavigator";
 
-const AppStack = createNativeStackNavigator();
+// type definitions
+export type AppStackParamList = {
+  // will check if the names param are correct
+  Main: undefined;
+};
+
+const AppStack = createNativeStackNavigator<AppStackParamList>();
 
 const AppNavigator = () => {
   return (

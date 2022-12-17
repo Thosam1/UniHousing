@@ -97,7 +97,7 @@ const SignUpScreen = () => {
             />
             <View>
               <Text style={[tw("text-center py-2"), { fontSize: 15 }]}>
-                Already have an account ?{" "}
+                Already have an account ? {" "}
                 <Text onPress={switchToSignIn} style={{ color: "#19e266" }}>
                   Sign In
                 </Text>
