@@ -28,9 +28,6 @@ const SignUpScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<IntroductionSignUpScreenNavigationProp>();
 
-  // The `state` arg is correctly typed as `RootState` already
-  const dispatch = useAppDispatch()
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");

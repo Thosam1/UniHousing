@@ -43,9 +43,6 @@ type SignInScreenNavigationProp = NativeStackNavigationProp<
 const SignInScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<SignInScreenNavigationProp>();
-  
-  // The `state` arg is correctly typed as `RootState` already
-  const authStatus = useAppSelector(selectAuthStatus)
   const dispatch = useAppDispatch()
 
   const [email, setEmail] = useState("");
