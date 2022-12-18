@@ -21,8 +21,10 @@ import { validateRegister } from "../utils/client_side_validation/auth_validatio
 import Toast from "react-native-toast-message";
 import { useAppDispatch } from "../features/hooks";
 
-type IntroductionSignUpScreenNavigationProp =
-  NativeStackNavigationProp<AuthStackParamList, "SignUp">;
+type IntroductionSignUpScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  "SignUp"
+>;
 
 const SignUpScreen = () => {
   const tw = useTailwind();
@@ -65,9 +67,9 @@ const SignUpScreen = () => {
     //   setFailed(true);
     // })
 
-    const serverResponse: [boolean, string] = [true, "server message"]
+    const serverResponse: [boolean, string] = [true, "server message"];
 
-    if(!response) {
+    if (!response) {
       Toast.show({
         type: "error",
         text1: serverResponse[1],
@@ -82,6 +84,8 @@ const SignUpScreen = () => {
       text1: serverResponse[1],
     });
     setLoading(false);
+    resetAllFields();
+    navigation.navigate("EmailVerification");
     return;
   };
 

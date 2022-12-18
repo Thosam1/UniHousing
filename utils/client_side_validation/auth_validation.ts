@@ -5,7 +5,8 @@
 const MIN_PASSWORD_LENGTH = 6;
 const MIN_FIRST_NAME_LENGTH = 2;
 const MIN_LAST_NAME_LENGTH = 2;
-
+const EMAIL_VERIFICATION_CODE_LENGTH = 9;
+const FORGOT_PASSWORD_VERIFICATION_CODE_LENGTH = 9; 
 
 // -----------------
 
@@ -27,11 +28,6 @@ export function validateLogin(email: string, password: string) : [boolean, strin
 
 export const validateRegister = (first_name: string, last_name: string, email: string, password: string, confirmPassword: string) : [boolean, string] => {
 
-    const emailValidation: [boolean, string] = validateEmailFormat(email);
-    if(emailValidation[0] === false) {
-        return emailValidation;
-    } 
-
     const firstNameValidation: [boolean, string] = validateFirstName(first_name);
     if(firstNameValidation[0] === false) {
         return firstNameValidation;
@@ -40,6 +36,32 @@ export const validateRegister = (first_name: string, last_name: string, email: s
     const lastNameValidation: [boolean, string] = validateLastName(last_name);
     if(lastNameValidation[0] === false) {
         return lastNameValidation;
+    } 
+
+    const emailAndBothPasswordsValidation: [boolean, string] = validateResetPassword(email, password, confirmPassword);   
+    if(emailAndBothPasswordsValidation[0] === false) {
+        return lastNameValidation;
+    } 
+
+    return [true, "Client-side login validation is successful"];
+}
+
+export const validateEmailVerification = (verificationCode: string) : [boolean, string] => {
+    return (verificationCode.length === EMAIL_VERIFICATION_CODE_LENGTH) ? [true, "Correct length"] : [false, "Incorrect length"];
+}
+
+export const validateForgotPassword = (email: string) : [boolean, string] => {
+    return validateEmailFormat(email);
+}
+
+export const validateForgotPasswordVerify = (verificationCode: string) : [boolean, string] => {
+    return (verificationCode.length === FORGOT_PASSWORD_VERIFICATION_CODE_LENGTH) ? [true, "Correct length"] : [false, "Incorrect length"];
+}
+
+export const validateResetPassword = (email: string, password: string, confirmPassword: string) : [boolean, string] => {
+    const emailValidation: [boolean, string] = validateEmailFormat(email);
+    if(emailValidation[0] === false) {
+        return emailValidation;
     } 
 
     const passwordValidation1: [boolean, string] = validatePasswordFormat(password);

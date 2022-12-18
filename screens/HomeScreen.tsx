@@ -1,21 +1,19 @@
 /* Home Screen : the screen we show if the user is already signed in. */
-import { View, Text, Button } from 'react-native'
-import React from 'react'
-import { CompositeScreenProps, useNavigation } from '@react-navigation/native';
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigator/RootNavigator';
-import { TabStackParamList } from '../navigator/TabNavigator';
-import { AuthStackParamList } from '../navigator/AuthNavigator';
+import { View, Text, Button } from "react-native";
+import React from "react";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { TabStackParamList } from "../navigator/TabNavigator";
 
-type HomeScreenNavigationProp = BottomTabScreenProps<TabStackParamList, 'Home'>;
+import { useAppDispatch } from "../features/hooks";
+import { logoutRDK } from "../features/auth/authSlice";
+
+type HomeScreenNavigationProp = BottomTabScreenProps<TabStackParamList, "Home">;
 
 const HomeScreen = () => {
+  const dispatch = useAppDispatch();
 
-  const navigation = useNavigation<HomeScreenNavigationProp>();
-  
   const signOut = () => {
-
+    dispatch(logoutRDK());
   };
 
   return (
@@ -23,7 +21,7 @@ const HomeScreen = () => {
       <Text>HomeScreen</Text>
       <Button title="Sign Out" onPress={signOut}></Button>
     </View>
-  )
-}
+  );
+};
 
-export default HomeScreen
+export default HomeScreen;

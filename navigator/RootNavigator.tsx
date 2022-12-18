@@ -18,18 +18,25 @@ export type RootStackParamList = {
 const RootStack = createNativeStackNavigator();
 
 const RootNavigator = () => {
-
   // The `state` arg is correctly typed as `RootState` already
-  const authStatus: boolean = useAppSelector(selectAuthStatus)
+  const authStatus: boolean = useAppSelector(selectAuthStatus);
 
   return (
     <RootStack.Navigator>
       {authStatus ? (
         // User is signed in
-        <RootStack.Screen name="Application" component={AppNavigator} options={{ headerShown: false }} />
+        <RootStack.Screen
+          name="Application"
+          component={AppNavigator}
+          options={{ headerShown: false }}
+        />
       ) : (
         // No token found, user isn't signed in
-        <RootStack.Screen name="Authentification" component={AuthNavigator} options={{ headerShown: false }} />
+        <RootStack.Screen
+          name="Authentification"
+          component={AuthNavigator}
+          options={{ headerShown: false }}
+        />
       )}
     </RootStack.Navigator>
   );

@@ -13,9 +13,9 @@ const AppStack = createNativeStackNavigator<AppStackParamList>();
 const AppNavigator = () => {
   return (
     <AppStack.Navigator>
-        <AppStack.Group>
-          <AppStack.Screen name="Main" component={TabNavigator} />
-        </AppStack.Group>
+      <AppStack.Group>
+        <AppStack.Screen name="Main" component={TabNavigator} />
+      </AppStack.Group>
     </AppStack.Navigator>
   );
 };

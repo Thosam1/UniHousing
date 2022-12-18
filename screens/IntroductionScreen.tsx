@@ -23,9 +23,18 @@ const IntroductionScreen = () => {
 
   return (
     <SafeAreaView style={tw("flex items-center")}>
-
-      <View style={[tw("flex items-center"), {paddingHorizontal: 15, maxWidth: '90%'}]}>
-        <Text style={[tw("text-center font-bold"), { paddingTop: 30, fontSize: 25 }]}>
+      <View
+        style={[
+          tw("flex items-center"),
+          { paddingHorizontal: 15, maxWidth: "90%" },
+        ]}
+      >
+        <Text
+          style={[
+            tw("text-center font-bold"),
+            { paddingTop: 30, fontSize: 25 },
+          ]}
+        >
           UniHousing
         </Text>
 
@@ -44,10 +53,17 @@ const IntroductionScreen = () => {
           studies, we are here to help you get a room for your budget
         </Text>
 
-        <Button title="Get Started" style={[tw("py-2 px-4"), { width: 400 }]} onPress={switchToSignIn}  />
+        <Button
+          title="Get Started"
+          style={[tw("py-2 px-4"), { width: 400 }]}
+          onPress={switchToSignIn}
+        />
 
         <Text style={[tw("text-center py-2"), { fontSize: 15 }]}>
-          Don't have an account ? <Text onPress={switchToSignUp} style={{ color: '#19e266' }}>Sign Up</Text>
+          Don't have an account ?{" "}
+          <Text onPress={switchToSignUp} style={{ color: "#19e266" }}>
+            Sign Up
+          </Text>
         </Text>
       </View>
     </SafeAreaView>

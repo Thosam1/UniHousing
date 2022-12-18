@@ -1,4 +1,3 @@
-
 import React from "react";
 import SignInScreen from "../screens/SignInScreen";
 import EmailVerificationScreen from "../screens/EmailVerificationScreen";
@@ -8,6 +7,7 @@ import SplashScreen from "../screens/SplashScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import IntroductionScreen from "../screens/IntroductionScreen";
 import SignUpScreen from "../screens/SignUpScreen";
+import ForgotPasswordVerifyScreen from "../screens/ForgotPasswordVerifyScreen";
 
 // type definitions
 export type AuthStackParamList = {
@@ -17,6 +17,7 @@ export type AuthStackParamList = {
   SignUp: undefined;
   EmailVerification: undefined;
   ForgotPassword: undefined;
+  ForgotPasswordVerify: undefined;
   ResetPassword: undefined;
   SplashScreen: undefined;
 };
@@ -25,11 +26,13 @@ const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 
 const AuthNavigator = () => {
   return (
-    <AuthStack.Navigator screenOptions={{
-      contentStyle:{
-        backgroundColor:'#FFFFFF'
-      }
-    }}>
+    <AuthStack.Navigator
+      screenOptions={{
+        contentStyle: {
+          backgroundColor: "#FFFFFF",
+        },
+      }}
+    >
       <AuthStack.Screen
         name="Introduction"
         component={IntroductionScreen}
@@ -71,6 +74,14 @@ const AuthNavigator = () => {
         component={ForgotPasswordScreen}
         options={{
           title: "Forgot Password",
+          headerShown: false,
+        }}
+      />
+      <AuthStack.Screen
+        name="ForgotPasswordVerify"
+        component={ForgotPasswordVerifyScreen}
+        options={{
+          title: "Forgot Password Verify",
           headerShown: false,
         }}
       />

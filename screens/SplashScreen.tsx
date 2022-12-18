@@ -1,6 +1,6 @@
 /* This will show a splash or loading screen when we're restoring the token. */
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text } from "react-native";
+import React from "react";
 
 const SplashScreen = () => {
   return (
@@ -8,7 +8,7 @@ const SplashScreen = () => {
       <Text>SplashScreen</Text>
       <Text>Loading ...</Text>
     </View>
-  )
-}
+  );
+};
 
-export default SplashScreen
+export default SplashScreen;

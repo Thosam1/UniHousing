@@ -124,5 +124,10 @@
 		"style": {
 			"fontWeight": "700"
 		}
+	},
+	"italic": {
+		"style": {
+			"fontStyle": "italic"
+		}
 	}
 }

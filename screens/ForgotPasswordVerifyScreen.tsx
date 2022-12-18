@@ -1,4 +1,3 @@
-/* This is the screen we show if the user isn't signed in already (we couldn't find a token). */
 import {
   View,
   Text,
@@ -10,7 +9,6 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import Checkbox from "expo-checkbox";
 
 import { Button, Image } from "@rneui/themed";
 import React, { useState } from "react";
@@ -19,64 +17,48 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "../navigator/AuthNavigator";
 
-import { validateLogin } from "../utils/client_side_validation/auth_validation";
+import { validateForgotPasswordVerify } from "../utils/client_side_validation/auth_validation";
 import Toast from "react-native-toast-message";
-
-import { useAppDispatch } from "../features/hooks";
-import { loginRDK } from "../features/auth/authSlice";
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
-  "SignIn"
+  "ForgotPasswordVerify"
 >;
 
-const SignInScreen = () => {
+const ForgotPasswordVerifyScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<SignInScreenNavigationProp>();
-  const dispatch = useAppDispatch();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-
-  const [failed, setFailed] = useState(true); // todo set back to false
-
+  const [verificationCode, setVerificationCode] = useState("");
+  const [failed, setFailed] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // method when signing in
-  const login = () => {
+  const validateVerificationCode = () => {
     setLoading(true);
     Keyboard.dismiss();
 
     // Perform client-side verification
-    const clientLoginValidation: [boolean, string] = validateLogin(
-      email,
-      password
-    );
+    const forgotPasswordVerifyValidation: [boolean, string] =
+      validateForgotPasswordVerify(verificationCode);
 
-    if (clientLoginValidation[0] === false) {
+    if (forgotPasswordVerifyValidation[0] === false) {
       Toast.show({
         type: "error",
-        text1: clientLoginValidation[1],
+        text1: forgotPasswordVerifyValidation[1],
       });
       setLoading(false);
       return;
     }
 
     // send request to the server
-    //const response = true; // method to the api
-    // api.account.loginRequest(email, password, rememberMe, () => {setLoading(false)}, () => {
-    //   setFailed(true);
-    // })
-
-    const serverResponse: [boolean, string] = [false, "server message"];
+    const serverResponse: [boolean, string] = [true, "server message"];
 
     if (!serverResponse[0]) {
       Toast.show({
         type: "error",
         text1: serverResponse[1],
       });
-      setFailed(true);
+      setFailed(true); // already sent an email to this address
       setLoading(false);
       return;
     }
@@ -89,26 +71,12 @@ const SignInScreen = () => {
     setFailed(false);
     setLoading(false);
     resetAllFields();
-    dispatch(loginRDK());
+    navigation.navigate("ResetPassword");
     return;
   };
 
-  const switchToSignUp = () => {
-    Keyboard.dismiss();
-    resetAllFields();
-    navigation.navigate("SignUp");
-  };
-
-  const switchToForgotPassword = () => {
-    Keyboard.dismiss();
-    resetAllFields();
-    navigation.navigate("ForgotPassword");
-  };
-
   const resetAllFields = () => {
-    setEmail("");
-    setPassword("");
-    setRememberMe(false);
+    setVerificationCode("");
     setFailed(false);
     setLoading(false);
   };
@@ -139,61 +107,45 @@ const SignInScreen = () => {
                   { paddingVertical: 12, fontSize: 25 },
                 ]}
               >
-                Login
+                Forgot Password : Verification
+              </Text>
+            </View>
+
+            <View style={[{ paddingVertical: 12 }]}>
+              <Text
+                style={[
+                  tw("text-center"),
+                  { paddingVertical: 12, fontSize: 15 },
+                ]}
+              >
+                We sent you a verification code at your address mail :
               </Text>
             </View>
 
             <TextInput
-              placeholder="Email"
+              placeholder="Verification code"
               style={[tw("py-6")]}
-              value={email}
-              onChangeText={setEmail}
+              value={verificationCode}
+              onChangeText={setVerificationCode}
             />
-
-            <TextInput
-              placeholder="Password"
-              style={[tw("py-6")]}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-
-            <View style={tw("flex flex-row py-3")}>
-              <Checkbox
-                value={rememberMe}
-                onValueChange={setRememberMe}
-                disabled={loading}
-              />
-              <Text style={{ paddingLeft: 8, fontSize: 14 }}>Remember Me</Text>
-            </View>
 
             <Button
-              title="Sign In"
+              title="Send Recovery Email"
               style={[tw("py-2 px-4"), { width: 400 }]}
-              disabled={email.length === 0 || password.length === 0}
-              onPress={login}
+              disabled={verificationCode.length !== 9}
+              onPress={validateVerificationCode}
               loading={loading}
             />
-
-            <View>
-              <Text style={[tw("text-center py-2"), { fontSize: 15 }]}>
-                Don't have an account ?{" "}
-                <Text onPress={switchToSignUp} style={{ color: "#19e266" }}>
-                  Sign Up
-                </Text>
-              </Text>
-            </View>
 
             {failed === true ? (
               <View>
                 <Text
-                  onPress={switchToForgotPassword}
                   style={[
                     tw("text-center py-2"),
                     { fontSize: 15, color: "#e21966" },
                   ]}
                 >
-                  Forgot your password ?
+                  Something went wrong, please try again !
                 </Text>
               </View>
             ) : (
@@ -208,4 +160,4 @@ const SignInScreen = () => {
   );
 };
 
-export default SignInScreen;
+export default ForgotPasswordVerifyScreen;
