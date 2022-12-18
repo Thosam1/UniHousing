@@ -19,13 +19,17 @@ import { Button, Image } from "@rneui/themed";
 
 import { validateRegister } from "../utils/client_side_validation/auth_validation";
 import Toast from "react-native-toast-message";
+import { useAppDispatch } from "../features/hooks";
 
 type IntroductionSignUpScreenNavigationProp =
-  NativeStackNavigationProp<AuthStackParamList>;
+  NativeStackNavigationProp<AuthStackParamList, "SignUp">;
 
 const SignUpScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<IntroductionSignUpScreenNavigationProp>();
+
+  // The `state` arg is correctly typed as `RootState` already
+  const dispatch = useAppDispatch()
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");

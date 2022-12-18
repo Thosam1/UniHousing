@@ -32,14 +32,21 @@ import { TabStackParamList } from "../navigator/TabNavigator";
 import { validateLogin } from "../utils/client_side_validation/auth_validation";
 import Toast from "react-native-toast-message";
 
-type IntroductionSignInScreenNavigationProp = CompositeNavigationProp<
-  NativeStackNavigationProp<AuthStackParamList, "SignIn">,
-  NativeStackNavigationProp<RootStackParamList>
+import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { loginRDK, logoutRDK, selectAuthStatus } from "../features/auth/authSlice";
+
+type SignInScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  "SignIn"
 >;
 
 const SignInScreen = () => {
   const tw = useTailwind();
-  const navigation = useNavigation<IntroductionSignInScreenNavigationProp>();
+  const navigation = useNavigation<SignInScreenNavigationProp>();
+  
+  // The `state` arg is correctly typed as `RootState` already
+  const authStatus = useAppSelector(selectAuthStatus)
+  const dispatch = useAppDispatch()
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -75,9 +82,9 @@ const SignInScreen = () => {
     //   setFailed(true);
     // })
 
-    const serverResponse: [boolean, string] = [true, "server message"]
+    const serverResponse: [boolean, string] = [true, "server message"];
 
-    if(!response) {
+    if (!response) {
       Toast.show({
         type: "error",
         text1: serverResponse[1],
@@ -92,6 +99,8 @@ const SignInScreen = () => {
       text1: serverResponse[1],
     });
     setLoading(false);
+
+    dispatch(loginRDK())
     return;
   };
 

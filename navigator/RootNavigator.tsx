@@ -5,6 +5,8 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AuthNavigator from "./AuthNavigator";
 import AppNavigator from "./AppNavigator";
+import { useAppSelector } from "../features/hooks";
+import { selectAuthStatus } from "../features/auth/authSlice";
 
 // type definitions
 export type RootStackParamList = {
@@ -16,16 +18,18 @@ export type RootStackParamList = {
 const RootStack = createNativeStackNavigator();
 
 const RootNavigator = () => {
-  const authData = true;
+
+  // The `state` arg is correctly typed as `RootState` already
+  const authStatus: boolean = false; // useAppSelector(selectAuthStatus)
 
   return (
     <RootStack.Navigator>
-      {authData ? (
-        // No token found, user isn't signed in
-        <RootStack.Screen name="Authentification" component={AuthNavigator} options={{ headerShown: false }} />
-      ) : (
+      {authStatus ? (
         // User is signed in
         <RootStack.Screen name="Application" component={AppNavigator} options={{ headerShown: false }} />
+      ) : (
+        // No token found, user isn't signed in
+        <RootStack.Screen name="Authentification" component={AuthNavigator} options={{ headerShown: false }} />
       )}
     </RootStack.Navigator>
   );
