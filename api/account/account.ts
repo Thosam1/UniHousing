@@ -1,5 +1,4 @@
 import { axiosClient } from "../RequestManager";
-import { Date, Location } from "../typesAPI";
 
 export const getPrivateProfile = (email: string, jwt_token: string) => {
   const body = JSON.stringify({
