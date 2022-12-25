@@ -16,7 +16,7 @@ export async function login(
     password: password,
     rememberMe: rememberMe,
   });
-  return axiosClient.post("account/login", body);
+  return axiosClient.post("auth/login", body);
   // try {
   //   const { data } = await axios.post<loginResponse>(
   //     BASE_URL + "account/login",
@@ -39,13 +39,13 @@ export async function login(
 
 export async function loginJWT(email: string, jwt_token: string) {
   const body = JSON.stringify({ email: email, jwt_token: jwt_token });
-  return axiosClient.post("account/login", body);
+  return axiosClient.post("auth/login", body);
 }
 
 export async function logout(user_id: string) {
   // delete jwt token locally so next time it is prompted
   const body = JSON.stringify({ email: user_id });
-  return axiosClient.post("account/logout", body);
+  return axiosClient.post("auth/logout", body);
 }
 
 export async function register(
@@ -62,35 +62,35 @@ export async function register(
     password: password,
     confirmPassword: confirmPassword,
   });
-  return axiosClient.post("account/register", body);
+  return axiosClient.post("auth/register", body);
 }
 
 export async function verifyEmail(email: string, code: string) {
   const body = JSON.stringify({ email: email, code: code });
-  return axiosClient.post("account/verify-email", body);
+  return axiosClient.post("auth/verify-email", body);
 }
 
 export async function resendVerificationEmail(email: string) {
   const body = JSON.stringify({ email: email });
-  return axiosClient.post("account/resend-verification-code-email", body);
+  return axiosClient.post("auth/resend-verification-code-email", body);
 }
 
 export async function forgotPassword(email: string) {
   // sends a code from the backend to this email address
   const body = JSON.stringify({ email: email });
-  return axiosClient.post("account/forgot-password", body);
+  return axiosClient.post("auth/forgot-password", body);
 }
 
 export async function resendForgotPassword(email: string) {
   // resends a code from the backend to this email address
   const body = JSON.stringify({ email: email });
   return axiosClient.post(
-    "account/resend-verification-code-password-email",
+    "auth/resend-verification-code-password-email",
     body
   );
 }
 
 export async function verifyForgotPassword(email: string, code: string) {
   const body = JSON.stringify({ email: email, code: code });
-  return axiosClient.post("account/verify-forgot-password", body);
+  return axiosClient.post("auth/verify-forgot-password", body);
 }
