@@ -39,7 +39,7 @@ const SignInScreen = () => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const [failed, setFailed] = useState(true); // todo set back to false
+  const [failed, setFailed] = useState(false); // todo set back to false
 
   const [loading, setLoading] = useState(false);
 
