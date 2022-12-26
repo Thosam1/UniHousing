@@ -2,7 +2,7 @@ import { PROD_MODE } from "../utils/util";
 import axios from "axios";
 
 export const BASE_URL =
-  (PROD_MODE ? "" : window.location.origin + "/server") + "/api/v1/";
+  (PROD_MODE ? "" : "http://localhost:3000/api/");
 
 export const POST = "POST";
 export const GET = "GET";
@@ -15,6 +15,6 @@ export const axiosClient = axios.create({
   baseURL: BASE_URL,
   headers: {
     'Accept': JSON_TYPE,
-    'Content-Type': JSON_TYPE
+    'Content-Type': JSON_TYPE,
   }
 });

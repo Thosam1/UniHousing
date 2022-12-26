@@ -5,7 +5,7 @@ export const getPrivateProfile = (email: string, jwt_token: string) => {
     email,
     jwt_token,
   });
-  return axiosClient.post("account/get-private-profile", body);
+  return axiosClient.post("user/get-private-profile", body);
 };
 
 export const getPublicProfile = (user_id: string) => {
@@ -20,7 +20,7 @@ export const changeProfileFirstName = (user_id: string, jwt_token: string) => {
     user_id,
     jwt_token,
   });
-  return axiosClient.post("account/change-profile-first-name", body);
+  return axiosClient.post("user/change-profile-first-name", body);
 };
 
 export const changeProfileLastName = (user_id: string, jwt_token: string) => {
@@ -28,7 +28,7 @@ export const changeProfileLastName = (user_id: string, jwt_token: string) => {
     user_id,
     jwt_token,
   });
-  return axiosClient.post("account/change-profile-last-name", body);
+  return axiosClient.post("user/change-profile-last-name", body);
 };
 
 export const changeProfileAvatar = (user_id: string, jwt_token: string) => {
@@ -36,7 +36,7 @@ export const changeProfileAvatar = (user_id: string, jwt_token: string) => {
     user_id,
     jwt_token,
   });
-  return axiosClient.post("account/change-avatar", body);
+  return axiosClient.post("user/change-avatar", body);
 };
 
 export const deleteProfileAvatar = (user_id: string, jwt_token: string) => {
@@ -44,7 +44,7 @@ export const deleteProfileAvatar = (user_id: string, jwt_token: string) => {
     user_id,
     jwt_token,
   });
-  return axiosClient.post("account/delete-avatar", body);
+  return axiosClient.post("user/delete-avatar", body);
 };
 
 export const changeStatus = (
@@ -57,7 +57,7 @@ export const changeStatus = (
     jwt_token,
     status,
   });
-  return axiosClient.post("account/change-status", body);
+  return axiosClient.post("user/change-status", body);
 };
 
 export const changeBio = (user_id: string, jwt_token: string, bio: string) => {
@@ -66,7 +66,7 @@ export const changeBio = (user_id: string, jwt_token: string, bio: string) => {
     jwt_token,
     bio,
   });
-  return axiosClient.post("account/change-bio", body);
+  return axiosClient.post("user/change-bio", body);
 };
 
 export const changePassword = (
@@ -81,7 +81,7 @@ export const changePassword = (
     currentPassword,
     newPassword,
   });
-  return axiosClient.post("account/change-password", body);
+  return axiosClient.post("users/change-password", body);
 };
 
 export const closeAccount = (
@@ -94,5 +94,5 @@ export const closeAccount = (
     jwt_token,
     message,
   });
-  return axiosClient.post("account/close-account", body);
+  return axiosClient.post("users/close-account", body);
 };

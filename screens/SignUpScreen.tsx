@@ -19,6 +19,9 @@ import { Button, Image } from "@rneui/themed";
 
 import { validateRegister } from "../utils/client_side_validation/auth_validation";
 import Toast from "react-native-toast-message";
+
+import { register } from "../api/auth/auth";
+
 import { useAppDispatch } from "../features/hooks";
 
 type IntroductionSignUpScreenNavigationProp = NativeStackNavigationProp<
@@ -39,7 +42,7 @@ const SignUpScreen = () => {
   const [loading, setLoading] = useState(false);
 
   // method when signing in
-  const register = () => {
+  const registerButton = () => {
     setLoading(true);
     Keyboard.dismiss();
 
@@ -67,23 +70,26 @@ const SignUpScreen = () => {
     //   setFailed(true);
     // })
 
-    const serverResponse: [boolean, string] = [true, "server message"];
+    let failed = false;
 
-    if (!response) {
-      Toast.show({
-        type: "error",
-        text1: serverResponse[1],
-      });
-      setLoading(false);
-      return;
-    }
+    register(firstName, lastName, email, password, confirmPassword).then((res) => {
+      if(res.status === 200) {
+        Toast.show({
+          type: "success",
+          text1: res.data,
+        });
+      } else {
+        Toast.show({
+          type: "error",
+          text1: res.data,
+        });
+        failed = true;
+      }
+    }).catch((err) => console.log(err))
 
-    // Everything went well
-    Toast.show({
-      type: "success",
-      text1: serverResponse[1],
-    });
     setLoading(false);
+    if(failed) return;
+
     resetAllFields();
     navigation.navigate("EmailVerification");
     return;
@@ -175,7 +181,7 @@ const SignUpScreen = () => {
             <Button
               title="Sign Up"
               style={[tw("py-2 px-4"), { width: 400 }]}
-              onPress={register}
+              onPress={registerButton}
               disabled={
                 firstName.length === 0 ||
                 lastName.length === 0 ||
