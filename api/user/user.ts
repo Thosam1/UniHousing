@@ -20,7 +20,7 @@ export const changeProfileFirstName = (user_id: string, jwt_token: string) => {
     user_id,
     jwt_token,
   });
-  return axiosClient.post("user/change-profile-first-name", body);
+  return axiosClient.post("user/change-first-name", body);
 };
 
 export const changeProfileLastName = (user_id: string, jwt_token: string) => {
@@ -28,23 +28,14 @@ export const changeProfileLastName = (user_id: string, jwt_token: string) => {
     user_id,
     jwt_token,
   });
-  return axiosClient.post("user/change-profile-last-name", body);
+  return axiosClient.post("user/change-last-name", body);
 };
 
 export const changeProfileAvatar = (user_id: string, jwt_token: string) => {
   const body = JSON.stringify({
     user_id,
-    jwt_token,
   });
   return axiosClient.post("user/change-avatar", body);
-};
-
-export const deleteProfileAvatar = (user_id: string, jwt_token: string) => {
-  const body = JSON.stringify({
-    user_id,
-    jwt_token,
-  });
-  return axiosClient.post("user/delete-avatar", body);
 };
 
 export const changeStatus = (
@@ -54,7 +45,6 @@ export const changeStatus = (
 ) => {
   const body = JSON.stringify({
     user_id,
-    jwt_token,
     status,
   });
   return axiosClient.post("user/change-status", body);
@@ -63,7 +53,6 @@ export const changeStatus = (
 export const changeBio = (user_id: string, jwt_token: string, bio: string) => {
   const body = JSON.stringify({
     user_id,
-    jwt_token,
     bio,
   });
   return axiosClient.post("user/change-bio", body);
@@ -81,6 +70,7 @@ export const changePassword = (
     currentPassword,
     newPassword,
   });
+  // todo security reason, would be better to encrypt the password before sending it
   return axiosClient.post("users/change-password", body);
 };
 

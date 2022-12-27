@@ -44,12 +44,12 @@ export function register(
     password: password,
     confirmPassword: confirmPassword,
   });
+  // todo security reason, would be better to encrypt the password before sending it
   return axiosClient.post("users/register", body);
 }
 
-export async function verifyEmail(email: string, code: string) {
-  const body = JSON.stringify({ email: email, code: code });
-  return axiosClient.post("users/verify/:id/:verificationCode", body);
+export async function verifyEmail(id: string, verificationCode: string) {
+  return axiosClient.post(`users/verify/${id}/${verificationCode}`);
 }
 
 // export async function resendVerificationEmail(email: string) {
@@ -72,9 +72,9 @@ export async function forgotPassword(email: string) {
 //   );
 // }
 
-export async function verifyForgotPassword(email: string, code: string) {
-  const body = JSON.stringify({ email: email, code: code });
-  return axiosClient.post("users/resetpassword/:id/:passwordResetCode", body);
+export async function resetForgotPassword(id: string, passwordResetCode: string, password: string, confirmPassword: string) {
+  const body = JSON.stringify({ password: password, confirmPassword: confirmPassword });
+  return axiosClient.post(`users/resetpassword/${id}/${passwordResetCode}`);
 }
 
 
