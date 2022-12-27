@@ -65,13 +65,7 @@ const SignUpScreen = () => {
     }
 
     // send request to the server
-    const response = true; // method to the api
-    // api.account.loginRequest(email, password, rememberMe, () => {setLoading(false)}, () => {
-    //   setFailed(true);
-    // })
-
     let failed = false;
-
     register(firstName, lastName, email, password, confirmPassword).then((res) => {
       if(res.status === 200) {
         Toast.show({
@@ -100,6 +94,12 @@ const SignUpScreen = () => {
     resetAllFields();
     navigation.navigate("SignIn");
   };
+
+  const switchToValidate = () => {
+    Keyboard.dismiss();
+    resetAllFields();
+    navigation.navigate("EmailVerification");
+  }
 
   const resetAllFields = () => {
     setFirstName("");
@@ -195,6 +195,15 @@ const SignUpScreen = () => {
                 Already have an account ?{" "}
                 <Text onPress={switchToSignIn} style={{ color: "#19e266" }}>
                   Sign In
+                </Text>
+              </Text>
+            </View>
+
+            <View>
+              <Text style={[tw("text-center py-2"), { fontSize: 15 }]}>
+                Want to validate your account ?{" "}
+                <Text onPress={switchToValidate} style={{ color: "#19e266" }}>
+                  Validate
                 </Text>
               </Text>
             </View>

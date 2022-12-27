@@ -19,6 +19,7 @@ import { AuthStackParamList } from "../navigator/AuthNavigator";
 
 import { validateResetPassword } from "../utils/client_side_validation/auth_validation";
 import Toast from "react-native-toast-message";
+import { resetForgotPassword } from "../api/auth/auth";
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -29,11 +30,11 @@ const ResetPasswordScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<SignInScreenNavigationProp>();
 
-  const [email, setEmail] = useState("");
+  const [userID, setUserID] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [failed, setFailed] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const resetPassword = () => {
@@ -42,7 +43,8 @@ const ResetPasswordScreen = () => {
 
     // Perform client-side verification
     const resetPasswordValidation: [boolean, string] = validateResetPassword(
-      email,
+      userID,
+      verificationCode,
       password,
       confirmPassword
     );
@@ -57,28 +59,27 @@ const ResetPasswordScreen = () => {
     }
 
     // send request to the server
-    const serverResponse: [boolean, string] = [
-      true,
-      "server message : password for XXX has been reset successfully !",
-    ];
+    let failed = false;
+    resetForgotPassword(userID, verificationCode, password, confirmPassword)
+      .then((res) => {
+        if (res.status === 200) {
+          Toast.show({
+            type: "success",
+            text1: res.data,
+          });
+        } else {
+          Toast.show({
+            type: "error",
+            text1: res.data,
+          });
+          failed = true;
+        }
+      })
+      .catch((err) => console.log(err));
 
-    if (!serverResponse[0]) {
-      Toast.show({
-        type: "error",
-        text1: serverResponse[1],
-      });
-      setFailed(true);
-      setLoading(false);
-      return;
-    }
-
-    // Everything went well
-    Toast.show({
-      type: "success",
-      text1: serverResponse[1],
-    });
-    setFailed(false);
     setLoading(false);
+    if (failed) return;
+
     resetAllFields();
     navigation.navigate("SignIn"); // todo change it so that it automatically dispatch to the home screen
     return;
@@ -87,7 +88,6 @@ const ResetPasswordScreen = () => {
   const resetAllFields = () => {
     setConfirmPassword("");
     setPassword("");
-    setFailed(false);
     setLoading(false);
   };
 
@@ -128,21 +128,35 @@ const ResetPasswordScreen = () => {
                   { paddingVertical: 12, fontSize: 15 },
                 ]}
               >
-                Resetting password for : MAIL_ADDRESS_FROM_PROP
+                Check your mailbox and fill below with the id and verification
+                code received :
               </Text>
             </View>
-
+            <TextInput
+              placeholder="Id received"
+              style={[tw("py-6")]}
+              value={userID}
+              onChangeText={setUserID}
+            />
+            <TextInput
+              placeholder="Verification code received"
+              style={[tw("py-6")]}
+              value={verificationCode}
+              onChangeText={setVerificationCode}
+            />
             <TextInput
               placeholder="New password"
               style={[tw("py-6")]}
               value={password}
               onChangeText={setPassword}
+              secureTextEntry
             />
             <TextInput
               placeholder="Confirm new password"
               style={[tw("py-6")]}
               value={confirmPassword}
               onChangeText={setConfirmPassword}
+              secureTextEntry
             />
 
             <Button
@@ -152,21 +166,6 @@ const ResetPasswordScreen = () => {
               onPress={resetPassword}
               loading={loading}
             />
-
-            {failed === true ? (
-              <View>
-                <Text
-                  style={[
-                    tw("text-center py-2"),
-                    { fontSize: 15, color: "#e21966" },
-                  ]}
-                >
-                  Something went wrong, please try again !
-                </Text>
-              </View>
-            ) : (
-              <></>
-            )}
 
             <Toast />
           </View>

@@ -46,8 +46,15 @@ export const validateRegister = (first_name: string, last_name: string, email: s
     return [true, "Client-side login validation is successful"];
 }
 
-export const validateEmailVerification = (verificationCode: string) : [boolean, string] => {
-    return (verificationCode.length === EMAIL_VERIFICATION_CODE_LENGTH) ? [true, "Correct length"] : [false, "Incorrect length"];
+export const validateEmailVerification = (userID: string, verificationCode: string) : [boolean, string] => {
+    if(userID.length < 1) {
+        return [false, "Incorrect userID length, check your email and copy paste !"];
+    } else if(verificationCode.length < 1) {
+        return [false, "Incorrect email verification code length, check your email and copy paste !"];
+    } else {
+        return [true, "Correct length"]
+    }
+    // return (verificationCode.length === EMAIL_VERIFICATION_CODE_LENGTH) ? [true, "Correct length"] : [false, "Incorrect length"]; // todo
 }
 
 export const validateForgotPassword = (email: string) : [boolean, string] => {
@@ -58,10 +65,15 @@ export const validateForgotPasswordVerify = (verificationCode: string) : [boolea
     return (verificationCode.length === FORGOT_PASSWORD_VERIFICATION_CODE_LENGTH) ? [true, "Correct length"] : [false, "Incorrect length"];
 }
 
-export const validateResetPassword = (email: string, password: string, confirmPassword: string) : [boolean, string] => {
-    const emailValidation: [boolean, string] = validateEmailFormat(email);
-    if(emailValidation[0] === false) {
-        return emailValidation;
+export const validateResetPassword = (userID: string, verificationCode: string, password: string, confirmPassword: string) : [boolean, string] => {
+    // const emailValidation: [boolean, string] = validateEmailFormat(email);
+    // if(emailValidation[0] === false) {
+    //     return emailValidation;
+    // } 
+    if(userID.length < 1) {
+        return [false, "Incorrect userID length, check your email and copy paste !"];
+    } else if(verificationCode.length < 1) {
+        return [false, "Incorrect email verification code length, check your email and copy paste !"];
     } 
 
     const passwordValidation1: [boolean, string] = validatePasswordFormat(password);

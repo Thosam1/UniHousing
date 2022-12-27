@@ -19,6 +19,7 @@ import { AuthStackParamList } from "../navigator/AuthNavigator";
 
 import { validateForgotPassword } from "../utils/client_side_validation/auth_validation";
 import Toast from "react-native-toast-message";
+import { forgotPassword } from "../api/auth/auth";
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -35,7 +36,6 @@ const ForgotPasswordScreen = () => {
   const navigation = useNavigation<SignInScreenNavigationProp>();
 
   const [email, setEmail] = useState("");
-  const [failed, setFailed] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const sendRecoveryEmail = () => {
@@ -56,35 +56,41 @@ const ForgotPasswordScreen = () => {
     }
 
     // send request to the server
-    const serverResponse: [boolean, string] = [true, "server message"];
+    // send request to the server
+    let failed = false;
+    forgotPassword(email).then((res) => {
+      if(res.status === 200) {
+        Toast.show({
+          type: "success",
+          text1: res.data,
+        });
+      } else {
+        Toast.show({
+          type: "error",
+          text1: res.data,
+        });
+        failed = true;
+      }
+    }).catch((err) => console.log(err))
 
-    if (!serverResponse[0]) {
-      Toast.show({
-        type: "error",
-        text1: serverResponse[1],
-      });
-      setFailed(true); // already sent an email to this address
-      setLoading(false);
-      return;
-    }
-
-    // Everything went well
-    Toast.show({
-      type: "success",
-      text1: serverResponse[1],
-    });
-    setFailed(false);
     setLoading(false);
+    if(failed) return;
+
     resetAllFields();
-    navigation.navigate("ForgotPasswordVerify");
+    navigation.navigate("ResetPassword");
     return;
   };
 
   const resetAllFields = () => {
     setEmail("");
-    setFailed(false);
     setLoading(false);
   };
+
+  const switchToResetPassword = () => {
+    Keyboard.dismiss();
+    resetAllFields();
+    navigation.navigate("ResetPassword");
+  }
 
   return (
     <KeyboardAvoidingView
@@ -146,20 +152,14 @@ const ForgotPasswordScreen = () => {
               loading={loading}
             />
 
-            {failed === true ? (
-              <View>
-                <Text
-                  style={[
-                    tw("text-center py-2"),
-                    { fontSize: 15, color: "#e21966" },
-                  ]}
-                >
-                  Something went wrong, please try again !
+<View>
+              <Text style={[tw("text-center py-2"), { fontSize: 15 }]}>
+                Already received verification code ?{" "}
+                <Text onPress={switchToResetPassword} style={{ color: "#19e266" }}>
+                  Validate
                 </Text>
-              </View>
-            ) : (
-              <></>
-            )}
+              </Text>
+            </View>
 
             <Toast />
           </View>

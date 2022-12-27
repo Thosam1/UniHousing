@@ -19,6 +19,7 @@ import { AuthStackParamList } from "../navigator/AuthNavigator";
 
 import { validateEmailVerification } from "../utils/client_side_validation/auth_validation";
 import Toast from "react-native-toast-message";
+import { verifyEmail } from "../api/auth/auth";
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -30,6 +31,7 @@ const EmailVerificationScreen = () => {
   const navigation = useNavigation<SignInScreenNavigationProp>();
 
   const [verificationCode, setVerificationCode] = useState("");
+  const [userID, setUserID] = useState("");
   const [failed, setFailed] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -39,7 +41,7 @@ const EmailVerificationScreen = () => {
 
     // Perform client-side verification
     const emailVerificationValidation: [boolean, string] =
-      validateEmailVerification(verificationCode);
+      validateEmailVerification(userID, verificationCode);
 
     if (emailVerificationValidation[0] === false) {
       Toast.show({
@@ -51,25 +53,25 @@ const EmailVerificationScreen = () => {
     }
 
     // send request to the server
-    const serverResponse: [boolean, string] = [true, "server message"];
+    let failed = false;
+    verifyEmail(userID, verificationCode).then((res) => {
+      if(res.status === 200) {
+        Toast.show({
+          type: "success",
+          text1: res.data,
+        });
+      } else {
+        Toast.show({
+          type: "error",
+          text1: res.data,
+        });
+        failed = true;
+      }
+    }).catch((err) => console.log(err))
 
-    if (!serverResponse[0]) {
-      Toast.show({
-        type: "error",
-        text1: serverResponse[1],
-      });
-      setFailed(true); // already sent an email to this address
-      setLoading(false);
-      return;
-    }
-
-    // Everything went well
-    Toast.show({
-      type: "success",
-      text1: serverResponse[1],
-    });
-    setFailed(false);
     setLoading(false);
+    if(failed) return;
+
     resetAllFields();
     navigation.navigate("SignIn"); // todo change it so that it automatically dispatch to the home screen
     return;
@@ -123,6 +125,13 @@ const EmailVerificationScreen = () => {
             </View>
 
             <TextInput
+              placeholder="User id"
+              style={[tw("py-6")]}
+              value={userID}
+              onChangeText={setUserID}
+            />
+
+            <TextInput
               placeholder="Verification code"
               style={[tw("py-6")]}
               value={verificationCode}
@@ -130,9 +139,9 @@ const EmailVerificationScreen = () => {
             />
 
             <Button
-              title="Send Recovery Email"
+              title="Validate email"
               style={[tw("py-2 px-4"), { width: 400 }]}
-              disabled={verificationCode.length !== 9}
+              disabled={verificationCode.length < 1 || userID.length < 1}
               onPress={validateVerificationCode}
               loading={loading}
             />
