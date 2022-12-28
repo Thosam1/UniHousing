@@ -1,34 +1,49 @@
 import axios from "axios";
 
-import { axiosClient } from "../RequestManager";
+import { axiosClient, axiosPrivate } from "../RequestManager";
+
+// type loginResponse = {
+//   tokens: {
+//     accessToken: string;
+//     refreshToken: string;
+//   }
+// };
 
 type loginResponse = {
-  jwt_token: string;
-};
-
+  accessToken: string
+}
 export function login(
   email: string,
   password: string,
-  rememberMe: string
+  rememberMe: boolean
 ) {
   const body = JSON.stringify({
     email: email,
     password: password,
     rememberMe: rememberMe,
   });
-  return axiosClient.post("auth/login", body);
+  // axiosClient.interceptors.request.use(
+  //   config => {
+  //     config.headers.authorization = `Bearer ${accessToken}`;
+  //     return config;
+  //   },
+  //   error => {
+  //     return Promise.reject(error);
+  //   }    
+  // );
+  return axiosClient.post("sessions/login", body) //.then((res) => res.data);
 }
 
-export function loginJWT(email: string, jwt_token: string) {
-  const body = JSON.stringify({ email: email, jwt_token: jwt_token });
-  return axiosClient.post("auth/login", body);
-}
+// export function loginJWT(email: string, jwt_token: string) {
+//   const body = JSON.stringify({ email: email, jwt_token: jwt_token });
+//   return axiosClient.post("auth/login", body);
+// }
 
-export function logout(user_id: string) {
-  // delete jwt token locally so next time it is prompted
-  const body = JSON.stringify({ email: user_id });
-  return axiosClient.post("auth/logout", body);
-}
+// export function logout(user_id: string) {
+//   // delete jwt token locally so next time it is prompted
+//   const body = JSON.stringify({ email: user_id });
+//   return axiosClient.post("auth/logout", body);
+// }
 
 export function register(
   firstName: string,

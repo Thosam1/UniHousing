@@ -23,7 +23,9 @@ import { validateLogin } from "../utils/client_side_validation/auth_validation";
 import Toast from "react-native-toast-message";
 
 import { useAppDispatch } from "../features/hooks";
-import { loginRDK } from "../features/auth/authSlice";
+import { setUser } from "../features/auth/authSlice";
+import { login } from "../api/auth/auth";
+import { data } from "autoprefixer";
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -44,7 +46,7 @@ const SignInScreen = () => {
   const [loading, setLoading] = useState(false);
 
   // method when signing in
-  const login = () => {
+  const loginButton = () => {
     setLoading(true);
     Keyboard.dismiss();
 
@@ -64,32 +66,31 @@ const SignInScreen = () => {
     }
 
     // send request to the server
-    //const response = true; // method to the api
-    // api.account.loginRequest(email, password, rememberMe, () => {setLoading(false)}, () => {
-    //   setFailed(true);
-    // })
+    let failed = false;
+    login(email, password, rememberMe).then((res) => {
+      if(res.status === 200) {
+        // Toast.show({
+        //   type: "success",
+        //   text1: "Login successful",
+        // });
+        setFailed(false);
+        console.log(`new accessToken received : ${res.data.accessToken}`)
+        localStorage.setItem("accessToken", res.data.accessToken);
+        dispatch(setUser({ authenticated: true, accessToken: res.data.accessToken }));
+      } else {
+        Toast.show({
+          type: "error",
+          text1: "Login error",
+        });
+        failed = true;
+        setFailed(true);
+      }
+    }).catch((err) => console.log(err))
 
-    const serverResponse: [boolean, string] = [false, "server message"];
-
-    if (!serverResponse[0]) {
-      Toast.show({
-        type: "error",
-        text1: serverResponse[1],
-      });
-      setFailed(true);
-      setLoading(false);
-      return;
-    }
-
-    // Everything went well
-    Toast.show({
-      type: "success",
-      text1: serverResponse[1],
-    });
-    setFailed(false);
     setLoading(false);
+    if(failed) return;
     resetAllFields();
-    dispatch(loginRDK());
+    // todo change variable so we are redirected to home screen
     return;
   };
 
@@ -171,7 +172,7 @@ const SignInScreen = () => {
               title="Sign In"
               style={[tw("py-2 px-4"), { width: 400 }]}
               disabled={email.length === 0 || password.length === 0}
-              onPress={login}
+              onPress={loginButton}
               loading={loading}
             />
 

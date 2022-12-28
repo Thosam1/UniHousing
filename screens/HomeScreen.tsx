@@ -4,21 +4,42 @@ import React from "react";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { TabStackParamList } from "../navigator/TabNavigator";
 
-import { useAppDispatch } from "../features/hooks";
-import { logoutRDK } from "../features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { logoutRTK, selectUser, setUser } from "../features/auth/authSlice";
+import { getPrivateProfile } from "../api/user/user";
 
 type HomeScreenNavigationProp = BottomTabScreenProps<TabStackParamList, "Home">;
 
 const HomeScreen = () => {
   const dispatch = useAppDispatch();
 
+  const getPrivateProfileButton = () => {
+    getPrivateProfile();
+  }
+
+  const logProfile = () => {
+    const user = useAppSelector(selectUser);
+    console.log(user)
+  }
+
   const signOut = () => {
-    dispatch(logoutRDK());
+    localStorage.setItem("accessToken", "");
+    dispatch(logoutRTK());
   };
+
+  // will fetch the user profile, to see if access token works :
+
+
 
   return (
     <View>
       <Text>HomeScreen</Text>
+
+      <Button title="Get Private Profile" onPress={getPrivateProfileButton}></Button>
+
+      <Button title="logProfile" onPress={logProfile}></Button>
+
+
       <Button title="Sign Out" onPress={signOut}></Button>
     </View>
   );

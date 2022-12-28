@@ -1,11 +1,14 @@
-import { axiosClient } from "../RequestManager";
+import axios from "axios";
+import { axiosClient, axiosPrivate, BASE_URL, JSON_TYPE } from "../RequestManager";
 
-export const getPrivateProfile = (email: string, jwt_token: string) => {
-  const body = JSON.stringify({
-    email,
-    jwt_token,
-  });
-  return axiosClient.post("user/get-private-profile", body);
+export const getPrivateProfile = () => {
+  return axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      "Content-Type": JSON_TYPE,
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}` // problem because of const, doesn't update after signIn !
+    },
+  }).post("users/me").then((res) => res.data).catch(() => { return null; });
 };
 
 export const getPublicProfile = (user_id: string) => {
