@@ -2,11 +2,11 @@
 import { View, Text, Button } from "react-native";
 import React from "react";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { TabStackParamList } from "../navigator/TabNavigator";
+import { TabStackParamList } from "../../navigator/TabNavigator";
 
-import { useAppDispatch, useAppSelector } from "../features/hooks";
-import { logoutRTK, selectUser, setUserState } from "../features/auth/authSlice";
-import { getPrivateProfile } from "../api/user/user";
+import { useAppDispatch, useAppSelector } from "../../features/hooks";
+import { logoutRTK, selectUser, setUserState } from "../../features/auth/authSlice";
+import { getPrivateProfile } from "../../api/user/user";
 
 type HomeScreenNavigationProp = BottomTabScreenProps<TabStackParamList, "Home">;
 

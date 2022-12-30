@@ -15,81 +15,82 @@ import React, { useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { AuthStackParamList } from "../navigator/AuthNavigator";
+import { AuthStackParamList } from "../../navigator/AuthNavigator";
 
-import { validateResetPassword } from "../utils/client_side_validation/auth_validation";
+import { validateForgotPassword } from "../../utils/client_side_validation/auth_validation";
 import Toast from "react-native-toast-message";
-import { resetForgotPassword } from "../api/auth/auth";
+import { forgotPassword } from "../../api/auth/auth";
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
-  "ResetPassword"
+  "ForgotPassword"
 >;
 
-const ResetPasswordScreen = () => {
+type forgotPasswordObject = {
+  serverError: "Something went wrong, please try again !";
+  alreadySent: "Oups, we already sent you a recovery link, check your inbox !";
+};
+
+const ForgotPasswordScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<SignInScreenNavigationProp>();
 
-  const [userID, setUserID] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const resetPassword = () => {
+  const sendRecoveryEmail = () => {
     setLoading(true);
     Keyboard.dismiss();
 
     // Perform client-side verification
-    const resetPasswordValidation: [boolean, string] = validateResetPassword(
-      userID,
-      verificationCode,
-      password,
-      confirmPassword
-    );
+    const forgotPasswordValidation: [boolean, string] =
+      validateForgotPassword(email);
 
-    if (resetPasswordValidation[0] === false) {
+    if (forgotPasswordValidation[0] === false) {
       Toast.show({
         type: "error",
-        text1: resetPasswordValidation[1],
+        text1: forgotPasswordValidation[1],
       });
       setLoading(false);
       return;
     }
 
     // send request to the server
+    // send request to the server
     let failed = false;
-    resetForgotPassword(userID, verificationCode, password, confirmPassword)
-      .then((res) => {
-        if (res.status === 200) {
-          Toast.show({
-            type: "success",
-            text1: res.data,
-          });
-        } else {
-          Toast.show({
-            type: "error",
-            text1: res.data,
-          });
-          failed = true;
-        }
-      })
-      .catch((err) => console.log(err));
+    forgotPassword(email).then((res) => {
+      if(res.status === 200) {
+        Toast.show({
+          type: "success",
+          text1: res.data,
+        });
+      } else {
+        Toast.show({
+          type: "error",
+          text1: res.data,
+        });
+        failed = true;
+      }
+    }).catch((err) => console.log(err))
 
     setLoading(false);
-    if (failed) return;
+    if(failed) return;
 
     resetAllFields();
-    navigation.navigate("SignIn"); // todo change it so that it automatically dispatch to the home screen
+    navigation.navigate("ResetPassword");
     return;
   };
 
   const resetAllFields = () => {
-    setConfirmPassword("");
-    setPassword("");
+    setEmail("");
     setLoading(false);
   };
+
+  const switchToResetPassword = () => {
+    Keyboard.dismiss();
+    resetAllFields();
+    navigation.navigate("ResetPassword");
+  }
 
   return (
     <KeyboardAvoidingView
@@ -117,7 +118,7 @@ const ResetPasswordScreen = () => {
                   { paddingVertical: 12, fontSize: 25 },
                 ]}
               >
-                Reset Password
+                Forgot Password
               </Text>
             </View>
 
@@ -128,44 +129,37 @@ const ResetPasswordScreen = () => {
                   { paddingVertical: 12, fontSize: 15 },
                 ]}
               >
-                Check your mailbox and fill below with the id and verification
-                code received :
+                "Treat your password like your toothbrush. Don't let anybody
+                else use it, and get a new one every six months."
+                <Text style={{ fontStyle: "italic" }}>
+                  {"   "}Clifford Stoll
+                </Text>
               </Text>
             </View>
+
             <TextInput
-              placeholder="Id received"
+              placeholder="Email"
               style={[tw("py-6")]}
-              value={userID}
-              onChangeText={setUserID}
-            />
-            <TextInput
-              placeholder="Verification code received"
-              style={[tw("py-6")]}
-              value={verificationCode}
-              onChangeText={setVerificationCode}
-            />
-            <TextInput
-              placeholder="New password"
-              style={[tw("py-6")]}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-            <TextInput
-              placeholder="Confirm new password"
-              style={[tw("py-6")]}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry
+              value={email}
+              onChangeText={setEmail}
             />
 
             <Button
-              title="Reset Password"
+              title="Send Recovery Email"
               style={[tw("py-2 px-4"), { width: 400 }]}
-              disabled={password.length === 0 || confirmPassword.length === 0}
-              onPress={resetPassword}
+              disabled={email.length === 0}
+              onPress={sendRecoveryEmail}
               loading={loading}
             />
+
+<View>
+              <Text style={[tw("text-center py-2"), { fontSize: 15 }]}>
+                Already received verification code ?{" "}
+                <Text onPress={switchToResetPassword} style={{ color: "#19e266" }}>
+                  Validate
+                </Text>
+              </Text>
+            </View>
 
             <Toast />
           </View>
@@ -175,4 +169,4 @@ const ResetPasswordScreen = () => {
   );
 };
 
-export default ResetPasswordScreen;
+export default ForgotPasswordScreen;

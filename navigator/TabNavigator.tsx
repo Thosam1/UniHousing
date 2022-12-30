@@ -6,8 +6,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
 
 // screens
-import HomeScreen from "../screens/HomeScreen";
-import ProfileScreen from "../screens/ProfileScreen";
+import HomeScreen from "../screens/Main/HomeScreen";
+import ProfileScreen from "../screens/Main/ProfileScreen";
 
 // icons
 import { Icon } from "@rneui/themed";
@@ -16,7 +16,10 @@ import { Icon } from "@rneui/themed";
 export type TabStackParamList = {
   // will check if the names param are correct
   Home: undefined;
+  Search: undefined;
+  Create: undefined;
   Profile: undefined;
+  Settings: undefined;
 };
 
 const Tab = createBottomTabNavigator<TabStackParamList>();

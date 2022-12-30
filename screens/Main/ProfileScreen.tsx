@@ -17,10 +17,10 @@ import { Button, Image } from "@rneui/themed";
 
 import { useTailwind } from "tailwind-rn/dist";
 
-import { getPrivateProfile } from "../api/user/user";
-import { PrivateProfile } from "../api/typesAPI";
-import { useAppDispatch, useAppSelector } from "../features/hooks";
-import { selectUser, setUser } from "../features/auth/authSlice";
+import { getPrivateProfile } from "../../api/user/user";
+import { PrivateProfile } from "../../api/typesAPI";
+import { useAppDispatch, useAppSelector } from "../../features/hooks";
+import { selectUser, setUser } from "../../features/auth/authSlice";
 
 const ProfileScreen = () => {
   const tw = useTailwind();

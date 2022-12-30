@@ -17,14 +17,14 @@ import React, { useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { AuthStackParamList } from "../navigator/AuthNavigator";
+import { AuthStackParamList } from "../../navigator/AuthNavigator";
 
-import { validateLogin } from "../utils/client_side_validation/auth_validation";
+import { validateLogin } from "../../utils/client_side_validation/auth_validation";
 import Toast from "react-native-toast-message";
 
-import { useAppDispatch } from "../features/hooks";
-import { setUserState } from "../features/auth/authSlice";
-import { login } from "../api/auth/auth";
+import { useAppDispatch } from "../../features/hooks";
+import { setUserState } from "../../features/auth/authSlice";
+import { login } from "../../api/auth/auth";
 import { data } from "autoprefixer";
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<

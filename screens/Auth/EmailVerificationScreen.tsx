@@ -15,11 +15,11 @@ import React, { useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { AuthStackParamList } from "../navigator/AuthNavigator";
+import { AuthStackParamList } from "../../navigator/AuthNavigator";
 
-import { validateEmailVerification } from "../utils/client_side_validation/auth_validation";
+import { validateEmailVerification } from "../../utils/client_side_validation/auth_validation";
 import Toast from "react-native-toast-message";
-import { verifyEmail } from "../api/auth/auth";
+import { verifyEmail } from "../../api/auth/auth";
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,

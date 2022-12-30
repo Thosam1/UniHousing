@@ -1,8 +1,8 @@
 import React from "react";
-import SignInScreen from "../screens/SignInScreen";
-import EmailVerificationScreen from "../screens/EmailVerificationScreen";
-import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
-import ResetPasswordScreen from "../screens/ResetPasswordScreen";
+import SignInScreen from "../screens/Auth/SignInScreen";
+import EmailVerificationScreen from "../screens/Auth/EmailVerificationScreen";
+import ForgotPasswordScreen from "../screens/Auth/ForgotPasswordScreen";
+import ResetPasswordScreen from "../screens/Auth/ResetPasswordScreen";
 import SplashScreen from "../screens/SplashScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import IntroductionScreen from "../screens/IntroductionScreen";
