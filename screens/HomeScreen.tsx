@@ -5,7 +5,7 @@ import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { TabStackParamList } from "../navigator/TabNavigator";
 
 import { useAppDispatch, useAppSelector } from "../features/hooks";
-import { logoutRTK, selectUser, setUser } from "../features/auth/authSlice";
+import { logoutRTK, selectUser, setUserState } from "../features/auth/authSlice";
 import { getPrivateProfile } from "../api/user/user";
 
 type HomeScreenNavigationProp = BottomTabScreenProps<TabStackParamList, "Home">;
@@ -14,12 +14,15 @@ const HomeScreen = () => {
   const dispatch = useAppDispatch();
 
   const getPrivateProfileButton = () => {
-    getPrivateProfile();
-  }
+    getPrivateProfile().then((res) => {
+      if(res.status === 200) {
+        console.log("WE GOT THE PRIVATE PROFILE DATA");
+        console.log(res.data)
+      } else {
+        console.log("NOT an OK response, couldn't get the user data")
+      }
+    }).catch((err) => console.log(err));
 
-  const logProfile = () => {
-    const user = useAppSelector(selectUser);
-    console.log(user)
   }
 
   const signOut = () => {
@@ -36,9 +39,6 @@ const HomeScreen = () => {
       <Text>HomeScreen</Text>
 
       <Button title="Get Private Profile" onPress={getPrivateProfileButton}></Button>
-
-      <Button title="logProfile" onPress={logProfile}></Button>
-
 
       <Button title="Sign Out" onPress={signOut}></Button>
     </View>

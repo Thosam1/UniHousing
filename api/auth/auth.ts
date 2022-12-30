@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { axiosClient, axiosPrivate } from "../RequestManager";
+import { axiosClient, BASE_URL } from "../RequestManager";
 
 // type loginResponse = {
 //   tokens: {
@@ -31,7 +31,7 @@ export function login(
   //     return Promise.reject(error);
   //   }    
   // );
-  return axiosClient.post("sessions/login", body) //.then((res) => res.data);
+  return axiosClient.post(BASE_URL + "sessions/login", body, { withCredentials: true, }); // .then((res) => res.data); // .then(), do it in screen otherwise, doesn't get the 200 OK
 }
 
 // export function loginJWT(email: string, jwt_token: string) {

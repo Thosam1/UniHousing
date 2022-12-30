@@ -42,14 +42,15 @@ export type PublicProfile = {
 
 export type PrivateProfile = {
     profile_id: string,
-    avatar_id: string,
+    // avatar_id: string,
     first_name: string,
     last_name: string,
+    email: string,
     status: string,
     bio: string,
 
-    owned_posts: [string],
-    saved_posts: [string]
+    // owned_posts: [string],
+    // saved_posts: [string]
 }
 
 

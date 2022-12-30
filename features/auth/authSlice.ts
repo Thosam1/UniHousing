@@ -8,7 +8,7 @@ type authState = {
   accessToken: string | null,
   // refreshToken: string | null,
   authenticated: boolean | null,
-  user: PrivateProfile | null;
+  user: PrivateProfile;
 }
 
 // const userToken = null; // localStorage.getItem('userToken') ? localStorage.getItem('userToken') : null;
@@ -17,7 +17,14 @@ type authState = {
 const initialState: authState = {
   accessToken: null,
   authenticated: false,
-  user: null,
+  user: {
+    profile_id: '',
+    first_name: '',
+    last_name: '',
+    email: '',
+    status: '',
+    bio: '',
+  },
 }
 
 export const authSlice = createSlice({
@@ -26,7 +33,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     logoutRTK: () => initialState,
-    setUser: (
+    setUserState: (
       state,
       action: PayloadAction<{ authenticated: boolean; accessToken: string }>
     ) => {
@@ -35,13 +42,19 @@ export const authSlice = createSlice({
 
       // also must fetch user profile
     },
+    setUser: (
+      state,
+      action: PayloadAction<{ user: PrivateProfile }>
+    ) => {
+      state.user = action.payload.user;
+    },
     defaultState: (state) => {
       state = initialState;
     },
   },
 })
 
-export const { setUser, logoutRTK, defaultState } = authSlice.actions
+export const { setUserState, setUser, logoutRTK, defaultState } = authSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectAuthStatus = (state: RootState) => state.auth.authenticated

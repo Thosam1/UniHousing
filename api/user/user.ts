@@ -1,14 +1,17 @@
 import axios from "axios";
-import { axiosClient, axiosPrivate, BASE_URL, JSON_TYPE } from "../RequestManager";
+import { axiosClient, BASE_URL, JSON_TYPE } from "../RequestManager";
 
 export const getPrivateProfile = () => {
-  return axios.create({
-    baseURL: BASE_URL,
-    headers: {
-      "Content-Type": JSON_TYPE,
-      Authorization: `Bearer ${localStorage.getItem("accessToken")}` // problem because of const, doesn't update after signIn !
-    },
-  }).post("users/me").then((res) => res.data).catch(() => { return null; });
+  // return axios.create({
+  //   baseURL: BASE_URL,
+  //   headers: {
+  //     "Content-Type": JSON_TYPE,
+  //     Authorization: `Bearer ${localStorage.getItem("accessToken")}` // problem because of const, doesn't update after signIn !
+  //   },
+  // }).post("users/me").then((res) => res.data).catch(() => { return null; });
+  return axiosClient.get("users/me", {
+    withCredentials: true,
+  }) // .then((res) => res.data).catch(() => { return null; }); // todo check if works or not
 };
 
 export const getPublicProfile = (user_id: string) => {

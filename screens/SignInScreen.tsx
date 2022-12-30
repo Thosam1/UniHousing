@@ -23,7 +23,7 @@ import { validateLogin } from "../utils/client_side_validation/auth_validation";
 import Toast from "react-native-toast-message";
 
 import { useAppDispatch } from "../features/hooks";
-import { setUser } from "../features/auth/authSlice";
+import { setUserState } from "../features/auth/authSlice";
 import { login } from "../api/auth/auth";
 import { data } from "autoprefixer";
 
@@ -76,7 +76,7 @@ const SignInScreen = () => {
         setFailed(false);
         console.log(`new accessToken received : ${res.data.accessToken}`)
         localStorage.setItem("accessToken", res.data.accessToken);
-        dispatch(setUser({ authenticated: true, accessToken: res.data.accessToken }));
+        dispatch(setUserState({ authenticated: true, accessToken: res.data.accessToken }));
       } else {
         Toast.show({
           type: "error",
