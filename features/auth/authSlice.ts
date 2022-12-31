@@ -60,5 +60,6 @@ export const { setUserState, setUser, logoutRTK, defaultState } = authSlice.acti
 export const selectAuthStatus = (state: RootState) => state.auth.authenticated
 export const selectAccessToken = (state: RootState) => state.auth.accessToken
 export const selectUser = (state: RootState) => state.auth.user
+export const selectUserID = (state: RootState) => state.auth.user.profile_id
 
 export default authSlice.reducer

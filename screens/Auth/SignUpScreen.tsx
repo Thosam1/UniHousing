@@ -14,15 +14,15 @@ import React, { useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { AuthStackParamList } from "../navigator/AuthNavigator";
+import { AuthStackParamList } from "../../navigator/AuthNavigator";
 import { Button, Image } from "@rneui/themed";
 
-import { validateRegister } from "../utils/client_side_validation/auth_validation";
+import { validateRegister } from "../../utils/client_side_validation/auth_validation";
 import Toast from "react-native-toast-message";
 
-import { register } from "../api/auth/auth";
+import { register } from "../../api/auth/auth";
 
-import { useAppDispatch } from "../features/hooks";
+import { useAppDispatch } from "../../features/hooks";
 
 type IntroductionSignUpScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -124,7 +124,7 @@ const SignUpScreen = () => {
             ]}
           >
             <Image
-              source={require("../assets/images/register_image.png")}
+              source={require("../../assets/images/register_image.png")}
               style={[{ height: 300, width: 300 }]}
               PlaceholderContent={<ActivityIndicator />}
             />
@@ -182,6 +182,7 @@ const SignUpScreen = () => {
               title="Sign Up"
               style={[tw("py-2 px-4"), { width: 400 }]}
               onPress={registerButton}
+              loading={loading}
               disabled={
                 firstName.length === 0 ||
                 lastName.length === 0 ||

@@ -128,7 +128,7 @@ const SignInScreen = () => {
             ]}
           >
             <Image
-              source={require("../assets/images/login_image.png")}
+              source={require("../../assets/images/login_image.png")}
               style={[{ height: 300, width: 300 }]}
               PlaceholderContent={<ActivityIndicator />}
             />

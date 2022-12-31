@@ -11,6 +11,7 @@ import ProfileScreen from "../screens/Main/ProfileScreen";
 
 // icons
 import { Icon } from "@rneui/themed";
+import EditProfileScreen from "../screens/Main/EditProfileScreen";
 
 // type definitions
 export type TabStackParamList = {
@@ -50,7 +51,31 @@ const TabNavigator = () => {
                 color={focused ? "#59C1CC" : "gray"}
               />
             );
+          } else if (route.name === "Search") {
+            return (
+              <Icon
+                name="box"
+                type="entypo"
+                color={focused ? "#EB6A7C" : "gray"}
+              />
+            );
+          } else if (route.name === "Create") {
+            return (
+              <Icon
+                name="box"
+                type="entypo"
+                color={focused ? "#EB6A7C" : "gray"}
+              />
+            );
           } else if (route.name === "Profile") {
+            return (
+              <Icon
+                name="box"
+                type="entypo"
+                color={focused ? "#EB6A7C" : "gray"}
+              />
+            );
+          } else if (route.name === "Settings") {
             return (
               <Icon
                 name="box"

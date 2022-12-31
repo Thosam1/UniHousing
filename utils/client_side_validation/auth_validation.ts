@@ -38,7 +38,7 @@ export const validateRegister = (first_name: string, last_name: string, email: s
         return lastNameValidation;
     } 
 
-    const emailAndBothPasswordsValidation: [boolean, string] = validateResetPassword(email, password, confirmPassword);   
+    const emailAndBothPasswordsValidation: [boolean, string] = validateResetPassword("DUMMAY ID asdfas6d1f5q6e", email, password, confirmPassword);   
     if(emailAndBothPasswordsValidation[0] === false) {
         return lastNameValidation;
     } 

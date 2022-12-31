@@ -1,14 +1,14 @@
 /* Home Screen : the screen we show if the user is already signed in. */
 import { View, Text, Button } from "react-native";
 import React from "react";
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { BottomTabNavigationProp, BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { TabStackParamList } from "../../navigator/TabNavigator";
 
 import { useAppDispatch, useAppSelector } from "../../features/hooks";
 import { logoutRTK, selectUser, setUserState } from "../../features/auth/authSlice";
 import { getPrivateProfile } from "../../api/user/user";
 
-type HomeScreenNavigationProp = BottomTabScreenProps<TabStackParamList, "Home">;
+type HomeScreenNavigationProp = BottomTabNavigationProp<TabStackParamList, "Home">;
 
 const HomeScreen = () => {
   const dispatch = useAppDispatch();

@@ -21,47 +21,24 @@ export const getPublicProfile = (user_id: string) => {
   return axiosClient.post("post/get-public-profile", body);
 };
 
-export const changeProfileFirstName = (user_id: string, jwt_token: string) => {
-  const body = JSON.stringify({
-    user_id,
-    jwt_token,
-  });
-  return axiosClient.post("user/change-first-name", body);
-};
-
-export const changeProfileLastName = (user_id: string, jwt_token: string) => {
-  const body = JSON.stringify({
-    user_id,
-    jwt_token,
-  });
-  return axiosClient.post("user/change-last-name", body);
-};
 
 export const changeProfileAvatar = (user_id: string, jwt_token: string) => {
   const body = JSON.stringify({
     user_id,
   });
-  return axiosClient.post("user/change-avatar", body);
+  return axiosClient.post("users/change-avatar", body);
 };
 
-export const changeStatus = (
-  user_id: string,
-  jwt_token: string,
-  status: string
+export const editProfile = (
+payload : {
+  id: string,
+  newFirstName: string,
+  newLastName: string,
+  newStatus: string,
+  newBio: string
+}
 ) => {
-  const body = JSON.stringify({
-    user_id,
-    status,
-  });
-  return axiosClient.post("user/change-status", body);
-};
-
-export const changeBio = (user_id: string, jwt_token: string, bio: string) => {
-  const body = JSON.stringify({
-    user_id,
-    bio,
-  });
-  return axiosClient.post("user/change-bio", body);
+  return axiosClient.post("users/me/edit-profile", payload);
 };
 
 export const changePassword = (

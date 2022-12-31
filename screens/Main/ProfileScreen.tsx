@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 
 import {
@@ -12,6 +11,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
+  Modal,
+  Pressable,
 } from "react-native";
 import { Button, Image } from "@rneui/themed";
 
@@ -21,21 +22,24 @@ import { getPrivateProfile } from "../../api/user/user";
 import { PrivateProfile } from "../../api/typesAPI";
 import { useAppDispatch, useAppSelector } from "../../features/hooks";
 import { selectUser, setUser } from "../../features/auth/authSlice";
+import { BottomTabNavigationProp, BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from "@react-navigation/native";
+import { TabStackParamList } from "../../navigator/TabNavigator";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { SecondaryStackParamList } from "../../navigator/SecondaryNavigator";
+
+type ProfileScreenNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabStackParamList, "Profile">,
+  NativeStackNavigationProp<SecondaryStackParamList>
+>;
 
 const ProfileScreen = () => {
   const tw = useTailwind();
-  const navigation = useNavigation(); // maybe to modify profile
+  const navigation = useNavigation<ProfileScreenNavigationProp>(); // maybe to modify profile
   const dispatch = useAppDispatch();
-
-  // const user = {
-  //   avatar: "avatar_link",
-  //   firstName: "Thösam",
-  //   lastName: "Norlha-Tsang",
-  //   email: "abc@gmail.com",
-  //   status:
-  //     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porttitor, metus in sagittis euismod",
-  //   bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porttitor, metus in sagittis euismod, purus elit feugiat leo, ac malesuada dolor turpis in tellus. Vestibulum commodo felis sit amet fringilla efficitur. Sed dictum semper odio, sed imperdiet est feugiat et. Aliquam ornare aliquam hendrerit. Curabitur porttitor in urna non blandit. Proin at faucibus magna. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis pharetra felis magna, non feugiat est fermentum ac. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc ultricies neque in volutpat vehicula. Curabitur quis iaculis tellus.",
-  // };
 
   let user = useAppSelector(selectUser);
 
@@ -49,16 +53,15 @@ const ProfileScreen = () => {
           console.log(res.data);
 
           // putting what we got in the global state in RTK
-          const user : PrivateProfile = {
+          const user: PrivateProfile = {
             profile_id: res.data._id,
             first_name: res.data.firstName as string,
             last_name: res.data.lastName as string,
             email: res.data.email as string,
             status: res.data.status as string,
-            bio: res.data.bio as string
-          }
-          dispatch(setUser({ user }))
-
+            bio: res.data.bio as string,
+          };
+          dispatch(setUser({ user }));
         } else {
           console.log("NOT an OK response, couldn't get the user data");
         }
@@ -66,11 +69,17 @@ const ProfileScreen = () => {
       .catch((err) => console.log(err));
   }, [antiInfiniteLoop]);
 
-  const editProfileButton = () => {};
+  const editProfileButton = () => {
+    navigation.navigate("EditProfile");
+  };
 
-  const yourPostsButton = () => {};
+  const yourPostsButton = () => {
+    navigation.navigate("OwnedPosts");
+  };
 
-  const savedPostsButton = () => {};
+  const savedPostsButton = () => {
+    navigation.navigate("SavedPosts");
+  };
 
   return (
     <SafeAreaView style={tw("flex items-center")}>

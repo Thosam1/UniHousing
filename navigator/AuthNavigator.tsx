@@ -6,7 +6,7 @@ import ResetPasswordScreen from "../screens/Auth/ResetPasswordScreen";
 import SplashScreen from "../screens/SplashScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import IntroductionScreen from "../screens/IntroductionScreen";
-import SignUpScreen from "../screens/SignUpScreen";
+import SignUpScreen from "../screens/Auth/SignUpScreen";
 
 // type definitions
 export type AuthStackParamList = {
