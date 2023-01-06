@@ -28,16 +28,10 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { TabStackParamList } from "../../navigator/TabNavigator";
 import { SecondaryStackParamList } from "../../navigator/SecondaryNavigator";
-
-// type EditProfileScreenProps = {
-//   firstName_prop: string;
-//   lastName_prop: string;
-//   status_prop: string;
-//   bio_prop: string;
-// };
+import { AppStackParamList } from "../../navigator/AppNavigator";
 
 type EditProfileScreenNavigationProp = CompositeNavigationProp<
-NativeStackNavigationProp<SecondaryStackParamList, "EditProfile">,
+NativeStackNavigationProp<AppStackParamList, "EditProfile">,
   BottomTabNavigationProp<TabStackParamList>
 >;
 
@@ -53,7 +47,15 @@ const EditProfileScreen = () => {
 
   const [loading, setLoading] = useState(false);
 
+  const [antiInfiniteLoop, setAntiInfiniteLoop] = useState("");
+
   let user = useAppSelector(selectUser);
+  useEffect(() => { 
+    setFirstName(user.first_name);
+    setLastName(user.last_name);
+    setStatus(user.status);
+    setBio(user.bio);
+  }, [antiInfiniteLoop])
 
   const cancelButton = () => {
     navigation.navigate("Profile");
@@ -105,7 +107,8 @@ const EditProfileScreen = () => {
         }
       })
       .catch((err) => console.log(err));
-  };
+      setLoading(false);
+    };
 
   return (
     <SafeAreaView style={tw("flex items-center")}>
@@ -131,7 +134,6 @@ const EditProfileScreen = () => {
             <View style={[tw("flex flex-col"), { paddingRight: 15 }]}>
               <Text>First Name</Text>
               <TextInput
-                placeholder={user.first_name}
                 style={[tw("py-2")]}
                 value={firstName}
                 onChangeText={setFirstName}
@@ -141,7 +143,6 @@ const EditProfileScreen = () => {
             <View style={[tw("flex flex-col"), { paddingLeft: 15 }]}>
               <Text>Last Name</Text>
               <TextInput
-                placeholder={user.last_name}
                 style={[tw("py-2")]}
                 value={lastName}
                 onChangeText={setLastName}
@@ -157,7 +158,6 @@ const EditProfileScreen = () => {
           >
             <Text>Status</Text>
             <TextInput
-              placeholder={user.status}
               style={[tw("py-2")]}
               value={status}
               onChangeText={setStatus}
@@ -171,7 +171,6 @@ const EditProfileScreen = () => {
           >
             <Text>Bio</Text>
             <TextInput
-              placeholder={user.bio}
               style={[tw("py-2")]}
               value={bio}
               onChangeText={setBio}
@@ -180,13 +179,13 @@ const EditProfileScreen = () => {
 
           <View></View>
           <Button
-            title="Edit Profile"
+            title="Cancel"
             style={[tw("py-1 px-4"), { width: 400 }]}
             onPress={cancelButton}
           />
 
           <Button
-            title="Your Posts"
+            title="Done"
             style={[tw("py-2 px-4"), { width: 400 }]}
             loading={loading}
             onPress={doneButton}

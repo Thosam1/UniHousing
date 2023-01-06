@@ -38,7 +38,9 @@ payload : {
   newBio: string
 }
 ) => {
-  return axiosClient.post("users/me/edit-profile", payload);
+  return axiosClient.post("users/me/edit-profile", payload, {
+    withCredentials: true,
+  });
 };
 
 export const changePassword = (
@@ -54,7 +56,9 @@ export const changePassword = (
     newPassword,
   });
   // todo security reason, would be better to encrypt the password before sending it
-  return axiosClient.post("users/change-password", body);
+  return axiosClient.post("users/change-password", body, {
+    withCredentials: true,
+  });
 };
 
 export const closeAccount = (
@@ -67,5 +71,7 @@ export const closeAccount = (
     jwt_token,
     message,
   });
-  return axiosClient.post("users/close-account", body);
+  return axiosClient.post("users/close-account", body, {
+    withCredentials: true,
+  });
 };

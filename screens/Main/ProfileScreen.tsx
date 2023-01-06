@@ -30,10 +30,11 @@ import {
 import { TabStackParamList } from "../../navigator/TabNavigator";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SecondaryStackParamList } from "../../navigator/SecondaryNavigator";
+import { AppStackParamList } from "../../navigator/AppNavigator";
 
 type ProfileScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList, "Profile">,
-  NativeStackNavigationProp<SecondaryStackParamList>
+  NativeStackNavigationProp<AppStackParamList>
 >;
 
 const ProfileScreen = () => {
@@ -70,6 +71,7 @@ const ProfileScreen = () => {
   }, [antiInfiniteLoop]);
 
   const editProfileButton = () => {
+    // navigation.navigate("EditProfile");
     navigation.navigate("EditProfile");
   };
 
