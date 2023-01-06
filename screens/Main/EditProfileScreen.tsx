@@ -32,7 +32,7 @@ import { PrivateProfile } from "../../api/typesAPI";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { TabStackParamList } from "../../navigator/TabNavigator";
-import { SecondaryStackParamList } from "../../navigator/SecondaryNavigator";
+
 import { AppStackParamList } from "../../navigator/AppNavigator";
 import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
 
@@ -91,14 +91,7 @@ const EditProfileScreen = () => {
       return;
     }
 
-    editProfile(
-      user.profile_id,
-      avatar,
-      firstName,
-      lastName,
-      status,
-      bio,
-    )
+    editProfile(user.profile_id, avatar, firstName, lastName, status, bio)
       .then((res) => {
         if (res.status === 200) {
           console.log("WE GOT THE PRIVATE PROFILE DATA");
@@ -107,6 +100,7 @@ const EditProfileScreen = () => {
           // putting what we got in the global state in RTK
           const user: PrivateProfile = {
             profile_id: res.data._id,
+            avatar: res.data.avatar,
             first_name: res.data.firstName as string,
             last_name: res.data.lastName as string,
             email: res.data.email as string,
@@ -140,7 +134,7 @@ const EditProfileScreen = () => {
     if (!picked.canceled) {
       setAvatar(picked.assets[0]);
       setAvatarChanged(true);
-      console.log("avatar has been picked !")
+      console.log("avatar has been picked !");
     }
   };
 
@@ -176,6 +170,12 @@ const EditProfileScreen = () => {
             {avatar && (
               <Image
                 source={{ uri: avatar.uri }}
+                style={{ width: 200, height: 200 }}
+              />
+            )}
+            {!avatar && (
+              <Image
+                source={require("../../assets/images/anonymous-avatar.jpg")}
                 style={{ width: 200, height: 200 }}
               />
             )}
@@ -249,7 +249,8 @@ const EditProfileScreen = () => {
               firstName === user.first_name &&
               lastName === user.last_name &&
               status === user.status &&
-              bio === user.bio && !avatarChanged
+              bio === user.bio &&
+              !avatarChanged
             }
           />
         </View>

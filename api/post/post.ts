@@ -3,38 +3,49 @@ import { Date, Location } from "../typesAPI";
 
 // when creating a post
 export const createPost = (
-  user_id: string,
-  jwt_token: string,
+  user: string,
   title: string,
+  city: string,
+  country: string,
+  startDate: string,
+  endDate: string,
   description: string,
-  location: Location,
-  date: Date,
   price: string
 ) => {
   const body = JSON.stringify({
-    user_id,
-    jwt_token,
+    user,
     title,
+    city,
+    country,
+    startDate,
+    endDate,
     description,
-    location,
-    date,
     price,
   });
-  return axiosClient.post("post/create-post", body);
+
+  return axiosClient.post("post/create", body, { withCredentials: true });
 };
 
-export const deletePost = (
-  user_id: string,
-  jwt_token: string,
-  post_id: string
-) => {
+export const editPost = (input: {
+  user: string;
+  title: string;
+  city: string;
+  country: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  price: string;
+}) => {
+  return axiosClient.post("post/edit", input, { withCredentials: true });
+};
+
+export const deletePost = (user_id: string, post_id: string) => {
   // from security perspective would be good to add a second factor authentification like a code to avoid attacks
   const body = JSON.stringify({
     user_id,
     post_id,
-    jwt_token,
   });
-  return axiosClient.post("post/delete-post", body);
+  return axiosClient.post("post/delete", body, { withCredentials: true });
 };
 
 // when individually clicked on
@@ -90,17 +101,3 @@ export const unSavePost = (
   return axiosClient.post("post/unsave-post", body);
 };
 
-export const getUserOwnedPosts = (user_id: string) => {
-  const body = JSON.stringify({
-    user_id,
-  });
-  return axiosClient.post("post/user-owned-posts", body);
-};
-
-export const getUserSavedPosts = (user_id: string, jwt_token: string) => {
-  const body = JSON.stringify({
-    user_id,
-    jwt_token,
-  });
-  return axiosClient.post("post/user-saved-posts", body);
-};

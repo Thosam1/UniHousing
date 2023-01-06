@@ -12,6 +12,7 @@ import ProfileScreen from "../screens/Main/ProfileScreen";
 // icons
 import { Icon } from "@rneui/themed";
 import EditProfileScreen from "../screens/Main/EditProfileScreen";
+import CreateScreen from "../screens/Main/CreateScreen";
 
 // type definitions
 export type TabStackParamList = {
@@ -96,6 +97,14 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
+        name="Create"
+        component={CreateScreen}
+        options={{
+          title: "Create",
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
@@ -103,7 +112,6 @@ const TabNavigator = () => {
           headerShown: false,
         }}
       />
-      
     </Tab.Navigator>
   );
 };

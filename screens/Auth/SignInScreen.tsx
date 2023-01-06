@@ -23,9 +23,11 @@ import { validateLogin } from "../../utils/client_side_validation/auth_validatio
 import Toast from "react-native-toast-message";
 
 import { useAppDispatch } from "../../features/hooks";
-import { setUserState } from "../../features/auth/authSlice";
+import { setUser, setUserState } from "../../features/auth/authSlice";
 import { login } from "../../api/auth/auth";
 import { data } from "autoprefixer";
+import { getPrivateProfile } from "../../api/user/user";
+import { PrivateProfile } from "../../api/typesAPI";
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -67,28 +69,59 @@ const SignInScreen = () => {
 
     // send request to the server
     let failed = false;
-    login(email, password, rememberMe).then((res) => {
-      if(res.status === 200) {
-        // Toast.show({
-        //   type: "success",
-        //   text1: "Login successful",
-        // });
-        setFailed(false);
-        console.log(`new accessToken received : ${res.data.accessToken}`)
-        localStorage.setItem("accessToken", res.data.accessToken);
-        dispatch(setUserState({ authenticated: true, accessToken: res.data.accessToken }));
-      } else {
-        Toast.show({
-          type: "error",
-          text1: "Login error",
-        });
-        failed = true;
-        setFailed(true);
-      }
-    }).catch((err) => console.log(err))
+    login(email, password, rememberMe)
+      .then((res) => {
+        if (res.status === 200) {
+          // Toast.show({
+          //   type: "success",
+          //   text1: "Login successful",
+          // });
+          setFailed(false);
+          console.log(`new accessToken received : ${res.data.accessToken}`);
+          localStorage.setItem("accessToken", res.data.accessToken);
+
+          getPrivateProfile()
+            .then((res) => {
+              if (res.status === 200) {
+                console.log("WE GOT THE PRIVATE PROFILE DATA");
+                console.log(res.data);
+
+                // putting what we got in the global state in RTK
+                const user: PrivateProfile = {
+                  profile_id: res.data._id,
+                  avatar: res.data.avatar,
+                  first_name: res.data.firstName as string,
+                  last_name: res.data.lastName as string,
+                  email: res.data.email as string,
+                  status: res.data.status as string,
+                  bio: res.data.bio as string,
+                };
+                dispatch(setUser({ user }));
+              } else {
+                console.log("NOT an OK response, couldn't get the user data");
+              }
+            })
+            .catch((err) => console.log(err));
+
+          dispatch(
+            setUserState({
+              authenticated: true,
+              accessToken: res.data.accessToken,
+            })
+          );
+        } else {
+          Toast.show({
+            type: "error",
+            text1: "Login error",
+          });
+          failed = true;
+          setFailed(true);
+        }
+      })
+      .catch((err) => console.log(err));
 
     setLoading(false);
-    if(failed) return;
+    if (failed) return;
     resetAllFields();
     // todo change variable so we are redirected to home screen
     return;

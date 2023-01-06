@@ -12,6 +12,7 @@ import {
   Keyboard,
   ScrollView,
   Modal,
+  StyleSheet,
   Pressable,
 } from "react-native";
 import { Button, Image } from "@rneui/themed";
@@ -22,14 +23,17 @@ import { getPrivateProfile } from "../../api/user/user";
 import { PrivateProfile } from "../../api/typesAPI";
 import { useAppDispatch, useAppSelector } from "../../features/hooks";
 import { selectUser, setUser } from "../../features/auth/authSlice";
-import { BottomTabNavigationProp, BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import {
+  BottomTabNavigationProp,
+  BottomTabScreenProps,
+} from "@react-navigation/bottom-tabs";
 import {
   CompositeNavigationProp,
   useNavigation,
 } from "@react-navigation/native";
 import { TabStackParamList } from "../../navigator/TabNavigator";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { SecondaryStackParamList } from "../../navigator/SecondaryNavigator";
+import { useIsFocused } from '@react-navigation/native';
 import { AppStackParamList } from "../../navigator/AppNavigator";
 
 type ProfileScreenNavigationProp = CompositeNavigationProp<
@@ -41,10 +45,9 @@ const ProfileScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<ProfileScreenNavigationProp>(); // maybe to modify profile
   const dispatch = useAppDispatch();
+  const isFocused = useIsFocused();
 
   let user = useAppSelector(selectUser);
-
-  const [antiInfiniteLoop, setAntiInfiniteLoop] = useState("");
 
   useEffect(() => {
     getPrivateProfile()
@@ -56,6 +59,7 @@ const ProfileScreen = () => {
           // putting what we got in the global state in RTK
           const user: PrivateProfile = {
             profile_id: res.data._id,
+            avatar: res.data.avatar,
             first_name: res.data.firstName as string,
             last_name: res.data.lastName as string,
             email: res.data.email as string,
@@ -68,7 +72,7 @@ const ProfileScreen = () => {
         }
       })
       .catch((err) => console.log(err));
-  }, [antiInfiniteLoop]);
+  }, [isFocused]);
 
   const editProfileButton = () => {
     // navigation.navigate("EditProfile");
@@ -101,7 +105,14 @@ const ProfileScreen = () => {
             Profile
           </Text>
 
-          <Text>Avatar</Text>
+          <View style={imageUploaderStyles.container}>
+            <Image
+              // source={ ( user.avatar === "" ? require("../../assets/images/anonymous-avatar.jpg") : require(`${user.avatar}`)) }
+              source={require("../../assets/images/anonymous-avatar.jpg")}
+
+              style={{ width: 200, height: 200 }}
+            />
+          </View>
 
           <View style={[tw("flex flex-row"), { paddingVertical: 20 }]}>
             <View style={[tw("flex flex-col"), { paddingRight: 15 }]}>
@@ -164,5 +175,16 @@ const ProfileScreen = () => {
     </SafeAreaView>
   );
 };
+
+const imageUploaderStyles = StyleSheet.create({
+  container: {
+    elevation: 2,
+    height: 200,
+    width: 200,
+    backgroundColor: "#efefef",
+    position: "relative",
+    borderRadius: 999,
+    overflow: "hidden",
+  }});
 
 export default ProfileScreen;

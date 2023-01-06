@@ -23,10 +23,12 @@ export type Post = {
   owner_id: string;
   title: string;
   description: string;
-  location: Location;
-  date: Date;
+  city: string;
+  country: string;
+  startDate: string;
+  endDate:string;
   price: string;
-  photos_ids: [string];
+  // photos_ids: [string];
 };
 
 // idea, we can pass the PostCardProps as a prop to the new screen, and then fetch the title and description with the post_id
@@ -42,7 +44,7 @@ export type PublicProfile = {
 
 export type PrivateProfile = {
     profile_id: string,
-    // avatar_id: string,
+    avatar: string, // url
     first_name: string,
     last_name: string,
     email: string,

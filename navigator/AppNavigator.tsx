@@ -37,7 +37,7 @@ const AppNavigator = () => {
         component={OwnedPostsSreen}
         options={{
           title: "Owned Posts",
-          headerShown: false,
+          headerShown: true,
         }}
       />
       <AppStack.Screen
@@ -45,7 +45,7 @@ const AppNavigator = () => {
         component={SavedPostsScreen}
         options={{
           title: "Saved Posts",
-          headerShown: false,
+          headerShown: true,
         }}
       />
 
