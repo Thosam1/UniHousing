@@ -1,5 +1,6 @@
 import axios from "axios";
-import { axiosClient, BASE_URL, JSON_TYPE } from "../RequestManager";
+import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
+import { axiosClient, axiosClientImages, BASE_URL, JSON_TYPE } from "../RequestManager";
 
 export const getPrivateProfile = () => {
   // return axios.create({
@@ -11,7 +12,7 @@ export const getPrivateProfile = () => {
   // }).post("users/me").then((res) => res.data).catch(() => { return null; });
   return axiosClient.get("users/me", {
     withCredentials: true,
-  }) // .then((res) => res.data).catch(() => { return null; }); // todo check if works or not
+  }); // .then((res) => res.data).catch(() => { return null; }); // todo check if works or not
 };
 
 export const getPublicProfile = (user_id: string) => {
@@ -21,7 +22,6 @@ export const getPublicProfile = (user_id: string) => {
   return axiosClient.post("post/get-public-profile", body);
 };
 
-
 export const changeProfileAvatar = (user_id: string, jwt_token: string) => {
   const body = JSON.stringify({
     user_id,
@@ -30,15 +30,52 @@ export const changeProfileAvatar = (user_id: string, jwt_token: string) => {
 };
 
 export const editProfile = (
-payload : {
   id: string,
+  avatar: ImagePickerAsset | null, // null if no need to change avatar
   newFirstName: string,
   newLastName: string,
   newStatus: string,
   newBio: string
-}
 ) => {
-  return axiosClient.post("users/me/edit-profile", payload, {
+  // uploading user avatar if given
+  if (avatar) {
+
+    console.log("avatar is not null")
+
+    // ImagePicker saves the taken photo to disk and returns a local URI to it
+    let localUri = avatar.uri;
+    let filename = localUri.split("/").pop() as string;
+
+    // Infer the type of the image
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+
+    // Upload the image using the fetch and FormData APIs
+    let formData = new FormData();
+    // Assume "photo" is the name of the form field the server expects
+    formData.append(
+      "image",
+      JSON.parse(JSON.stringify({ uri: localUri, name: filename, type }))
+    );
+
+    console.log(formData);
+
+    axiosClientImages.post("users/me/edit-profile/avatar", formData, {
+      withCredentials: true,
+    });
+
+    console.log("SENT REQUEST FOR AVATAR")
+
+  }
+
+  const body = JSON.stringify({
+    id,
+    newFirstName,
+    newLastName,
+    newStatus,
+    newBio,
+  });
+  return axiosClient.post("users/me/edit-profile", body, {
     withCredentials: true,
   });
 };

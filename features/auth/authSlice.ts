@@ -19,6 +19,7 @@ const initialState: authState = {
   authenticated: false,
   user: {
     profile_id: '',
+    // avatar: '',
     first_name: '',
     last_name: '',
     email: '',

@@ -25,6 +25,14 @@ export const axiosClient = axios.create({
   },
 });
 
+export const axiosClientImages = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    Accept: JSON_TYPE,
+    'Content-Type': 'multipart/form-data',
+  },
+});
+
 // // for JWT -> interceptors
 // export const axiosPrivate = axios.create({
 //   baseURL: BASE_URL,

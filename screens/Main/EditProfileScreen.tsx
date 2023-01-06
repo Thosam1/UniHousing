@@ -1,6 +1,9 @@
-import { CompositeNavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-
+import * as ImagePicker from "expo-image-picker";
 import {
   View,
   Text,
@@ -14,6 +17,8 @@ import {
   ScrollView,
   Modal,
   Pressable,
+  StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import { Button, Image } from "@rneui/themed";
 import Toast from "react-native-toast-message";
@@ -29,9 +34,10 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { TabStackParamList } from "../../navigator/TabNavigator";
 import { SecondaryStackParamList } from "../../navigator/SecondaryNavigator";
 import { AppStackParamList } from "../../navigator/AppNavigator";
+import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
 
 type EditProfileScreenNavigationProp = CompositeNavigationProp<
-NativeStackNavigationProp<AppStackParamList, "EditProfile">,
+  NativeStackNavigationProp<AppStackParamList, "EditProfile">,
   BottomTabNavigationProp<TabStackParamList>
 >;
 
@@ -40,6 +46,8 @@ const EditProfileScreen = () => {
   const navigation = useNavigation<EditProfileScreenNavigationProp>(); // maybe to modify profile
   const dispatch = useAppDispatch();
 
+  const [avatar, setAvatar] = useState<ImagePickerAsset | null>(null);
+  const [avatarChanged, setAvatarChanged] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [status, setStatus] = useState("");
@@ -50,12 +58,14 @@ const EditProfileScreen = () => {
   const [antiInfiniteLoop, setAntiInfiniteLoop] = useState("");
 
   let user = useAppSelector(selectUser);
-  useEffect(() => { 
+  useEffect(() => {
     setFirstName(user.first_name);
     setLastName(user.last_name);
     setStatus(user.status);
     setBio(user.bio);
-  }, [antiInfiniteLoop])
+
+    checkForCameraRollPermission();
+  }, [antiInfiniteLoop]);
 
   const cancelButton = () => {
     navigation.navigate("Profile");
@@ -81,7 +91,14 @@ const EditProfileScreen = () => {
       return;
     }
 
-    editProfile({ id: user.profile_id, newFirstName: firstName, newLastName: lastName, newStatus: status, newBio: bio })
+    editProfile(
+      user.profile_id,
+      avatar,
+      firstName,
+      lastName,
+      status,
+      bio,
+    )
       .then((res) => {
         if (res.status === 200) {
           console.log("WE GOT THE PRIVATE PROFILE DATA");
@@ -107,9 +124,36 @@ const EditProfileScreen = () => {
         }
       })
       .catch((err) => console.log(err));
-      setLoading(false);
-    };
+    setLoading(false);
+  };
 
+  const pickAvatar = async () => {
+    let picked = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      allowsMultipleSelection: false,
+      aspect: [4, 3],
+      quality: 0.8, // [0-1] % quality
+    });
+
+    // an image has been picked
+    if (!picked.canceled) {
+      setAvatar(picked.assets[0]);
+      setAvatarChanged(true);
+      console.log("avatar has been picked !")
+    }
+  };
+
+  const checkForCameraRollPermission = async () => {
+    const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert(
+        "Please grant camera roll permissions inside your system's settings"
+      );
+    } else {
+      console.log("Media Permissions are granted");
+    }
+  };
   return (
     <SafeAreaView style={tw("flex items-center")}>
       <ScrollView>
@@ -128,7 +172,23 @@ const EditProfileScreen = () => {
             Profile
           </Text>
 
-          <Text>Avatar</Text>
+          <View style={imageUploaderStyles.container}>
+            {avatar && (
+              <Image
+                source={{ uri: avatar.uri }}
+                style={{ width: 200, height: 200 }}
+              />
+            )}
+            <View style={imageUploaderStyles.uploadBtnContainer}>
+              <TouchableOpacity
+                onPress={pickAvatar}
+                style={imageUploaderStyles.uploadBtn}
+              >
+                <Text>{avatar ? "Edit" : "Upload"} Image</Text>
+                {/* <AntDesign name="camera" size={20} color="black" /> */}
+              </TouchableOpacity>
+            </View>
+          </View>
 
           <View style={[tw("flex flex-row"), { paddingVertical: 20 }]}>
             <View style={[tw("flex flex-col"), { paddingRight: 15 }]}>
@@ -170,11 +230,7 @@ const EditProfileScreen = () => {
             ]}
           >
             <Text>Bio</Text>
-            <TextInput
-              style={[tw("py-2")]}
-              value={bio}
-              onChangeText={setBio}
-            />
+            <TextInput style={[tw("py-2")]} value={bio} onChangeText={setBio} />
           </View>
 
           <View></View>
@@ -193,7 +249,7 @@ const EditProfileScreen = () => {
               firstName === user.first_name &&
               lastName === user.last_name &&
               status === user.status &&
-              bio === user.bio
+              bio === user.bio && !avatarChanged
             }
           />
         </View>
@@ -203,5 +259,31 @@ const EditProfileScreen = () => {
     </SafeAreaView>
   );
 };
+
+const imageUploaderStyles = StyleSheet.create({
+  container: {
+    elevation: 2,
+    height: 200,
+    width: 200,
+    backgroundColor: "#efefef",
+    position: "relative",
+    borderRadius: 999,
+    overflow: "hidden",
+  },
+  uploadBtnContainer: {
+    opacity: 0.7,
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+    backgroundColor: "lightgrey",
+    width: "100%",
+    height: "25%",
+  },
+  uploadBtn: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 
 export default EditProfileScreen;
