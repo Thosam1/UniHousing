@@ -209,7 +209,7 @@ const SignUpScreen = () => {
                     <Text
                       caption
                       center
-                      onPress={switchToSignIn}
+                      onPress={switchToValidate}
                       style={{
                         color: "#19e266",
                         textDecorationLine: "underline",

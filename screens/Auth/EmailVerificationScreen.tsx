@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   TextInput,
   SafeAreaView,
   ActivityIndicator,
@@ -8,9 +7,13 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  StyleSheet,
+  ScrollView,
 } from "react-native";
+import { Button, Block, Input, Text } from "../../components";
+import { theme } from "../../constants";
 
-import { Button, Image } from "@rneui/themed";
+import { Image } from "@rneui/themed";
 import React, { useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import { useNavigation } from "@react-navigation/native";
@@ -54,23 +57,25 @@ const EmailVerificationScreen = () => {
 
     // send request to the server
     let failed = false;
-    verifyEmail(userID, verificationCode).then((res) => {
-      if(res.status === 200) {
-        Toast.show({
-          type: "success",
-          text1: res.data,
-        });
-      } else {
-        Toast.show({
-          type: "error",
-          text1: res.data,
-        });
-        failed = true;
-      }
-    }).catch((err) => console.log(err))
+    verifyEmail(userID, verificationCode)
+      .then((res) => {
+        if (res.status === 200) {
+          Toast.show({
+            type: "success",
+            text1: res.data,
+          });
+        } else {
+          Toast.show({
+            type: "error",
+            text1: res.data,
+          });
+          failed = true;
+        }
+      })
+      .catch((err) => console.log(err));
 
     setLoading(false);
-    if(failed) return;
+    if (failed) return;
 
     resetAllFields();
     navigation.navigate("SignIn"); // todo change it so that it automatically dispatch to the home screen
@@ -83,90 +88,100 @@ const EmailVerificationScreen = () => {
     setLoading(false);
   };
 
+  const switchToSignUp = () => {
+    Keyboard.dismiss();
+    resetAllFields();
+    navigation.navigate("SignUp");
+  }; 
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
+      style={styles.container}
     >
-      <SafeAreaView style={tw("flex items-center")}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View
-            style={[
-              tw("flex items-center pt-4"),
-              { padding: 24, justifyContent: "flex-end" },
-            ]}
-          >
-            <Image
-              source={require("../../assets/images/login_image.png")}
-              style={[{ height: 300, width: 300 }]}
-              PlaceholderContent={<ActivityIndicator />}
-            />
-
-            <View>
-              <Text
-                style={[
-                  tw("text-center font-bold"),
-                  { paddingVertical: 12, fontSize: 25 },
-                ]}
-              >
-                Register : Verification
-              </Text>
-            </View>
-
-            <View style={[{ paddingVertical: 12 }]}>
-              <Text
-                style={[
-                  tw("text-center"),
-                  { paddingVertical: 12, fontSize: 15 },
-                ]}
-              >
-                We sent you a verification code at your address mail :
-              </Text>
-            </View>
-
-            <TextInput
-              placeholder="User id"
-              style={[tw("py-6")]}
-              value={userID}
-              onChangeText={setUserID}
-            />
-
-            <TextInput
-              placeholder="Verification code"
-              style={[tw("py-6")]}
-              value={verificationCode}
-              onChangeText={setVerificationCode}
-            />
-
-            <Button
-              title="Validate email"
-              style={[tw("py-2 px-4"), { width: 400 }]}
-              disabled={verificationCode.length < 1 || userID.length < 1}
-              onPress={validateVerificationCode}
-              loading={loading}
-            />
-
-            {failed === true ? (
-              <View>
-                <Text
-                  style={[
-                    tw("text-center py-2"),
-                    { fontSize: 15, color: "#e21966" },
-                  ]}
-                >
-                  Something went wrong, please try again !
+      <SafeAreaView style={[styles.container]}>
+        <ScrollView>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <Block padding={[0, theme.sizes.base * 2]}>
+              <View style={{ paddingTop: 30 }}>
+                <Text center h1 bold>
+                  Register : Verification
                 </Text>
               </View>
-            ) : (
-              <></>
-            )}
+              <Image
+                source={require("../../assets/images/login_image.png")}
+                style={[{ height: 300, width: 300 }]}
+                PlaceholderContent={<ActivityIndicator />}
+              />
 
-            <Toast />
-          </View>
-        </TouchableWithoutFeedback>
+              <Block middle>
+                <Text gray caption center>
+                  We sent you a verification code at your address mail
+                </Text>
+                <Input
+                  label="User Id"
+                  style={[styles.input]}
+                  onChangeText={(text: string) => setUserID(text)}
+                />
+                <Input
+                  label="Verification Code"
+                  style={[styles.input]}
+                  onChangeText={(text: string) => setVerificationCode(text)}
+                />
+                <Button
+                  gradient
+                  onPress={validateVerificationCode}
+                  disabled={verificationCode.length < 1 || userID.length < 1}
+                >
+                  {loading ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Text bold white center>
+                      Validate Email
+                    </Text>
+                  )}
+                </Button>
+
+                <View style={{ paddingVertical: 8 }}>
+                  <Text gray caption center>
+                    Don't have an account ?{" "}
+                    <Text
+                      caption
+                      center
+                      onPress={switchToSignUp}
+                      style={{
+                        color: "#19e266",
+                        textDecorationLine: "underline",
+                      }}
+                    >
+                      Sign Up
+                    </Text>
+                  </Text>
+                </View>
+              </Block>
+              <Toast />
+            </Block>
+          </TouchableWithoutFeedback>
+        </ScrollView>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
 };
 
 export default EmailVerificationScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  input: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderBottomColor: theme.colors.gray2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  hasErrors: {
+    borderBottomColor: theme.colors.accent,
+  },
+});
