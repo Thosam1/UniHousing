@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import Checkbox from "expo-checkbox";
 
@@ -27,6 +28,7 @@ import { setUser, setUserState } from "../../features/auth/authSlice";
 import { login } from "../../api/auth/auth";
 import { getPrivateProfile } from "../../api/user/user";
 import { PrivateProfile } from "../../api/typesAPI";
+import { Image } from "@rneui/themed";
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -152,38 +154,39 @@ const SignInScreen = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <SafeAreaView style={[styles.login]}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <Block padding={[0, theme.sizes.base * 2]}>
-            <View style={{ paddingTop: 30 }}>
-              <Text center h1 bold>
-                Login
-              </Text>
-            </View>
+        <ScrollView>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <Block padding={[0, theme.sizes.base * 2]}>
+              <View style={{ paddingTop: 30 }}>
+                <Text center h1 bold>
+                  Login
+                </Text>
+              </View>
 
-            {/* <Image
+              <Image
                 source={require("../../assets/images/login_image.png")}
-                style={[{ height: 300, width: 300 }]}
+                style={[{ height: 280, width: 280 }]}
                 PlaceholderContent={<ActivityIndicator />}
-              /> */}
-
-            <Block middle>
-              <Input
-                label="Email"
-                // error={hasErrors("email")}
-                style={[styles.input]} // style={[styles.input, hasErrors("email")]}
-                // defaultValue={this.state.email}
-                onChangeText={(text: string) => setEmail(text)}
-              />
-              <Input
-                secure
-                label="Password"
-                // error={hasErrors("password")}
-                style={[styles.input]}
-                // defaultValue={this.state.password}
-                onChangeText={(text: string) => setPassword(text)}
               />
 
-              {/* <View style={tw("flex flex-row py-3")}>
+              <Block middle>
+                <Input
+                  label="Email"
+                  // error={hasErrors("email")}
+                  style={[styles.input]} // style={[styles.input, hasErrors("email")]}
+                  // defaultValue={this.state.email}
+                  onChangeText={(text: string) => setEmail(text)}
+                />
+                <Input
+                  secure
+                  label="Password"
+                  // error={hasErrors("password")}
+                  style={[styles.input]}
+                  // defaultValue={this.state.password}
+                  onChangeText={(text: string) => setPassword(text)}
+                />
+
+                {/* <View style={tw("flex flex-row py-3")}>
                 <Checkbox
                   value={rememberMe}
                   onValueChange={setRememberMe}
@@ -193,53 +196,54 @@ const SignInScreen = () => {
                   Remember Me
                 </Text>
               </View> */}
-              <Button
-                disabled={email.length === 0 || password.length === 0}
-                gradient
-                onPress={() => loginButton()}
-              >
-                {loading ? (
-                  <ActivityIndicator size="small" color="white" />
-                ) : (
-                  <Text bold white center>
-                    Login
-                  </Text>
-                )}
-              </Button>
-
-              <View style={{ paddingVertical: 8 }}>
-                <Text
-                  gray
-                  caption
-                  center
-                  onPress={switchToForgotPassword}
-                  style={{ textDecorationLine: "underline" }}
+                <Button
+                  disabled={email.length === 0 || password.length === 0}
+                  gradient
+                  onPress={() => loginButton()}
                 >
-                  Forgot your password?
-                </Text>
-              </View>
+                  {loading ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Text bold white center>
+                      Login
+                    </Text>
+                  )}
+                </Button>
 
-              <View style={{ paddingVertical: 8 }}>
-                <Text gray caption center>
-                  Don't have an account ?{" "}
+                <View style={{ paddingVertical: 8 }}>
                   <Text
+                    gray
                     caption
                     center
-                    onPress={switchToSignUp}
-                    style={{
-                      color: "#19e266",
-                      textDecorationLine: "underline",
-                    }}
+                    onPress={switchToForgotPassword}
+                    style={{ textDecorationLine: "underline" }}
                   >
-                    Sign Up
+                    Forgot your password?
                   </Text>
-                </Text>
-              </View>
+                </View>
+
+                <View style={{ paddingVertical: 8 }}>
+                  <Text gray caption center>
+                    Don't have an account ?{" "}
+                    <Text
+                      caption
+                      center
+                      onPress={switchToSignUp}
+                      style={{
+                        color: "#19e266",
+                        textDecorationLine: "underline",
+                      }}
+                    >
+                      Sign Up
+                    </Text>
+                  </Text>
+                </View>
+              </Block>
+              <Toast />
             </Block>
-            <Toast />
-          </Block>
-          {/* </View> */}
-        </TouchableWithoutFeedback>
+            {/* </View> */}
+          </TouchableWithoutFeedback>
+        </ScrollView>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
