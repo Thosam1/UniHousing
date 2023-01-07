@@ -174,12 +174,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     justifyContent: "center",
   },
-  input: {
-    borderRadius: 0,
-    borderWidth: 0,
-    borderBottomColor: theme.colors.gray2,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
 });
 
 export default ProfileScreen;

@@ -6,21 +6,20 @@ import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import {
   View,
-  Text,
   TextInput,
   SafeAreaView,
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
   Keyboard,
-  ScrollView,
-  Modal,
-  Pressable,
+  TouchableWithoutFeedback,
+  ActivityIndicator,
   StyleSheet,
+  ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { Button, Image } from "@rneui/themed";
+import { Button, Block, Input, Text } from "../../components";
+import { theme } from "../../constants";
+import { Image } from "@rneui/themed";
 import Toast from "react-native-toast-message";
 
 import { useTailwind } from "tailwind-rn/dist";
@@ -149,119 +148,103 @@ const EditProfileScreen = () => {
     }
   };
   return (
-    <SafeAreaView style={tw("flex items-center")}>
+    <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
       <ScrollView>
-        <View
-          style={[
-            tw("flex items-center pt-4"),
-            { padding: 24, justifyContent: "flex-end" },
-          ]}
-        >
-          <Text
-            style={[
-              tw("text-center font-bold"),
-              { paddingVertical: 12, fontSize: 25 },
-            ]}
-          >
-            Profile
-          </Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <Block style={{ flex: 1 }} padding={[0, theme.sizes.base * 2]}>
+            <View style={{ paddingTop: 30 }}>
+              <Text center h1 bold>
+                Edit Profile
+              </Text>
+            </View>
 
-          <View style={imageUploaderStyles.container}>
-            {avatar && (
-              <Image
-                source={{ uri: avatar.uri }}
-                style={{ width: 200, height: 200 }}
+            <View style={styles.container}>
+              {avatar && (
+                <Image
+                  source={{ uri: avatar.uri }}
+                  style={{ width: 200, height: 200 }}
+                />
+              )}
+              {!avatar && (
+                <Image
+                  source={require("../../assets/images/anonymous-avatar.jpg")}
+                  style={{ width: 200, height: 200 }}
+                />
+              )}
+
+              <View style={styles.uploadBtnContainer}>
+                <TouchableOpacity onPress={pickAvatar} style={styles.uploadBtn}>
+                  <Text>{avatar ? "Edit" : "Upload"} Image</Text>
+                  {/* <AntDesign name="camera" size={20} color="black" /> */}
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <Block middle>
+              <Input
+                label="First Name"
+                style={[styles.input]}
+                defaultValue={firstName}
+                onChangeText={(text: string) => setFirstName(text)}
               />
-            )}
-            {!avatar && (
-              <Image
-                source={require("../../assets/images/anonymous-avatar.jpg")}
-                style={{ width: 200, height: 200 }}
+
+              <Input
+                label="Last Name"
+                style={[styles.input]}
+                defaultValue={lastName}
+                onChangeText={(text: string) => setLastName(text)}
               />
-            )}
-            <View style={imageUploaderStyles.uploadBtnContainer}>
-              <TouchableOpacity
-                onPress={pickAvatar}
-                style={imageUploaderStyles.uploadBtn}
+
+              <Input
+                label="Status"
+                style={[styles.input]}
+                defaultValue={status}
+                onChangeText={(text: string) => setStatus(text)}
+              />
+
+              <Input
+                label="Bio"
+                style={[styles.input]}
+                defaultValue={bio}
+                onChangeText={(text: string) => setBio(text)}
+              />
+
+              <Button shadow onPress={cancelButton}>
+                <Text semibold center>
+                  Cancel
+                </Text>
+              </Button>
+
+              <Button
+                gradient
+                onPress={doneButton}
+                disabled={
+                  firstName === user.first_name &&
+                  lastName === user.last_name &&
+                  status === user.status &&
+                  bio === user.bio &&
+                  !avatarChanged
+                }
               >
-                <Text>{avatar ? "Edit" : "Upload"} Image</Text>
-                {/* <AntDesign name="camera" size={20} color="black" /> */}
-              </TouchableOpacity>
-            </View>
-          </View>
+                {loading ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  <Text bold white center>
+                    Save Modifications
+                  </Text>
+                )}
+              </Button>
+            </Block>
 
-          <View style={[tw("flex flex-row"), { paddingVertical: 20 }]}>
-            <View style={[tw("flex flex-col"), { paddingRight: 15 }]}>
-              <Text>First Name</Text>
-              <TextInput
-                style={[tw("py-2")]}
-                value={firstName}
-                onChangeText={setFirstName}
-              />
-            </View>
-
-            <View style={[tw("flex flex-col"), { paddingLeft: 15 }]}>
-              <Text>Last Name</Text>
-              <TextInput
-                style={[tw("py-2")]}
-                value={lastName}
-                onChangeText={setLastName}
-              />
-            </View>
-          </View>
-
-          <View
-            style={[
-              tw("flex flex-col items-start px-6"),
-              { paddingVertical: 10 },
-            ]}
-          >
-            <Text>Status</Text>
-            <TextInput
-              style={[tw("py-2")]}
-              value={status}
-              onChangeText={setStatus}
-            />
-          </View>
-          <View
-            style={[
-              tw("flex flex-col items-start px-6"),
-              { paddingVertical: 10 },
-            ]}
-          >
-            <Text>Bio</Text>
-            <TextInput style={[tw("py-2")]} value={bio} onChangeText={setBio} />
-          </View>
-
-          <View></View>
-          <Button
-            title="Cancel"
-            style={[tw("py-1 px-4"), { width: 400 }]}
-            onPress={cancelButton}
-          />
-
-          <Button
-            title="Done"
-            style={[tw("py-2 px-4"), { width: 400 }]}
-            loading={loading}
-            onPress={doneButton}
-            disabled={
-              firstName === user.first_name &&
-              lastName === user.last_name &&
-              status === user.status &&
-              bio === user.bio &&
-              !avatarChanged
-            }
-          />
-        </View>
-
-        <Toast />
+            <Toast />
+          </Block>
+        </TouchableWithoutFeedback>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const imageUploaderStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     elevation: 2,
     height: 200,
@@ -284,6 +267,12 @@ const imageUploaderStyles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+  },
+  input: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderBottomColor: theme.colors.gray2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
 });
 
