@@ -7,6 +7,7 @@ import AuthNavigator from "./AuthNavigator";
 import AppNavigator from "./AppNavigator";
 import { useAppSelector } from "../features/hooks";
 import { selectAuthStatus } from "../features/auth/authSlice";
+import { theme } from "../constants";
 
 // type definitions
 export type RootStackParamList = {
@@ -18,11 +19,21 @@ export type RootStackParamList = {
 const RootStack = createNativeStackNavigator();
 
 const RootNavigator = () => {
+
   // The `state` arg is correctly typed as `RootState` already
-  const authStatus = useAppSelector(selectAuthStatus);
+  const authStatus = true; // todo // useAppSelector(selectAuthStatus);
 
   return (
-    <RootStack.Navigator>
+    <RootStack.Navigator
+    defaultScreenOptions={{
+      headerStyle: {
+        backgroundColor: theme.colors.white,
+      },
+      contentStyle: {
+        backgroundColor: theme.colors.white,
+      },
+    }}
+    >
       {authStatus ? (
         // User is signed in
         <RootStack.Screen

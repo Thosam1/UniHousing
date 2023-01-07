@@ -6,21 +6,17 @@ import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import {
   View,
-  Text,
   TextInput,
   SafeAreaView,
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
   Keyboard,
-  ScrollView,
-  Modal,
-  Pressable,
+  TouchableWithoutFeedback,
+  ActivityIndicator,
   StyleSheet,
-  TouchableOpacity,
+  ScrollView,
 } from "react-native";
-import { Button, Image } from "@rneui/themed";
+import { Button, Block, Input, Text } from "../../components";
 import Toast from "react-native-toast-message";
 
 import { useTailwind } from "tailwind-rn/dist";
@@ -36,6 +32,7 @@ import { TabStackParamList } from "../../navigator/TabNavigator";
 import { AppStackParamList } from "../../navigator/AppNavigator";
 import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
 import { createPost } from "../../api/post/post";
+import { theme } from "../../constants";
 
 // type CreateScreenNavigationProp = BottomTabScreenProps<TabStackParamList, "Profile">;
 
@@ -76,7 +73,7 @@ const CreateScreen = () => {
       startDate,
       endDate,
       description,
-      price,
+      price
     )
       .then((res) => {
         if (res.status === 200) {
@@ -84,7 +81,7 @@ const CreateScreen = () => {
             type: "success",
             text1: res.data,
           });
-          
+
           // to clear fields
           cancelButton();
           setLoading(false);
@@ -113,123 +110,112 @@ const CreateScreen = () => {
   };
 
   return (
-    <SafeAreaView style={tw("flex items-center")}>
-      <ScrollView>
-        <View
-          style={[
-            tw("flex items-center pt-4"),
-            { padding: 24, justifyContent: "flex-end" },
-          ]}
-        >
-          <Text
-            style={[
-              tw("text-center font-bold"),
-              { paddingVertical: 12, fontSize: 25 },
-            ]}
-          >
-            Create a Post
-          </Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <SafeAreaView style={[styles.container]}>
+        <ScrollView>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <Block padding={[0, theme.sizes.base * 2]}>
+              <View style={{ paddingTop: 30 }}>
+                <Text center h1 bold>
+                  Create a Post
+                </Text>
+              </View>
 
-          <View
-            style={[
-              tw("flex flex-col items-start px-6"),
-              { paddingVertical: 10 },
-            ]}
-          >
-            <Text>Title</Text>
-            <TextInput
-              style={[tw("py-2")]}
-              value={title}
-              onChangeText={setTitle}
-            />
-          </View>
-          <View
-            style={[
-              tw("flex flex-col items-start px-6"),
-              { paddingVertical: 10 },
-            ]}
-          >
-            <Text>Description</Text>
-            <TextInput
-              style={[tw("py-2")]}
-              value={description}
-              onChangeText={setDescription}
-            />
-          </View>
+              <Block middle>
+                <Input
+                  label="Title"
+                  style={[styles.input]}
+                  onChangeText={(text: string) => setTitle(text)}
+                />
+                <Input
+                  label="Description"
+                  multipline
+                  numberOfLines={6}
+                  style={[styles.input]}
+                  onChangeText={(text: string) => setDescription(text)}
+                />
 
-          <View style={[tw("flex flex-row"), { paddingVertical: 20 }]}>
-            <View style={[tw("flex flex-col"), { paddingRight: 15 }]}>
-              <Text>City</Text>
-              <TextInput
-                style={[tw("py-2")]}
-                value={city}
-                onChangeText={setCity}
-              />
-            </View>
+                <Input
+                  label="City"
+                  style={[styles.input]}
+                  onChangeText={(text: string) => setCity(text)}
+                />
+                <Input
+                  label="Country"
+                  style={[styles.input]}
+                  onChangeText={(text: string) => setCountry(text)}
+                />
+                <Input
+                  label="Start Date"
+                  style={[styles.input]}
+                  onChangeText={(text: string) => setStartDate(text)}
+                />
+                <Input
+                  label="End Date"
+                  style={[styles.input]}
+                  onChangeText={(text: string) => setEndDate(text)}
+                />
+                <Input
+                  label="Price per month"
+                  style={[styles.input]}
+                  onChangeText={(text: string) => setPrice(text)}
+                />
 
-            <View style={[tw("flex flex-col"), { paddingLeft: 15 }]}>
-              <Text>Country</Text>
-              <TextInput
-                style={[tw("py-2")]}
-                value={country}
-                onChangeText={setCountry}
-              />
-            </View>
-          </View>
+                <Button shadow onPress={cancelButton}>
+                  {loading ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Text center semibold>
+                      Cancel
+                    </Text>
+                  )}
+                </Button>
 
-          <View style={[tw("flex flex-row"), { paddingVertical: 20 }]}>
-            <View style={[tw("flex flex-col"), { paddingRight: 15 }]}>
-              <Text>Start Date</Text>
-              <TextInput
-                style={[tw("py-2")]}
-                value={startDate}
-                onChangeText={setStartDate}
-              />
-            </View>
-
-            <View style={[tw("flex flex-col"), { paddingLeft: 15 }]}>
-              <Text>End Date</Text>
-              <TextInput
-                style={[tw("py-2")]}
-                value={endDate}
-                onChangeText={setEndDate}
-              />
-            </View>
-          </View>
-
-          <View
-            style={[
-              tw("flex flex-col items-start px-6"),
-              { paddingVertical: 10 },
-            ]}
-          >
-            <Text>Price per month</Text>
-            <TextInput
-              style={[tw("py-2")]}
-              value={price}
-              onChangeText={setPrice}
-            />
-          </View>
-
-          <Button
-            title="Cancel"
-            style={[tw("py-1 px-4"), { width: 400 }]}
-            onPress={cancelButton}
-          />
-
-          <Button
-            title="Done"
-            style={[tw("py-2 px-4"), { width: 400 }]}
-            loading={loading}
-            onPress={createButton}
-            disabled={false}
-          />
-        </View>
-
-        <Toast />
-      </ScrollView>
-    </SafeAreaView>
+                <Button
+                  gradient
+                  onPress={createButton}
+                  disabled={
+                    title.length === 0 ||
+                    description.length === 0 ||
+                    city.length === 0 ||
+                    country.length === 0 ||
+                    startDate.length === 0 ||
+                    endDate.length === 0 ||
+                    price.length === 0
+                  }
+                >
+                  {loading ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Text bold white center>
+                      Create Post
+                    </Text>
+                  )}
+                </Button>
+              </Block>
+              <Toast />
+            </Block>
+          </TouchableWithoutFeedback>
+        </ScrollView>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
 export default CreateScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  input: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderBottomColor: theme.colors.gray2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+});
