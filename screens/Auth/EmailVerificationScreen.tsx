@@ -1,6 +1,5 @@
 import {
   View,
-  TextInput,
   SafeAreaView,
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -15,7 +14,6 @@ import { theme } from "../../constants";
 
 import { Image } from "@rneui/themed";
 import React, { useState } from "react";
-import { useTailwind } from "tailwind-rn/dist";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "../../navigator/AuthNavigator";
@@ -30,7 +28,6 @@ type SignInScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 const EmailVerificationScreen = () => {
-  const tw = useTailwind();
   const navigation = useNavigation<SignInScreenNavigationProp>();
 
   const [verificationCode, setVerificationCode] = useState("");

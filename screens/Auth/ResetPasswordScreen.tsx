@@ -1,16 +1,18 @@
 import {
   View,
-  Text,
-  TextInput,
   SafeAreaView,
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  StyleSheet,
+  ScrollView,
 } from "react-native";
+import { Button, Block, Input, Text } from "../../components";
+import { theme } from "../../constants";
 
-import { Button, Image } from "@rneui/themed";
+import { Image } from "@rneui/themed";
 import React, { useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import { useNavigation } from "@react-navigation/native";
@@ -37,7 +39,7 @@ const ResetPasswordScreen = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const resetPassword = () => {
+  const resetPasswordButton = () => {
     setLoading(true);
     Keyboard.dismiss();
 
@@ -94,85 +96,89 @@ const ResetPasswordScreen = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
+      style={styles.container}
     >
-      <SafeAreaView style={tw("flex items-center")}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View
-            style={[
-              tw("flex items-center pt-4"),
-              { padding: 24, justifyContent: "flex-end" },
-            ]}
-          >
-            <Image
-              source={require("../../assets/images/login_image.png")}
-              style={[{ height: 300, width: 300 }]}
-              PlaceholderContent={<ActivityIndicator />}
-            />
+      <SafeAreaView style={[styles.container]}>
+        <ScrollView>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <Block padding={[0, theme.sizes.base * 2]}>
+              <View style={{ paddingTop: 30 }}>
+                <Text center h1 bold>
+                  Reset Password
+                </Text>
+              </View>
 
-            <View>
-              <Text
-                style={[
-                  tw("text-center font-bold"),
-                  { paddingVertical: 12, fontSize: 25 },
-                ]}
-              >
-                Reset Password
-              </Text>
-            </View>
+              <Image
+                source={require("../../assets/images/login_image.png")}
+                style={[{ height: 300, width: 300 }]}
+                PlaceholderContent={<ActivityIndicator />}
+              />
 
-            <View style={[{ paddingVertical: 12 }]}>
-              <Text
-                style={[
-                  tw("text-center"),
-                  { paddingVertical: 12, fontSize: 15 },
-                ]}
-              >
-                Check your mailbox and fill below with the id and verification
-                code received :
-              </Text>
-            </View>
-            <TextInput
-              placeholder="Id received"
-              style={[tw("py-6")]}
-              value={userID}
-              onChangeText={setUserID}
-            />
-            <TextInput
-              placeholder="Verification code received"
-              style={[tw("py-6")]}
-              value={verificationCode}
-              onChangeText={setVerificationCode}
-            />
-            <TextInput
-              placeholder="New password"
-              style={[tw("py-6")]}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-            <TextInput
-              placeholder="Confirm new password"
-              style={[tw("py-6")]}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry
-            />
+              <Block middle>
+                <Text gray caption center>
+                  Check your mailbox and fill below with the id and verification
+                  code received
+                </Text>
+                <Input
+                  label="User Id"
+                  style={[styles.input]}
+                  onChangeText={(text: string) => setUserID(text)}
+                />
+                <Input
+                  label="Verification Code"
+                  style={[styles.input]}
+                  onChangeText={(text: string) => setVerificationCode(text)}
+                />
+                <Input
+                  label="User Id"
+                  style={[styles.input]}
+                  onChangeText={(text: string) => setPassword(text)}
+                />
+                <Input
+                  label="Verification Code"
+                  style={[styles.input]}
+                  onChangeText={(text: string) => setConfirmPassword(text)}
+                />
 
-            <Button
-              title="Reset Password"
-              style={[tw("py-2 px-4"), { width: 400 }]}
-              disabled={password.length === 0 || confirmPassword.length === 0}
-              onPress={resetPassword}
-              loading={loading}
-            />
-
-            <Toast />
-          </View>
-        </TouchableWithoutFeedback>
+                <Button
+                  gradient
+                  onPress={resetPasswordButton}
+                  disabled={
+                    password.length === 0 || confirmPassword.length === 0
+                  }
+                >
+                  {loading ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Text bold white center>
+                      Validate Email
+                    </Text>
+                  )}
+                </Button>
+              </Block>
+              <Toast />
+            </Block>
+          </TouchableWithoutFeedback>
+        </ScrollView>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
 };
 
 export default ResetPasswordScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  input: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderBottomColor: theme.colors.gray2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  hasErrors: {
+    borderBottomColor: theme.colors.accent,
+  },
+});
