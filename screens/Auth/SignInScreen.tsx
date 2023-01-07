@@ -1,18 +1,18 @@
 /* This is the screen we show if the user isn't signed in already (we couldn't find a token). */
 import {
   View,
-  Text,
-  TextInput,
   SafeAreaView,
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  StyleSheet,
 } from "react-native";
 import Checkbox from "expo-checkbox";
 
-import { Button, Image } from "@rneui/themed";
+import { Button, Block, Input, Text } from "../../components";
+import { theme } from "../../constants";
 import React, { useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import { useNavigation } from "@react-navigation/native";
@@ -25,7 +25,6 @@ import Toast from "react-native-toast-message";
 import { useAppDispatch } from "../../features/hooks";
 import { setUser, setUserState } from "../../features/auth/authSlice";
 import { login } from "../../api/auth/auth";
-import { data } from "autoprefixer";
 import { getPrivateProfile } from "../../api/user/user";
 import { PrivateProfile } from "../../api/typesAPI";
 
@@ -149,93 +148,97 @@ const SignInScreen = () => {
 
   return (
     <KeyboardAvoidingView
+      style={styles.login}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
     >
-      <SafeAreaView style={tw("flex items-center")}>
+      <SafeAreaView style={[styles.login]}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View
-            style={[
-              tw("flex items-center pt-4"),
-              { padding: 24, justifyContent: "flex-end" },
-            ]}
-          >
-            <Image
-              source={require("../../assets/images/login_image.png")}
-              style={[{ height: 300, width: 300 }]}
-              PlaceholderContent={<ActivityIndicator />}
-            />
-
-            <View>
-              <Text
-                style={[
-                  tw("text-center font-bold"),
-                  { paddingVertical: 12, fontSize: 25 },
-                ]}
-              >
+          <Block padding={[0, theme.sizes.base * 2]}>
+            <View style={{ paddingTop: 30 }}>
+              <Text center h1 bold>
                 Login
               </Text>
             </View>
 
-            <TextInput
-              placeholder="Email"
-              style={[tw("py-6")]}
-              value={email}
-              onChangeText={setEmail}
-            />
+            {/* <Image
+                source={require("../../assets/images/login_image.png")}
+                style={[{ height: 300, width: 300 }]}
+                PlaceholderContent={<ActivityIndicator />}
+              /> */}
 
-            <TextInput
-              placeholder="Password"
-              style={[tw("py-6")]}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-
-            <View style={tw("flex flex-row py-3")}>
-              <Checkbox
-                value={rememberMe}
-                onValueChange={setRememberMe}
-                disabled={loading}
+            <Block middle>
+              <Input
+                label="Email"
+                // error={hasErrors("email")}
+                style={[styles.input]} // style={[styles.input, hasErrors("email")]}
+                // defaultValue={this.state.email}
+                onChangeText={(text: string) => setEmail(text)}
               />
-              <Text style={{ paddingLeft: 8, fontSize: 14 }}>Remember Me</Text>
-            </View>
+              <Input
+                secure
+                label="Password"
+                // error={hasErrors("password")}
+                style={[styles.input]}
+                // defaultValue={this.state.password}
+                onChangeText={(text: string) => setPassword(text)}
+              />
 
-            <Button
-              title="Sign In"
-              style={[tw("py-2 px-4"), { width: 400 }]}
-              disabled={email.length === 0 || password.length === 0}
-              onPress={loginButton}
-              loading={loading}
-            />
-
-            <View>
-              <Text style={[tw("text-center py-2"), { fontSize: 15 }]}>
-                Don't have an account ?{" "}
-                <Text onPress={switchToSignUp} style={{ color: "#19e266" }}>
-                  Sign Up
+              {/* <View style={tw("flex flex-row py-3")}>
+                <Checkbox
+                  value={rememberMe}
+                  onValueChange={setRememberMe}
+                  disabled={loading}
+                />
+                <Text style={{ paddingLeft: 10, fontSize: 14 }}>
+                  Remember Me
                 </Text>
-              </Text>
-            </View>
+              </View> */}
+              <Button
+                disabled={email.length === 0 || password.length === 0}
+                gradient
+                onPress={() => loginButton()}
+              >
+                {loading ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  <Text bold white center>
+                    Login
+                  </Text>
+                )}
+              </Button>
 
-            {failed === true ? (
-              <View>
+              <View style={{ paddingVertical: 8 }}>
                 <Text
+                  gray
+                  caption
+                  center
                   onPress={switchToForgotPassword}
-                  style={[
-                    tw("text-center py-2"),
-                    { fontSize: 15, color: "#e21966" },
-                  ]}
+                  style={{ textDecorationLine: "underline" }}
                 >
-                  Forgot your password ?
+                  Forgot your password?
                 </Text>
               </View>
-            ) : (
-              <></>
-            )}
 
+              <View style={{ paddingVertical: 8 }}>
+                <Text gray caption center>
+                  Don't have an account ?{" "}
+                  <Text
+                    caption
+                    center
+                    onPress={switchToSignUp}
+                    style={{
+                      color: "#19e266",
+                      textDecorationLine: "underline",
+                    }}
+                  >
+                    Sign Up
+                  </Text>
+                </Text>
+              </View>
+            </Block>
             <Toast />
-          </View>
+          </Block>
+          {/* </View> */}
         </TouchableWithoutFeedback>
       </SafeAreaView>
     </KeyboardAvoidingView>
@@ -243,3 +246,19 @@ const SignInScreen = () => {
 };
 
 export default SignInScreen;
+
+const styles = StyleSheet.create({
+  login: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  input: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderBottomColor: theme.colors.gray2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  hasErrors: {
+    borderBottomColor: theme.colors.accent,
+  },
+});
