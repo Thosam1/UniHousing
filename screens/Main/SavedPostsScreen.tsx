@@ -37,7 +37,7 @@ import { TabStackParamList } from "../../navigator/TabNavigator";
 import { AppStackParamList } from "../../navigator/AppNavigator";
 import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
 import { createPost } from "../../api/post/post";
-import PostCard from "../../components/postCard";
+import { PostCard } from "../../components";
 
 const SavedPostsScreen = () => {
 
