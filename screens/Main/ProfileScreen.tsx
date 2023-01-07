@@ -2,20 +2,19 @@ import React, { useEffect, useState } from "react";
 
 import {
   View,
-  Text,
   TextInput,
   SafeAreaView,
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
   Keyboard,
-  ScrollView,
-  Modal,
+  TouchableWithoutFeedback,
+  ActivityIndicator,
   StyleSheet,
-  Pressable,
+  ScrollView,
 } from "react-native";
-import { Button, Image } from "@rneui/themed";
+import { Button, Block, Input, Text } from "../../components";
+import { theme } from "../../constants";
+import { Image } from "@rneui/themed";
 
 import { useTailwind } from "tailwind-rn/dist";
 
@@ -33,7 +32,7 @@ import {
 } from "@react-navigation/native";
 import { TabStackParamList } from "../../navigator/TabNavigator";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from "@react-navigation/native";
 import { AppStackParamList } from "../../navigator/AppNavigator";
 
 type ProfileScreenNavigationProp = CompositeNavigationProp<
@@ -88,103 +87,99 @@ const ProfileScreen = () => {
   };
 
   return (
-    <SafeAreaView style={tw("flex items-center")}>
+    <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
       <ScrollView>
-        <View
-          style={[
-            tw("flex items-center pt-4"),
-            { padding: 24, justifyContent: "flex-end" },
-          ]}
-        >
-          <Text
-            style={[
-              tw("text-center font-bold"),
-              { paddingVertical: 12, fontSize: 25 },
-            ]}
-          >
-            Profile
-          </Text>
+        <Block style={{ flex: 1 }} padding={[0, theme.sizes.base * 2]}>
+          <View style={{ paddingTop: 30 }}>
+            <Text center h1 bold>
+              Profile
+            </Text>
+          </View>
 
-          <View style={imageUploaderStyles.container}>
+          <View style={[styles.container, tw("flex items-center")]}>
             <Image
               // source={ ( user.avatar === "" ? require("../../assets/images/anonymous-avatar.jpg") : require(`${user.avatar}`)) }
               source={require("../../assets/images/anonymous-avatar.jpg")}
-
               style={{ width: 200, height: 200 }}
             />
           </View>
 
-          <View style={[tw("flex flex-row"), { paddingVertical: 20 }]}>
-            <View style={[tw("flex flex-col"), { paddingRight: 15 }]}>
+          <Block middle>
+            <View
+              style={[tw("flex flex-col items-start"), { paddingVertical: 10 }]}
+            >
               <Text>First Name</Text>
               <Text>{user.first_name}</Text>
             </View>
 
-            <View style={[tw("flex flex-col"), { paddingLeft: 15 }]}>
+            <View
+              style={[tw("flex flex-col items-start"), { paddingVertical: 10 }]}
+            >
               <Text>Last Name</Text>
               <Text>{user.last_name}</Text>
             </View>
-          </View>
 
-          <View
-            style={[tw("flex flex-col items-center"), { paddingVertical: 10 }]}
-          >
-            <Text>Email</Text>
-            <Text>{user.email}</Text>
-          </View>
+            <View
+              style={[tw("flex flex-col items-start"), { paddingVertical: 10 }]}
+            >
+              <Text>Email</Text>
+              <Text>{user.email}</Text>
+            </View>
 
-          <View
-            style={[
-              tw("flex flex-col items-start px-6"),
-              { paddingVertical: 10 },
-            ]}
-          >
-            <Text>Status</Text>
-            <Text>{user.status}</Text>
-          </View>
-          <View
-            style={[
-              tw("flex flex-col items-start px-6"),
-              { paddingVertical: 10 },
-            ]}
-          >
-            <Text>Bio</Text>
-            <Text>{user.bio}</Text>
-          </View>
+            <View
+              style={[tw("flex flex-col items-start"), { paddingVertical: 10 }]}
+            >
+              <Text>Status</Text>
+              <Text>{user.status}</Text>
+            </View>
+            <View
+              style={[tw("flex flex-col items-start"), { paddingVertical: 10 }]}
+            >
+              <Text>Bio</Text>
+              <Text>{user.bio}</Text>
+            </View>
 
-          <View></View>
-          <Button
-            title="Edit Profile"
-            style={[tw("py-1 px-4"), { width: 400 }]}
-            onPress={editProfileButton}
-          />
+            <Button gradient onPress={editProfileButton}>
+              <Text bold white center>
+                Edit Profile
+              </Text>
+            </Button>
 
-          <Button
-            title="Your Posts"
-            style={[tw("py-2 px-4"), { width: 400 }]}
-            onPress={yourPostsButton}
-          />
+            <Button gradient onPress={yourPostsButton}>
+              <Text bold white center>
+                Your Posts
+              </Text>
+            </Button>
 
-          <Button
-            title="Saved Posts"
-            style={[tw("py-2 px-4"), { width: 400 }]}
-            onPress={savedPostsButton}
-          />
-        </View>
+            <Button gradient onPress={savedPostsButton}>
+              <Text bold white center>
+                Saved Posts
+              </Text>
+            </Button>
+          </Block>
+        </Block>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const imageUploaderStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     elevation: 2,
     height: 200,
     width: 200,
-    backgroundColor: "#efefef",
+    backgroundColor: "#cecece",
     position: "relative",
     borderRadius: 999,
     overflow: "hidden",
-  }});
+    justifyContent: "center",
+  },
+  input: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderBottomColor: theme.colors.gray2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+});
 
 export default ProfileScreen;
