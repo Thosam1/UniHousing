@@ -51,8 +51,8 @@ const OwnedPostsSreen = () => {
       startDate: "12.02.2023",
       endDate: "12.08.2023",
       price: "840",
-      image:
-        "https://thumbor.forbes.com/thumbor/fit-in/x/https://www.forbes.com/home-improvement/wp-content/uploads/2022/07/download-23.jpg",
+      images:
+        ["https://thumbor.forbes.com/thumbor/fit-in/x/https://www.forbes.com/home-improvement/wp-content/uploads/2022/07/download-23.jpg", "https://thumbs.dreamstime.com/b/classic-house-flower-garden-751996.jpg", "https://thumbor.forbes.com/thumbor/fit-in/x/https://www.forbes.com/home-improvement/wp-content/uploads/2022/07/download-23.jpg"],
       // owner_firstName: "Thösam",
       // owner_lastName: "Norlha-Tsang",
       // owner_avatar:
@@ -67,8 +67,7 @@ const OwnedPostsSreen = () => {
       startDate: "12.02.2023",
       endDate: "31.12.2023",
       price: "960",
-      image:
-        "https://thumbs.dreamstime.com/b/classic-house-flower-garden-751996.jpg",
+      images: ["https://thumbs.dreamstime.com/b/classic-house-flower-garden-751996.jpg", "https://thumbor.forbes.com/thumbor/fit-in/x/https://www.forbes.com/home-improvement/wp-content/uploads/2022/07/download-23.jpg", "https://thumbs.dreamstime.com/b/classic-house-flower-garden-751996.jpg"],
 
       // owner_firstName: "Thösam",
       // owner_lastName: "Norlha-Tsang",
@@ -95,7 +94,7 @@ const OwnedPostsSreen = () => {
               startDate: elt.startDate,
               endDate: elt.endDate,
               price: elt.price,
-              image: elt.image,
+              images: elt.images,
             };
             array.push(singlePost);
           });
@@ -118,14 +117,15 @@ const OwnedPostsSreen = () => {
           {ownedPosts.map((post) => (
             <PostCard
               key={post.post_id}
-              id={post.post_id}
+              post_id={post.post_id}
+              owner_id={post.owner_id}
               title={post.title}
               city={post.city}
               country={post.country}
               startDate={post.startDate}
               endDate={post.endDate}
               price={post.price}
-              mainImageURL={post.image}
+              images={post.images}
             />
           ))}
         </Block>

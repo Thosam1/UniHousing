@@ -211,6 +211,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    backgroundColor: theme.colors.white
   },
   input: {
     borderRadius: 0,

@@ -13,6 +13,7 @@ import ProfileScreen from "../screens/Main/ProfileScreen";
 import { Icon } from "@rneui/themed";
 import EditProfileScreen from "../screens/Main/EditProfileScreen";
 import CreateScreen from "../screens/Main/CreateScreen";
+import { theme } from "../constants";
 
 // type definitions
 export type TabStackParamList = {
@@ -37,56 +38,55 @@ const TabNavigator = () => {
 
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        contentStyle: {
-          backgroundColor: "#FFFFFF",
-        },
-        tabBarActiveTintColor: "#59C1CC",
-        tabBarInactiveTintColor: "gray",
-        tabBarIcon: ({ focused, color, size }) => {
-          if (route.name === "Home") {
-            return (
-              <Icon
-                name="users"
-                type="entypo"
-                color={focused ? "#59C1CC" : "gray"}
-              />
-            );
-          } else if (route.name === "Search") {
-            return (
-              <Icon
-                name="box"
-                type="entypo"
-                color={focused ? "#EB6A7C" : "gray"}
-              />
-            );
-          } else if (route.name === "Create") {
-            return (
-              <Icon
-                name="box"
-                type="entypo"
-                color={focused ? "#EB6A7C" : "gray"}
-              />
-            );
-          } else if (route.name === "Profile") {
-            return (
-              <Icon
-                name="box"
-                type="entypo"
-                color={focused ? "#EB6A7C" : "gray"}
-              />
-            );
-          } else if (route.name === "Settings") {
-            return (
-              <Icon
-                name="box"
-                type="entypo"
-                color={focused ? "#EB6A7C" : "gray"}
-              />
-            );
-          }
-        },
-      })}
+
+    
+      // screenOptions={({ route }) => ({
+      //   tabBarActiveTintColor: "#59C1CC",
+      //   tabBarInactiveTintColor: "gray",
+      //   tabBarIcon: ({ focused, color, size }) => {
+      //     if (route.name === "Home") {
+      //       return (
+      //         <Icon
+      //           name="users"
+      //           type="entypo"
+      //           color={focused ? "#59C1CC" : "gray"}
+      //         />
+      //       );
+      //     } else if (route.name === "Search") {
+      //       return (
+      //         <Icon
+      //           name="box"
+      //           type="entypo"
+      //           color={focused ? "#EB6A7C" : "gray"}
+      //         />
+      //       );
+      //     } else if (route.name === "Create") {
+      //       return (
+      //         <Icon
+      //           name="box"
+      //           type="entypo"
+      //           color={focused ? "#EB6A7C" : "gray"}
+      //         />
+      //       );
+      //     } else if (route.name === "Profile") {
+      //       return (
+      //         <Icon
+      //           name="box"
+      //           type="entypo"
+      //           color={focused ? "#EB6A7C" : "gray"}
+      //         />
+      //       );
+      //     } else if (route.name === "Settings") {
+      //       return (
+      //         <Icon
+      //           name="box"
+      //           type="entypo"
+      //           color={focused ? "#EB6A7C" : "gray"}
+      //         />
+      //       );
+      //     }
+      //   },
+      // })}
     >
       <Tab.Screen
         name="Home"

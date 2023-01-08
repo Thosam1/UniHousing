@@ -9,15 +9,7 @@ export type Date = {
   end: string;
 };
 
-export type PostCardProps = {
-  post_id: string;
-  owner_id: string;
-  location: Location;
-  date: Date;
-  price: string;
-  photos_ids: string[];
-};
-
+// needed to show the preview of a most
 export type PostPreview = {
   post_id: string;
   owner_id: string;
@@ -28,7 +20,7 @@ export type PostPreview = {
   startDate: string;
   endDate:string;
   price: string;
-  image: string;
+  images: string[];
   // owner_firstName: string;
   // owner_lastName: string;
   // owner_avatar: string;
@@ -37,17 +29,24 @@ export type PostPreview = {
 export type Post = {
   post_id: string;
   owner_id: string;
-  owner_firstName: string;
-  owner_lastName: string;
-  owner_avatar: string;
+
+  owner_firstName: string; // additional
+  owner_lastName: string; // additional
+  owner_avatar: string; // additional
+ 
   title: string;
-  description: string;
+  description: string; // additional
   city: string;
   country: string;
   startDate: string;
   endDate:string;
   price: string;
-  photos: string[]
+  images: string[]
+
+  share_link: string; // additional
+  saved: boolean;  // additional
+
+  // send contact details to owner
 };
 
 // idea, we can pass the PostCardProps as a prop to the new screen, and then fetch the title and description with the post_id

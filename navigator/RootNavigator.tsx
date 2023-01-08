@@ -19,20 +19,16 @@ export type RootStackParamList = {
 const RootStack = createNativeStackNavigator();
 
 const RootNavigator = () => {
-
   // The `state` arg is correctly typed as `RootState` already
-  const authStatus = true; // todo // useAppSelector(selectAuthStatus);
+  const authStatus = true; // useAppSelector(selectAuthStatus);
 
   return (
     <RootStack.Navigator
-    defaultScreenOptions={{
-      headerStyle: {
-        backgroundColor: theme.colors.white,
-      },
-      contentStyle: {
-        backgroundColor: theme.colors.white,
-      },
-    }}
+      screenOptions={{
+        contentStyle: {
+          backgroundColor: theme.colors.white,
+        },
+      }}
     >
       {authStatus ? (
         // User is signed in

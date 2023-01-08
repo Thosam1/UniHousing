@@ -3,7 +3,7 @@ import axios from "axios";
 import { useAppSelector } from "../features/hooks";
 import { selectAccessToken } from "../features/auth/authSlice";
 
-const serverHostName = "localhost"; // "172.23.208.1"
+const serverHostName = "172.23.208.1"; // "localhost"; // 
 const serverPort = "3000"; // todo change for production
 
 export const BASE_URL = PROD_MODE

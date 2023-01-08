@@ -7,6 +7,7 @@ import SplashScreen from "../screens/SplashScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import IntroductionScreen from "../screens/IntroductionScreen";
 import SignUpScreen from "../screens/Auth/SignUpScreen";
+import { theme } from "../constants";
 
 // type definitions
 export type AuthStackParamList = {
@@ -27,7 +28,7 @@ const AuthNavigator = () => {
     <AuthStack.Navigator
       screenOptions={{
         contentStyle: {
-          backgroundColor: "#FFFFFF",
+          backgroundColor: theme.colors.white,
         },
       }}
     >

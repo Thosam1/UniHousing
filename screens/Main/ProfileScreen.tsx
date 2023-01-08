@@ -87,7 +87,7 @@ const ProfileScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
+    <SafeAreaView style={{ flex: 1, justifyContent: "center", backgroundColor: theme.colors.white }}>
       <ScrollView>
         <Block style={{ flex: 1 }} padding={[0, theme.sizes.base * 2]}>
           <View style={{ paddingTop: 30 }}>

@@ -48,14 +48,24 @@ export const deletePost = (user_id: string, post_id: string) => {
   return axiosClient.post("post/delete", body, { withCredentials: true });
 };
 
-// when individually clicked on
-export const getPost = (post_id: string) => {
-  // we could add the user_id as props to keep track of nb of requests to avoid attacks
+export const getPostAdditionalDetails = (user_id: string, post_id: string) => {
+  // from security perspective would be good to add a second factor authentification like a code to avoid attacks
   const body = JSON.stringify({
+    user_id,
     post_id,
   });
-  return axiosClient.post("post/get-post", body);
+  return axiosClient.post("post/asdfasdflékjaklsdjfélakdsj", body, { withCredentials: true });
 };
+
+
+// // when individually clicked on
+// export const getPost = (post_id: string) => {
+//   // we could add the user_id as props to keep track of nb of requests to avoid attacks
+//   const body = JSON.stringify({
+//     post_id,
+//   });
+//   return axiosClient.post("post/get-post", body);
+// };
 
 // when individually clicked on
 export const getPosts = (searchInput: string) => {
@@ -77,12 +87,10 @@ export const getPhotos = (photos_ids: [string]) => {
 export const savePost = (
   post_id: string,
   user_id: string,
-  jwt_token: string
 ) => {
   const body = JSON.stringify({
     user_id,
     post_id,
-    jwt_token,
   });
   return axiosClient.post("post/save-post", body);
 };
@@ -90,13 +98,11 @@ export const savePost = (
 // delete post from saved posts
 export const unSavePost = (
   post_id: string,
-  user_id: string,
-  jwt_token: string
+  user_id: string
 ) => {
   const body = JSON.stringify({
     user_id,
     post_id,
-    jwt_token,
   });
   return axiosClient.post("post/unsave-post", body);
 };
