@@ -148,6 +148,13 @@ const EditProfileScreen = () => {
     }
   };
   return (
+    <KeyboardAvoidingView
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    style={{
+      flex: 1,
+      justifyContent: "center",
+    }}
+  >
     <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
       <ScrollView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -241,6 +248,7 @@ const EditProfileScreen = () => {
         </TouchableWithoutFeedback>
       </ScrollView>
     </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
