@@ -14,16 +14,12 @@ export type PostPreview = {
   post_id: string;
   owner_id: string;
   title: string;
-  // description: string;
   city: string;
   country: string;
   startDate: string;
   endDate:string;
   price: string;
   images: string[];
-  // owner_firstName: string;
-  // owner_lastName: string;
-  // owner_avatar: string;
 };
 
 export type Post = {
@@ -53,11 +49,12 @@ export type Post = {
 
 export type PublicProfile = {
     profile_id: string,
-    avatar_id: string,
+    avatar: string,
     first_name: string,
     last_name: string,
     status: string,
-    bio: string
+    bio: string,
+    owned_posts: string[]
 }
 
 export type PrivateProfile = {

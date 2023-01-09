@@ -1,19 +1,24 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
+import { PostPreview } from "../api/typesAPI";
 import { theme } from "../constants";
 import EditProfileScreen from "../screens/Main/EditProfileScreen";
 import OwnedPostsSreen from "../screens/Main/OwnedPostsSreen";
+import PostScreen from "../screens/Main/PostScreen";
+import PublicProfileScreen from "../screens/Main/PublicProfileScreen";
 import SavedPostsScreen from "../screens/Main/SavedPostsScreen";
+
 import TabNavigator from "./TabNavigator";
 
 // type definitions
 export type AppStackParamList = {
   // will check if the names param are correct
   Main: undefined;
-
   EditProfile: undefined;
   OwnedPosts: undefined;
   SavedPosts: undefined;
+  Post: { props: PostPreview };
+  PublicProfile: { user_id: string };
   SplashScreen: undefined;
 };
 
@@ -55,6 +60,28 @@ const AppNavigator = () => {
             headerShown: true,
           }}
         />
+        <AppStack.Screen
+          name="Post"
+          component={PostScreen}
+          options={{
+            title: "Post",
+            headerShown: false,
+          }}
+        />
+        <AppStack.Group
+          screenOptions={{
+            presentation: "modal",
+          }}
+        >
+          <AppStack.Screen
+            name="PublicProfile"
+            component={PublicProfileScreen}
+            options={{
+              title: "Post",
+              headerShown: false,
+            }}
+          />
+        </AppStack.Group>
       </AppStack.Group>
     </AppStack.Navigator>
   );
