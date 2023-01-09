@@ -79,6 +79,64 @@ const PostCard = (props: PostCardProps) => {
       .finally(() => setLoading(false));
   };
 
+  const renderImagesGalleryInModal = (width: number) => {
+    return (
+      <FlatList
+        horizontal
+        pagingEnabled
+        scrollEnabled
+        showsHorizontalScrollIndicator={true}
+        scrollEventThrottle={16}
+        snapToAlignment="center"
+        data={props.images}
+        keyExtractor={(item, index) => `${index}`}
+        renderItem={({ item }) => (
+          // <TouchableOpacity onPress={() => console.log("hey")}>
+            <Image
+              source={{ uri: item }}
+              style={{
+                width: width,
+                height: 240,
+                borderRadius: 10,
+                resizeMode: "cover",
+              }}
+              PlaceholderContent={<ActivityIndicator />}
+            />
+          // </TouchableOpacity>
+        )}
+      />
+    );
+  };
+
+  const renderImagesGalleryInPreview = (width: number) => {
+    return (
+      <FlatList
+        horizontal
+        pagingEnabled
+        scrollEnabled
+        showsHorizontalScrollIndicator={true}
+        scrollEventThrottle={16}
+        snapToAlignment="center"
+        data={props.images}
+        keyExtractor={(item, index) => `${index}`}
+        renderItem={({ item }) => (
+          <TouchableOpacity activeOpacity={1} onPress={cardPressed}>
+            <Image
+              source={{ uri: item }}
+              style={{
+                width: width,
+                height: 240,
+                borderRadius: 10,
+                resizeMode: "cover",
+              }}
+              PlaceholderContent={<ActivityIndicator />}
+            />
+          </TouchableOpacity>
+        )}
+      />
+    );
+  };
+
   const renderPostInfo = () => {
     return (
       <Modal
@@ -110,13 +168,15 @@ const PostCard = (props: PostCardProps) => {
           </View>
 
           <ScrollView style={{ marginVertical: theme.sizes.padding }}>
-            <Image
+            {/* <Image
               source={{
                 uri: props.images[0],
               }}
               PlaceholderContent={<ActivityIndicator />}
               style={styles.image}
-            />
+            /> */}
+
+            {renderImagesGalleryInModal(width - theme.sizes.padding * 2)}
 
             <Text height={24} h1 bold style={{ marginTop: theme.sizes.base }}>
               {props.title}
@@ -154,63 +214,8 @@ const PostCard = (props: PostCardProps) => {
     );
   };
 
-  const renderImages = () => {
-    return (
-      <FlatList
-        horizontal
-        pagingEnabled
-        scrollEnabled
-        showsHorizontalScrollIndicator={false}
-        scrollEventThrottle={16}
-        snapToAlignment="center"
-        data={props.images}
-        // extraDate={this.state}
-        keyExtractor={(item, index) => `${item}+${props.owner_id}+${index}`}
-        renderItem={({ item }) => (
-          <Image
-            source={require("../assets/images/illustration_2.png")}
-            style={styles.image}
-          />
-        )}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: { contentOffset: { x: scrollX } },
-            },
-          ],
-          { useNativeDriver: false }
-        )}
-      />
-    );
-  };
-
-  const renderSteps = () => {
-    const stepPosition = Animated.divide(scrollX, width);
-    return (
-      <Block row center middle style={styles.stepsContainer}>
-        {props.images.map((item, index) => {
-          const opacity = stepPosition.interpolate({
-            inputRange: [index - 1, index, index + 1],
-            outputRange: [0.4, 1, 0.4],
-            extrapolate: "clamp",
-          });
-
-          return (
-            <Block
-              animated
-              flex={false}
-              key={`step-${index}`}
-              color="gray"
-              style={[styles.steps, { opacity }]}
-            />
-          );
-        })}
-      </Block>
-    );
-  };
-
   return (
-    <TouchableOpacity
+    <View
       style={{
         height: 320,
         backgroundColor: theme.colors.white,
@@ -218,27 +223,16 @@ const PostCard = (props: PostCardProps) => {
         width: "100%",
         margin: 20,
       }}
-      onPress={cardPressed}
     >
-      <Image
-        source={{
-          uri: props.images[0],
-        }}
-        PlaceholderContent={<ActivityIndicator />}
-        style={styles.image}
-      />
+      {renderImagesGalleryInPreview(width - theme.sizes.base * 4)}
 
-      {/* <Block center middle>
-        {renderImages()}
-        {renderSteps()}
-      </Block> */}
-
-      <View
+      <TouchableOpacity
         style={{
           flexDirection: "column",
           paddingTop: 10,
           paddingHorizontal: 10,
         }}
+        onPress={cardPressed}
       >
         <Text
           style={{
@@ -265,9 +259,9 @@ const PostCard = (props: PostCardProps) => {
         >
           {props.price} CHF/month
         </Text>
-      </View>
+      </TouchableOpacity>
       {renderPostInfo()}
-    </TouchableOpacity>
+    </View>
   );
 };
 
