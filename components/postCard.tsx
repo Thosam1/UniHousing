@@ -27,10 +27,10 @@ type CardNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<AppStackParamList>
 >;
 
+const { width, height } = Dimensions.get("window");
+
 const PostCard = (props: PostCardProps) => {
   const navigation = useNavigation<CardNavigationProp>(); // maybe to modify profile
-
-  const { width, height } = Dimensions.get("window");
 
   const cropTitle = (title: string) => {
     return title.length > 30 ? title.substring(0, 30) + "..." : title;

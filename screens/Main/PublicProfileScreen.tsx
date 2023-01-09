@@ -66,6 +66,8 @@ type PublicProfileScreenRouteProp = RouteProp<
   "PublicProfile"
 >;
 
+const { width, height } = Dimensions.get("window");
+
 const PublicProfileScreen = () => {
   const navigation = useNavigation<PublicProfileNavigationProp>(); // maybe to modify profile
 
@@ -74,8 +76,6 @@ const PublicProfileScreen = () => {
   } = useRoute<PublicProfileScreenRouteProp>();
 
   const isFocused = useIsFocused();
-
-  const { width, height } = Dimensions.get("window");
 
   const [loading, setLoading] = useState(false);
 

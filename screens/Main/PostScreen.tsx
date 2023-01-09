@@ -54,6 +54,9 @@ type PostNavigationProp = CompositeNavigationProp<
 
 type PostScreenRouteProp = RouteProp<AppStackParamList, "Post">;
 
+
+const { width, height } = Dimensions.get("window");
+
 const PostScreen = () => {
   const navigation = useNavigation<PostNavigationProp>(); // maybe to modify profile
 
@@ -62,8 +65,6 @@ const PostScreen = () => {
   } = useRoute<PostScreenRouteProp>();
 
   const isFocused = useIsFocused();
-
-  const { width, height } = Dimensions.get("window");
 
   const [loading, setLoading] = useState(false);
 
