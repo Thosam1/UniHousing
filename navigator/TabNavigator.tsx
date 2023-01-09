@@ -38,55 +38,53 @@ const TabNavigator = () => {
 
   return (
     <Tab.Navigator
-
-    
-      // screenOptions={({ route }) => ({
-      //   tabBarActiveTintColor: "#59C1CC",
-      //   tabBarInactiveTintColor: "gray",
-      //   tabBarIcon: ({ focused, color, size }) => {
-      //     if (route.name === "Home") {
-      //       return (
-      //         <Icon
-      //           name="users"
-      //           type="entypo"
-      //           color={focused ? "#59C1CC" : "gray"}
-      //         />
-      //       );
-      //     } else if (route.name === "Search") {
-      //       return (
-      //         <Icon
-      //           name="box"
-      //           type="entypo"
-      //           color={focused ? "#EB6A7C" : "gray"}
-      //         />
-      //       );
-      //     } else if (route.name === "Create") {
-      //       return (
-      //         <Icon
-      //           name="box"
-      //           type="entypo"
-      //           color={focused ? "#EB6A7C" : "gray"}
-      //         />
-      //       );
-      //     } else if (route.name === "Profile") {
-      //       return (
-      //         <Icon
-      //           name="box"
-      //           type="entypo"
-      //           color={focused ? "#EB6A7C" : "gray"}
-      //         />
-      //       );
-      //     } else if (route.name === "Settings") {
-      //       return (
-      //         <Icon
-      //           name="box"
-      //           type="entypo"
-      //           color={focused ? "#EB6A7C" : "gray"}
-      //         />
-      //       );
-      //     }
-      //   },
-      // })}
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: "#59C1CC",
+        tabBarInactiveTintColor: "gray",
+        tabBarIcon: ({ focused, color, size }) => {
+          if (route.name === "Home") {
+            return (
+              <Icon
+                name="ios-home"
+                type="ionicon"
+                color={focused ? theme.colors.secondary : "gray"}
+              />
+            );
+          } else if (route.name === "Search") {
+            return (
+              <Icon
+                name="box"
+                type="entypo"
+                color={focused ? theme.colors.secondary : "gray"}
+              />
+            );
+          } else if (route.name === "Create") {
+            return (
+              <Icon
+                name="squared-plus"
+                type="entypo"
+                color={focused ? theme.colors.secondary : "gray"}
+              />
+            );
+          } else if (route.name === "Profile") {
+            return (
+              <Icon
+                name="user-alt"
+                type="font-awesome-5"
+                color={focused ? theme.colors.secondary : "gray"}
+              />
+            );
+          } else if (route.name === "Settings") {
+            return (
+              <Icon
+                name="box"
+                type="entypo"
+                color={focused ? theme.colors.secondary : "gray"}
+              />
+            );
+          }
+        },
+      })}
     >
       <Tab.Screen
         name="Home"
