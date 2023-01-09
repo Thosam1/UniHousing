@@ -6,6 +6,9 @@ import {
   Animated,
   Dimensions,
   SafeAreaView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ScrollView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import {
@@ -22,9 +25,13 @@ import {
 } from "../../features/auth/authSlice";
 import { getPrivateProfile } from "../../api/user/user";
 import { theme } from "../../constants";
-import { Block, Input, Text } from "../../components";
+import { Block, Input, PostCard, Text } from "../../components";
 import { Icon } from "@rneui/themed";
 import { useIsFocused } from "@react-navigation/native";
+import { getHomePosts } from "../../api/post/post";
+import { PostPreview } from "../../api/typesAPI";
+import PostPreviewGallery from "../../components/PostPreviewGallery";
+import { dummy_post_preview_gallery } from "../../data/dummy_data";
 
 type HomeScreenNavigationProp = BottomTabNavigationProp<
   TabStackParamList,
@@ -35,52 +42,48 @@ const { width, height } = Dimensions.get("window");
 
 const HomeScreen = () => {
   const isFocused = useIsFocused();
+  let user = useAppSelector(selectUser);
+
   const [loading, setLoading] = useState(false);
+  const [displayedPosts, setDisplayedPosts] = useState<PostPreview[]>(dummy_post_preview_gallery);
 
   useEffect(() => {
     setLoading(true);
 
     // fetching out the posts
+    getHomePosts(user.profile_id)
+      .then((res) => {
+        if (res.status === 200) {
+          let array: PostPreview[] = [];
+          res.data.map((elt: any) => {
+            const singlePost: PostPreview = {
+              post_id: elt._id,
+              owner_id: elt.user,
+              title: elt.title,
+              city: elt.city,
+              country: elt.country,
+              startDate: elt.startDate,
+              endDate: elt.endDate,
+              price: elt.price,
+              images: elt.images,
+            };
+            array.push(singlePost);
 
-    // // tp get the details
-    // getPostAdditionalDetails(props.owner_id, props.post_id)
-    //   .then((res) => {
-    //     if (res.status === 200) {
-    //       setOwnerFirstName(res.data.owner_firstName);
-    //       setOwnerLastName(res.data.owner_lastName);
-    //       setOwnerAvatar(res.data.owner_avatar);
-    //       setDescription(res.data.descrption);
-    //       setShareLink(res.data.share_link);
-    //       setSaved(res.data.saved);
-
-    //       console.log(res.data);
-    //     }
-    //   })
-    //   .catch((err) => console.log(err))
-    //   .finally(() => setLoading(false));
+            setDisplayedPosts(array);
+            console.log(res.data);
+          });
+        }
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   }, [isFocused]);
 
   const dispatch = useAppDispatch();
-
-  const getPrivateProfileButton = () => {
-    getPrivateProfile()
-      .then((res) => {
-        if (res.status === 200) {
-          console.log("WE GOT THE PRIVATE PROFILE DATA");
-          console.log(res.data);
-        } else {
-          console.log("NOT an OK response, couldn't get the user data");
-        }
-      })
-      .catch((err) => console.log(err));
-  };
 
   const signOut = () => {
     localStorage.setItem("accessToken", "");
     dispatch(logoutRTK());
   };
-
-  // will fetch the user profile, to see if access token works :
 
   const [searchString, setSearchString] = useState("");
   const [searchFocus, setSearchFocus] = useState(new Animated.Value(0.6));
@@ -125,19 +128,22 @@ const HomeScreen = () => {
   };
 
   return (
-    <Block
-      style={{
-        paddingVertical: theme.sizes.base * 2,
-        backgroundColor: theme.colors.white,
-      }}
-    >
-      <Block flex={false} center space="between" style={styles.header}>
-        <Text h1 bold style={{ paddingVertical: 25 }}>
-          Explore
-        </Text>
-        {renderSearch()}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Block
+        style={{
+          paddingTop: theme.sizes.base * 2,
+          backgroundColor: theme.colors.white,
+        }}
+      >
+        <Block flex={false} center space="between" style={styles.header}>
+          <Text h1 bold style={{ paddingVertical: 25 }}>
+            Explore
+          </Text>
+          {renderSearch()}
+        </Block>
+        <PostPreviewGallery posts={displayedPosts} />
       </Block>
-    </Block>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -146,7 +152,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: theme.sizes.base * 2,
-    paddingBottom: theme.sizes.base * 2,
+    paddingBottom: theme.sizes.base * 2.5,
   },
   search: {
     height: theme.sizes.base * 2,

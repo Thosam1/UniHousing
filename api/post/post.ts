@@ -67,21 +67,21 @@ export const getPostAdditionalDetails = (user_id: string, post_id: string) => {
 //   return axiosClient.post("post/get-post", body);
 // };
 
-// when individually clicked on
-export const getPosts = (searchInput: string) => {
-  const body = JSON.stringify({
-    searchInput,
-  });
-  return axiosClient.post("post/get-posts", body);
-};
+// // when individually clicked on
+// export const getPosts = (searchInput: string) => {
+//   const body = JSON.stringify({
+//     searchInput,
+//   });
+//   return axiosClient.post("post/get-posts", body);
+// };
 
-//
-export const getPhotos = (photos_ids: [string]) => {
-  const body = JSON.stringify({
-    photos_ids,
-  });
-  return axiosClient.post("post/get-photos", body);
-};
+// //
+// export const getPhotos = (photos_ids: [string]) => {
+//   const body = JSON.stringify({
+//     photos_ids,
+//   });
+//   return axiosClient.post("post/get-photos", body);
+// };
 
 // add post to saved posts
 export const saveUnsavePost = (
@@ -92,7 +92,18 @@ export const saveUnsavePost = (
     user_id,
     post_id,
   });
-  return axiosClient.post("post/save-unsave", body);
+  return axiosClient.post("post/save-unsave", body, { withCredentials: true });
 };
+
+// add post to saved posts
+export const getHomePosts = (
+  user_id: string
+) => {
+  const body = JSON.stringify({
+    user_id
+  });
+  return axiosClient.post("post/home", body, { withCredentials: true });
+};
+
 
 

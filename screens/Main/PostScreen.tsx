@@ -103,24 +103,25 @@ const PostScreen = () => {
   }, [isFocused]);
 
   const saveButton = () => {
-    // sends request to server
-    saveUnsavePost(props.post_id, props.owner_id)
-      .then((res) => {
-        if (res.status === 200) {
-          setSaved(res.data.saved);
-          Toast.show({
-            type: "success",
-            text1: res.data.message,
-          });
-        } else {
-          Toast.show({
-            type: "error",
-            text1: res.data,
-          });
-          setSaved(!saved); // todo, to remove !!!
-        }
-      })
-      .catch((err) => console.log(err));
+    setSaved(!saved); // todo, to remove !!!
+
+    // // sends request to server
+    // saveUnsavePost(props.post_id, props.owner_id)
+    //   .then((res) => {
+    //     if (res.status === 200) {
+    //       setSaved(res.data.saved);
+    //       Toast.show({
+    //         type: "success",
+    //         text1: res.data.message,
+    //       });
+    //     } else {
+    //       Toast.show({
+    //         type: "error",
+    //         text1: res.data,
+    //       });
+    //     }
+    //   })
+    //   .catch((err) => console.log(err));
   };
 
   const shareButton = () => {};

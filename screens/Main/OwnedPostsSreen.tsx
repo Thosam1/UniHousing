@@ -39,33 +39,13 @@ import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
 import { createPost } from "../../api/post/post";
 import { Block, PostCard } from "../../components";
 import { theme } from "../../constants";
+import { dummy_post_preview_gallery } from "../../data/dummy_data";
+import PostPreviewGallery from "../../components/PostPreviewGallery";
 
 const OwnedPostsSreen = () => {
-  const [ownedPosts, setOwnedPosts] = useState<PostPreview[]>([
-    {
-      post_id: "asdasdofkl1242341",
-      owner_id: "sdasdasr3rethtre",
-      title: "Studio vers Renens",
-      city: "Renens",
-      country: "Switzerland",
-      startDate: "12.02.2023",
-      endDate: "12.08.2023",
-      price: "840",
-      images:
-        ["https://thumbor.forbes.com/thumbor/fit-in/x/https://www.forbes.com/home-improvement/wp-content/uploads/2022/07/download-23.jpg", "https://thumbs.dreamstime.com/b/classic-house-flower-garden-751996.jpg", "https://thumbor.forbes.com/thumbor/fit-in/x/https://www.forbes.com/home-improvement/wp-content/uploads/2022/07/download-23.jpg"],
-    },
-    {
-      post_id: "asdf5523df56rzht9sd",
-      owner_id: "sdasdasr3rethtre",
-      title: "Studio vers Crissier",
-      city: "Crissier",
-      country: "Switzerland",
-      startDate: "12.02.2023",
-      endDate: "31.12.2023",
-      price: "960",
-      images: ["https://thumbs.dreamstime.com/b/classic-house-flower-garden-751996.jpg", "https://thumbor.forbes.com/thumbor/fit-in/x/https://www.forbes.com/home-improvement/wp-content/uploads/2022/07/download-23.jpg", "https://thumbs.dreamstime.com/b/classic-house-flower-garden-751996.jpg"],
-    },
-  ]);
+  const [ownedPosts, setOwnedPosts] = useState<PostPreview[]>(
+    dummy_post_preview_gallery
+  ); // todo remove
   const isFocused = useIsFocused();
 
   let user = useAppSelector(selectUser);
@@ -99,28 +79,7 @@ const OwnedPostsSreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
-      <ScrollView>
-        <Block
-          middle
-          style={{ flex: 1, alignItems: "center",  }}
-          padding={[0, theme.sizes.base * 2]}
-        >
-          {ownedPosts.map((post) => (
-            <PostCard
-              key={post.post_id}
-              post_id={post.post_id}
-              owner_id={post.owner_id}
-              title={post.title}
-              city={post.city}
-              country={post.country}
-              startDate={post.startDate}
-              endDate={post.endDate}
-              price={post.price}
-              images={post.images}
-            />
-          ))}
-        </Block>
-      </ScrollView>
+      <PostPreviewGallery posts={ownedPosts} />
     </SafeAreaView>
   );
 };
