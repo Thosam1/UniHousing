@@ -111,9 +111,10 @@ const HomeScreen = () => {
           rightStyle={styles.searchRight}
           rightLabel={
             <Icon
-              name={isEditing ? "close" : "search"}
+              // name={isEditing ? "close" : "search"}
+              name="search"
               type="font-awesome"
-              size={theme.sizes.base / 1.6}
+              size={theme.sizes.base / 1.3}
               color={theme.colors.gray2}
               style={styles.searchIcon}
             />
@@ -124,7 +125,12 @@ const HomeScreen = () => {
   };
 
   return (
-    <Block style={{ paddingVertical: theme.sizes.base * 2 }}>
+    <Block
+      style={{
+        paddingVertical: theme.sizes.base * 2,
+        backgroundColor: theme.colors.white,
+      }}
+    >
       <Block flex={false} center space="between" style={styles.header}>
         <Text h1 bold style={{ paddingVertical: 25 }}>
           Explore
@@ -160,9 +166,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   searchIcon: {
-    position: "absolute",
-    right: theme.sizes.base / 1.333,
-    top: theme.sizes.base / 1.6,
+    margin: 10,
   },
   explore: {
     marginHorizontal: theme.sizes.padding * 1.25,
