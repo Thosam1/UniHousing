@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { Button, Block, Input, Text } from "../../components";
 import { theme } from "../../constants";
-import { Image } from "@rneui/themed";
+import { Avatar, Image } from "@rneui/themed";
 
 import { useTailwind } from "tailwind-rn/dist";
 
@@ -105,39 +105,30 @@ const ProfileScreen = () => {
           </View>
 
           <Block middle>
-            <View
-              style={[tw("flex flex-col items-start"), { paddingVertical: 10 }]}
-            >
-              <Text>First Name</Text>
-              <Text>{user.first_name}</Text>
-            </View>
+          <Avatar size={140} rounded source={(user.avatar === "" ? require("../../assets/images/anonymous-avatar.jpg") : { uri: user.avatar })} />
 
-            <View
-              style={[tw("flex flex-col items-start"), { paddingVertical: 10 }]}
-            >
-              <Text>Last Name</Text>
-              <Text>{user.last_name}</Text>
-            </View>
+          <Text h1 bold style={{ marginTop: theme.sizes.base }}>
+            {user.first_name} {user.last_name}
+          </Text>
 
-            <View
-              style={[tw("flex flex-col items-start"), { paddingVertical: 10 }]}
-            >
-              <Text>Email</Text>
-              <Text>{user.email}</Text>
-            </View>
+          <Text
+            h2
+            semibold
+            style={{ marginTop: theme.sizes.base, marginBottom: 5 }}
+          >
+            Status
+          </Text>
 
-            <View
-              style={[tw("flex flex-col items-start"), { paddingVertical: 10 }]}
-            >
-              <Text>Status</Text>
-              <Text>{user.status}</Text>
-            </View>
-            <View
-              style={[tw("flex flex-col items-start"), { paddingVertical: 10 }]}
-            >
-              <Text>Bio</Text>
-              <Text>{user.bio}</Text>
-            </View>
+          <Text h2>{user.status}</Text>
+
+          <Text
+            h2
+            semibold
+            style={{ marginTop: theme.sizes.base, marginBottom: 5 }}
+          >
+            Bio
+          </Text>
+          <Text h2>{user.bio}</Text>
 
             <Button gradient onPress={editProfileButton}>
               <Text bold white center>
