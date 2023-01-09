@@ -10,13 +10,15 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
-import { Divider, Image } from "@rneui/themed";
+import { Divider, Image, Icon, Avatar } from "@rneui/themed";
 import { theme } from "../constants";
 import { Container } from "postcss";
 import React, { useEffect, useState } from "react";
 import { Block, Button, Text } from "../components";
 import { useAppDispatch } from "../features/hooks";
-import { getPostAdditionalDetails } from "../api/post/post";
+
+import { getPostAdditionalDetails, saveUnsavePost } from "../api/post/post";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 
 type PostCardProps = {
   post_id: string;
@@ -79,6 +81,29 @@ const PostCard = (props: PostCardProps) => {
       .finally(() => setLoading(false));
   };
 
+  const saveButton = () => {
+    // sends request to server
+    saveUnsavePost(props.post_id, props.owner_id)
+      .then((res) => {
+        if (res.status === 200) {
+          setSaved(res.data.saved);
+          Toast.show({
+            type: "success",
+            text1: res.data.message,
+          });
+        } else {
+          Toast.show({
+            type: "error",
+            text1: res.data,
+          });
+          setSaved(!saved); // todo, to remove !!!
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const shareButton = () => {};
+
   const renderImagesGalleryInModal = (width: number) => {
     return (
       <FlatList
@@ -92,16 +117,16 @@ const PostCard = (props: PostCardProps) => {
         keyExtractor={(item, index) => `${index}`}
         renderItem={({ item }) => (
           // <TouchableOpacity onPress={() => console.log("hey")}>
-            <Image
-              source={{ uri: item }}
-              style={{
-                width: width,
-                height: 240,
-                borderRadius: 10,
-                resizeMode: "cover",
-              }}
-              PlaceholderContent={<ActivityIndicator />}
-            />
+          <Image
+            source={{ uri: item }}
+            style={{
+              width: width,
+              height: 240,
+              borderRadius: 10,
+              resizeMode: "cover",
+            }}
+            PlaceholderContent={<ActivityIndicator />}
+          />
           // </TouchableOpacity>
         )}
       />
@@ -157,28 +182,23 @@ const PostCard = (props: PostCardProps) => {
             <Text h2 light onPress={() => setShowPostDetails(false)}>
               Close
             </Text>
-            <View style={{ flexDirection: "row" }}>
-              <Text h2 light style={{ paddingRight: 25 }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text h2 light style={{ paddingRight: 25 }} onPress={shareButton}>
                 Share
               </Text>
-              <Text h2 light>
-                Save
-              </Text>
+
+              {saved === true ? (
+                <Icon size={30} name="bookmark" onPress={saveButton} />
+              ) : (
+                <Icon size={30} name="bookmark-outline" onPress={saveButton} />
+              )}
             </View>
           </View>
 
           <ScrollView style={{ marginVertical: theme.sizes.padding }}>
-            {/* <Image
-              source={{
-                uri: props.images[0],
-              }}
-              PlaceholderContent={<ActivityIndicator />}
-              style={styles.image}
-            /> */}
-
             {renderImagesGalleryInModal(width - theme.sizes.padding * 2)}
 
-            <Text height={24} h1 bold style={{ marginTop: theme.sizes.base }}>
+            <Text height={24} h2 bold style={{ marginTop: theme.sizes.base }}>
               {props.title}
             </Text>
             <Text h2>
@@ -200,12 +220,33 @@ const PostCard = (props: PostCardProps) => {
             <Text body style={{ marginTop: theme.sizes.base }}>
               {description}
             </Text>
+
+            <Divider style={{ paddingVertical: 8 }} />
+
+            <Text h3 bold style={{ marginTop: theme.sizes.base }}>
+              Author
+            </Text>
+
+            <TouchableOpacity>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                  paddingVertical: 25
+                }}
+              >
+                <Avatar size={64} rounded source={{ uri: owner_avatar }} />
+                <Text body bold style={{ marginTop: theme.sizes.base }}>
+                  {owner_firstName} {owner_lastName}
+                </Text>
+              </View>
+            </TouchableOpacity>
           </ScrollView>
 
           <Block middle padding={[theme.sizes.base / 2, 0]}>
             <Button gradient onPress={() => setShowPostDetails(false)}>
               <Text center white>
-                I understand
+                I am interested !
               </Text>
             </Button>
           </Block>
@@ -261,6 +302,7 @@ const PostCard = (props: PostCardProps) => {
         </Text>
       </TouchableOpacity>
       {renderPostInfo()}
+      <Toast />
     </View>
   );
 };

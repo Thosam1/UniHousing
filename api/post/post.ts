@@ -84,7 +84,7 @@ export const getPhotos = (photos_ids: [string]) => {
 };
 
 // add post to saved posts
-export const savePost = (
+export const saveUnsavePost = (
   post_id: string,
   user_id: string,
 ) => {
@@ -92,18 +92,7 @@ export const savePost = (
     user_id,
     post_id,
   });
-  return axiosClient.post("post/save-post", body);
+  return axiosClient.post("post/save-unsave", body);
 };
 
-// delete post from saved posts
-export const unSavePost = (
-  post_id: string,
-  user_id: string
-) => {
-  const body = JSON.stringify({
-    user_id,
-    post_id,
-  });
-  return axiosClient.post("post/unsave-post", body);
-};
 
