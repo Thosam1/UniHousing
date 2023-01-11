@@ -3,7 +3,7 @@ import axios from "axios";
 import { useAppSelector } from "../features/hooks";
 import { selectAccessToken } from "../features/auth/authSlice";
 
-const serverHostName = "172.23.208.1"; // "localhost"; // 
+const serverHostName = "localhost"; // (if not put to localhost, then the cookies cannot be saved !) // "172.23.208.1"; // "localhost"; // 
 const serverPort = "3000"; // todo change for production
 
 export const BASE_URL = PROD_MODE
@@ -28,7 +28,7 @@ export const axiosClient = axios.create({
 export const axiosClientImages = axios.create({
   baseURL: BASE_URL,
   headers: {
-    Accept: "application/json;",
+    Accept: JSON_TYPE,
     'Content-Type': 'multipart/form-data',
   },
 });

@@ -132,11 +132,16 @@ const EditProfileScreen = () => {
     // an image has been picked
     if (!picked.canceled) {
       setAvatar(picked.assets[0]);
+      console.log(picked)
+      console.log(picked.assets)
       setAvatarChanged(true);
 
+      console.log(avatar)
+
       // uploading it to the server
-      if (avatar) {
-        editAvatar(user.profile_id, avatar)
+      if (picked.assets[0]) { // idk why but avatar is null at this moment
+        console.log("SENDING AVATAR")
+        editAvatar(user.profile_id, picked.assets[0])
           .then((res) => {
             Toast.show({
               type: "success",
