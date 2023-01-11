@@ -91,6 +91,10 @@ export const editAvatar = (
 
     console.log(formData);
 
+    console.log(`local uri : ${localUri}\n\n`)
+    console.log(`filename : ${filename}\n\n`)
+    console.log(`type : ${type}\n\n`)
+
     // id can be infered from token in database
     return axiosClientImages.post("users/me/edit-profile/avatar", formData, {
       withCredentials: true,
