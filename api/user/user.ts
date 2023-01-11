@@ -1,25 +1,32 @@
 import axios from "axios";
 import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
-import { axiosClient, axiosClientImages, BASE_URL, JSON_TYPE } from "../RequestManager";
+import {
+  axiosClient,
+  axiosClientImages,
+  BASE_URL,
+  JSON_TYPE,
+} from "../RequestManager";
 
 export const getPrivateProfile = () => {
   return axiosClient.get("users/me", {
     withCredentials: true,
-  }); 
+  });
 };
 
-export const getOwnedPosts = (id: string) => { // user id
+export const getOwnedPosts = (id: string) => {
+  // user id
   const body = JSON.stringify({ id });
   return axiosClient.post("users/me/owned-posts", body, {
     withCredentials: true,
-  }); 
+  });
 };
 
-export const getSavedPosts = (id: string) => { // user id
+export const getSavedPosts = (id: string) => {
+  // user id
   const body = JSON.stringify({ id });
   return axiosClient.post("users/me/saved-posts", body, {
     withCredentials: true,
-  }); 
+  });
 };
 
 export const getPublicProfile = (user_id: string) => {
@@ -38,16 +45,27 @@ export const changeProfileAvatar = (user_id: string) => {
 
 export const editProfile = (
   id: string,
-  avatar: ImagePickerAsset | null, // null if no need to change avatar
   newFirstName: string,
   newLastName: string,
   newStatus: string,
   newBio: string
 ) => {
-  // uploading user avatar if given
-  if (avatar) {
+  const body = JSON.stringify({
+    id,
+    newFirstName,
+    newLastName,
+    newStatus,
+    newBio,
+  });
+  return axiosClient.post("users/me/edit-profile", body, {
+    withCredentials: true,
+  });
+};
 
-    console.log("avatar is not null")
+export const editAvatar = (
+  id: string,
+  avatar: ImagePickerAsset // null if no need to change avatar
+) => {
 
     // ImagePicker saves the taken photo to disk and returns a local URI to it
     let localUri = avatar.uri;
@@ -61,30 +79,22 @@ export const editProfile = (
     let formData = new FormData();
     // Assume "photo" is the name of the form field the server expects
     formData.append(
-      "image",
+      "avatar", // must be same as in database in the route -> uploads.single("avatar")
       JSON.parse(JSON.stringify({ uri: localUri, name: filename, type }))
-    );
+    // {
+    //   name: new Date() + '_profile',
+    //   uri: localUri,
+    //   type: type,
+    // }
+    
+      );
 
     console.log(formData);
 
-    axiosClientImages.post("users/me/edit-profile/avatar", formData, {
+    // id can be infered from token in database
+    return axiosClientImages.post("users/me/edit-profile/avatar", formData, {
       withCredentials: true,
     });
-
-    console.log("SENT REQUEST FOR AVATAR")
-
-  }
-
-  const body = JSON.stringify({
-    id,
-    newFirstName,
-    newLastName,
-    newStatus,
-    newBio,
-  });
-  return axiosClient.post("users/me/edit-profile", body, {
-    withCredentials: true,
-  });
 };
 
 export const changePassword = (

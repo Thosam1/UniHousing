@@ -24,7 +24,7 @@ import Toast from "react-native-toast-message";
 
 import { useTailwind } from "tailwind-rn/dist";
 import { useAppDispatch, useAppSelector } from "../../features/hooks";
-import { editProfile } from "../../api/user/user";
+import { editAvatar, editProfile } from "../../api/user/user";
 import { selectUser, setUser } from "../../features/auth/authSlice";
 import { validateRegister } from "../../utils/client_side_validation/auth_validation";
 import { PrivateProfile } from "../../api/typesAPI";
@@ -90,7 +90,7 @@ const EditProfileScreen = () => {
       return;
     }
 
-    editProfile(user.profile_id, avatar, firstName, lastName, status, bio)
+    editProfile(user.profile_id, firstName, lastName, status, bio)
       .then((res) => {
         if (res.status === 200) {
           console.log("WE GOT THE PRIVATE PROFILE DATA");
@@ -133,7 +133,18 @@ const EditProfileScreen = () => {
     if (!picked.canceled) {
       setAvatar(picked.assets[0]);
       setAvatarChanged(true);
-      console.log("avatar has been picked !");
+
+      // uploading it to the server
+      if (avatar) {
+        editAvatar(user.profile_id, avatar)
+          .then((res) => {
+            Toast.show({
+              type: "success",
+              text1: res.data,
+            });
+          })
+          .catch((err) => console.log(err))
+      }
     }
   };
 
@@ -149,105 +160,108 @@ const EditProfileScreen = () => {
   };
   return (
     <KeyboardAvoidingView
-    behavior={Platform.OS === "ios" ? "padding" : "height"}
-    style={{
-      flex: 1,
-      justifyContent: "center",
-    }}
-  >
-    <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
-      <ScrollView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <Block style={{ flex: 1 }} padding={[0, theme.sizes.base * 2]}>
-            <View style={{ paddingTop: 30 }}>
-              <Text center h1 bold>
-                Edit Profile
-              </Text>
-            </View>
-
-            <View style={styles.container}>
-              {avatar && (
-                <Image
-                  source={{ uri: avatar.uri }}
-                  style={{ width: 200, height: 200 }}
-                />
-              )}
-              {!avatar && (
-                <Image
-                  source={require("../../assets/images/anonymous-avatar.jpg")}
-                  style={{ width: 200, height: 200 }}
-                />
-              )}
-
-              <View style={styles.uploadBtnContainer}>
-                <TouchableOpacity onPress={pickAvatar} style={styles.uploadBtn}>
-                  <Text>{avatar ? "Edit" : "Upload"} Image</Text>
-                  {/* <AntDesign name="camera" size={20} color="black" /> */}
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <Block middle>
-              <Input
-                label="First Name"
-                style={[styles.input]}
-                defaultValue={firstName}
-                onChangeText={(text: string) => setFirstName(text)}
-              />
-
-              <Input
-                label="Last Name"
-                style={[styles.input]}
-                defaultValue={lastName}
-                onChangeText={(text: string) => setLastName(text)}
-              />
-
-              <Input
-                label="Status"
-                style={[styles.input]}
-                defaultValue={status}
-                onChangeText={(text: string) => setStatus(text)}
-              />
-
-              <Input
-                label="Bio"
-                style={[styles.input]}
-                defaultValue={bio}
-                onChangeText={(text: string) => setBio(text)}
-              />
-
-              <Button shadow onPress={cancelButton}>
-                <Text semibold center>
-                  Cancel
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{
+        flex: 1,
+        justifyContent: "center",
+      }}
+    >
+      <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
+        <ScrollView>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <Block style={{ flex: 1 }} padding={[0, theme.sizes.base * 2]}>
+              <View style={{ paddingTop: 30 }}>
+                <Text center h1 bold>
+                  Edit Profile
                 </Text>
-              </Button>
+              </View>
 
-              <Button
-                gradient
-                onPress={doneButton}
-                disabled={
-                  firstName === user.first_name &&
-                  lastName === user.last_name &&
-                  status === user.status &&
-                  bio === user.bio &&
-                  !avatarChanged
-                }
-              >
-                {loading ? (
-                  <ActivityIndicator size="small" color="white" />
-                ) : (
-                  <Text bold white center>
-                    Save Modifications
-                  </Text>
+              <View style={styles.container}>
+                {avatar && (
+                  <Image
+                    source={{ uri: avatar.uri }}
+                    style={{ width: 200, height: 200 }}
+                  />
                 )}
-              </Button>
-            </Block>
+                {!avatar && (
+                  <Image
+                    source={require("../../assets/images/anonymous-avatar.jpg")}
+                    style={{ width: 200, height: 200 }}
+                  />
+                )}
 
-            <Toast />
-          </Block>
-        </TouchableWithoutFeedback>
-      </ScrollView>
-    </SafeAreaView>
+                <View style={styles.uploadBtnContainer}>
+                  <TouchableOpacity
+                    onPress={pickAvatar}
+                    style={styles.uploadBtn}
+                  >
+                    <Text>{avatar ? "Edit" : "Upload"} Image</Text>
+                    {/* <AntDesign name="camera" size={20} color="black" /> */}
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <Block middle>
+                <Input
+                  label="First Name"
+                  style={[styles.input]}
+                  defaultValue={firstName}
+                  onChangeText={(text: string) => setFirstName(text)}
+                />
+
+                <Input
+                  label="Last Name"
+                  style={[styles.input]}
+                  defaultValue={lastName}
+                  onChangeText={(text: string) => setLastName(text)}
+                />
+
+                <Input
+                  label="Status"
+                  style={[styles.input]}
+                  defaultValue={status}
+                  onChangeText={(text: string) => setStatus(text)}
+                />
+
+                <Input
+                  label="Bio"
+                  style={[styles.input]}
+                  defaultValue={bio}
+                  onChangeText={(text: string) => setBio(text)}
+                />
+
+                <Button shadow onPress={cancelButton}>
+                  <Text semibold center>
+                    Cancel
+                  </Text>
+                </Button>
+
+                <Button
+                  gradient
+                  onPress={doneButton}
+                  disabled={
+                    firstName === user.first_name &&
+                    lastName === user.last_name &&
+                    status === user.status &&
+                    bio === user.bio &&
+                    !avatarChanged
+                  }
+                >
+                  {loading ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Text bold white center>
+                      Save Modifications
+                    </Text>
+                  )}
+                </Button>
+              </Block>
+
+              <Toast />
+            </Block>
+          </TouchableWithoutFeedback>
+        </ScrollView>
+      </SafeAreaView>
     </KeyboardAvoidingView>
   );
 };
