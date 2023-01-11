@@ -48,13 +48,8 @@ export const deletePost = (user_id: string, post_id: string) => {
   return axiosClient.post("post/delete", body, { withCredentials: true });
 };
 
-export const getPostAdditionalDetails = (user_id: string, post_id: string) => {
-  // from security perspective would be good to add a second factor authentification like a code to avoid attacks
-  const body = JSON.stringify({
-    user_id,
-    post_id,
-  });
-  return axiosClient.post("post/asdfasdflékjaklsdjfélakdsj", body, { withCredentials: true });
+export const getPost = (post_id: string) => {
+  return axiosClient.post(`post/get/${post_id}`, { withCredentials: true });
 };
 
 
