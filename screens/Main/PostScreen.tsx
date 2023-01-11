@@ -43,7 +43,7 @@ import { AppStackParamList } from "../../navigator/AppNavigator";
 import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
 import {
   createPost,
-  getPostAdditionalDetails,
+  getPost,
   saveUnsavePost,
 } from "../../api/post/post";
 
@@ -85,14 +85,15 @@ const PostScreen = () => {
     setLoading(true);
 
     // tp get the details
-    getPostAdditionalDetails(props.owner_id, props.post_id)
+    getPost(props.post_id)
       .then((res) => {
         if (res.status === 200) {
           setOwnerFirstName(res.data.owner_firstName);
           setOwnerLastName(res.data.owner_lastName);
           setOwnerAvatar(res.data.owner_avatar);
           setDescription(res.data.descrption);
-          setShareLink(res.data.share_link);
+
+          setShareLink(res.data.shareLink);
           setSaved(res.data.saved);
 
           console.log(res.data);
@@ -105,23 +106,23 @@ const PostScreen = () => {
   const saveButton = () => {
     setSaved(!saved); // todo, to remove !!!
 
-    // // sends request to server
-    // saveUnsavePost(props.post_id, props.owner_id)
-    //   .then((res) => {
-    //     if (res.status === 200) {
-    //       setSaved(res.data.saved);
-    //       Toast.show({
-    //         type: "success",
-    //         text1: res.data.message,
-    //       });
-    //     } else {
-    //       Toast.show({
-    //         type: "error",
-    //         text1: res.data,
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => console.log(err));
+    // sends request to server
+    saveUnsavePost(props.post_id, props.owner_id)
+      .then((res) => {
+        if (res.status === 200) {
+          setSaved(res.data.saved);
+          Toast.show({
+            type: "success",
+            text1: res.data.message,
+          });
+        } else {
+          Toast.show({
+            type: "error",
+            text1: res.data,
+          });
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   const shareButton = () => {};
