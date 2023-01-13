@@ -96,16 +96,17 @@ const ProfileScreen = () => {
             </Text>
           </View>
 
-          <View style={[styles.container, tw("flex items-center")]}>
+          {/* <View style={[styles.container, tw("flex items-center")]}>
             <Image
               // source={ ( user.avatar === "" ? require("../../assets/images/anonymous-avatar.jpg") : require(`${user.avatar}`)) }
               source={require("../../assets/images/anonymous-avatar.jpg")}
               style={{ width: 200, height: 200 }}
             />
-          </View>
+          </View> */}
 
-          <Block middle>
-          <Avatar size={140} rounded source={(user.avatar === "" ? require("../../assets/images/anonymous-avatar.jpg") : { uri: user.avatar })} />
+          <Block middle padding={[theme.sizes.padding, 0]}>
+            
+          <Avatar size={170} rounded source={(user.avatar === "" ? require("../../assets/images/anonymous-avatar.jpg") : { uri: user.avatar })} />
 
           <Text h1 bold style={{ marginTop: theme.sizes.base }}>
             {user.first_name} {user.last_name}

@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { PostPreview } from "../api/typesAPI";
 import { theme } from "../constants";
+import CreateScreen from "../screens/Main/CreateScreen";
 import EditProfileScreen from "../screens/Main/EditProfileScreen";
 import OwnedPostsSreen from "../screens/Main/OwnedPostsSreen";
 import PostScreen from "../screens/Main/PostScreen";
@@ -14,6 +15,7 @@ import TabNavigator from "./TabNavigator";
 export type AppStackParamList = {
   // will check if the names param are correct
   Main: undefined;
+  Create: undefined;
   EditProfile: undefined;
   OwnedPosts: undefined;
   SavedPosts: undefined;
@@ -49,7 +51,7 @@ const AppNavigator = () => {
           component={OwnedPostsSreen}
           options={{
             title: "Owned Posts",
-            headerShown: true,
+            headerShown: false,
           }}
         />
         <AppStack.Screen
@@ -57,7 +59,7 @@ const AppNavigator = () => {
           component={SavedPostsScreen}
           options={{
             title: "Saved Posts",
-            headerShown: true,
+            headerShown: false,
           }}
         />
         <AppStack.Screen
@@ -73,6 +75,15 @@ const AppNavigator = () => {
             presentation: "modal",
           }}
         >
+          <AppStack.Screen
+            name="Create"
+            component={CreateScreen}
+            options={{
+              title: "Create",
+              headerShown: false,
+            }}
+          />
+
           <AppStack.Screen
             name="PublicProfile"
             component={PublicProfileScreen}

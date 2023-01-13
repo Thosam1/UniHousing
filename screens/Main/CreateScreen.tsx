@@ -33,11 +33,15 @@ import { AppStackParamList } from "../../navigator/AppNavigator";
 import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
 import { createPost } from "../../api/post/post";
 import { theme } from "../../constants";
+import { Icon } from "@rneui/base";
 
-// type CreateScreenNavigationProp = BottomTabScreenProps<TabStackParamList, "Profile">;
+type CreateScreenNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabStackParamList>,
+  NativeStackNavigationProp<AppStackParamList>
+>;
 
 const CreateScreen = () => {
-  const tw = useTailwind();
+  const navigation = useNavigation<CreateScreenNavigationProp>(); // maybe to modify profile
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -116,8 +120,23 @@ const CreateScreen = () => {
     >
       <SafeAreaView style={[styles.container]}>
         <ScrollView>
+          
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <Block padding={[0, theme.sizes.base * 2]}>
+            <Block padding={[theme.sizes.padding, theme.sizes.padding, theme.sizes.padding/2]}>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "flex-start",
+              }}
+            >
+              <Icon
+                name="closecircle"
+                type="antdesign"
+                onPress={() => navigation.goBack()}
+              />
+            </View>
+              
               <View style={{ paddingTop: 30 }}>
                 <Text center h1 bold>
                   Create a Post
@@ -211,7 +230,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: theme.colors.white
+    backgroundColor: theme.colors.white,
   },
   input: {
     borderRadius: 0,

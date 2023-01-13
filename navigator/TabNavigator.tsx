@@ -20,7 +20,7 @@ export type TabStackParamList = {
   // will check if the names param are correct
   Home: undefined;
   Search: undefined;
-  Create: undefined;
+  CreateBase: undefined;
   Profile: undefined;
   Settings: undefined;
 };
@@ -58,7 +58,7 @@ const TabNavigator = () => {
                 color={focused ? theme.colors.secondary : "gray"}
               />
             );
-          } else if (route.name === "Create") {
+          } else if (route.name === "CreateBase") {
             return (
               <Icon
                 name="squared-plus"
@@ -94,14 +94,23 @@ const TabNavigator = () => {
           headerShown: false,
         }}
       />
+
       <Tab.Screen
-        name="Create"
+        name="CreateBase"
         component={CreateScreen}
         options={{
           title: "Create",
           headerShown: false,
         }}
+        // this tab is just a decoy
+        listeners={({navigation}) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate("Create")
+          }
+        })}
       />
+
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}

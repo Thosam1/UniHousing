@@ -29,11 +29,8 @@ export const getSavedPosts = (id: string) => {
   });
 };
 
-export const getPublicProfile = (user_id: string) => {
-  const body = JSON.stringify({
-    user_id,
-  });
-  return axiosClient.post("post/get-public-profile", body);
+export const getPublicProfile = (id: string) => {
+  return axiosClient.post(`users/get-profile/${id}`);
 };
 
 export const changeProfileAvatar = (user_id: string) => {

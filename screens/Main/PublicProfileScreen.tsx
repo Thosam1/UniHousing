@@ -52,7 +52,6 @@ import { AppStackParamList } from "../../navigator/AppNavigator";
 import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
 import {
   createPost,
-  getPostAdditionalDetails,
   saveUnsavePost,
 } from "../../api/post/post";
 
@@ -89,28 +88,28 @@ const PublicProfileScreen = () => {
     owned_posts: ["656s2df6sdf89w5ef65sdf", "sdf6562we3f3sd0v3se6t"],
   });
 
-  // useEffect(() => {
-  //   setLoading(true);
+  useEffect(() => {
+    setLoading(true);
 
-  //   // tp get the details
-  //   getPublicProfile(user_id)
-  //     .then((res) => {
-  //       if (res.status === 200) {
-  //         setOwner({
-  //           profile_id: user_id,
-  //           avatar: res.data.avatar,
-  //           first_name: res.data.firstName,
-  //           last_name: res.data.lastName,
-  //           status: res.data.status,
-  //           bio: res.data.bio,
-  //           owned_posts: res.data.ownedPosts, // todo check
-  //         })
-  //         console.log(res.data);
-  //       }
-  //     })
-  //     .catch((err) => console.log(err))
-  //     .finally(() => setLoading(false));
-  // }, [isFocused]);
+    // tp get the details
+    getPublicProfile(user_id)
+      .then((res) => {
+        if (res.status === 200) {
+          setOwner({
+            profile_id: user_id,
+            avatar: res.data.avatar,
+            first_name: res.data.firstName,
+            last_name: res.data.lastName,
+            status: res.data.status,
+            bio: res.data.bio,
+            owned_posts: res.data.ownedPosts, // todo check
+          })
+          console.log(res.data);
+        }
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
+  }, [isFocused]);
 
   const shareButton = () => {};
 

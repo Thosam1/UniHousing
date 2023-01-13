@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import {
   View,
-  Text,
   TextInput,
   SafeAreaView,
   ActivityIndicator,
@@ -21,7 +20,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { Button, Image } from "@rneui/themed";
+import { Button, Icon, Image } from "@rneui/themed";
 import Toast from "react-native-toast-message";
 
 import { useTailwind } from "tailwind-rn/dist";
@@ -29,7 +28,7 @@ import { useAppDispatch, useAppSelector } from "../../features/hooks";
 import { editProfile, getOwnedPosts, getSavedPosts } from "../../api/user/user";
 import { selectUser, setUser } from "../../features/auth/authSlice";
 import { validateRegister } from "../../utils/client_side_validation/auth_validation";
-import { Post, PrivateProfile } from "../../api/typesAPI";
+import { Post, PostPreview, PrivateProfile } from "../../api/typesAPI";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { TabStackParamList } from "../../navigator/TabNavigator";
@@ -37,45 +36,75 @@ import { TabStackParamList } from "../../navigator/TabNavigator";
 import { AppStackParamList } from "../../navigator/AppNavigator";
 import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
 import { createPost } from "../../api/post/post";
-import { PostCard } from "../../components";
+import { Block, PostCard, Text } from "../../components";
+import { theme } from "../../constants";
+import { dummy_post_preview_gallery } from "../../data/dummy_data";
+import PostPreviewGallery from "../../components/PostPreviewGallery";
+
+type SavedPostsNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabStackParamList>,
+  NativeStackNavigationProp<AppStackParamList>
+>;
 
 const SavedPostsScreen = () => {
+  const navigation = useNavigation<SavedPostsNavigationProp>(); // maybe to modify profile
 
-  const [savedPosts, setSavedPosts] = useState<Post[]>([]);
+  const [savedPosts, setSavedPosts] = useState<PostPreview[]>(
+    dummy_post_preview_gallery
+  ); // todo remove
   const isFocused = useIsFocused();
 
   let user = useAppSelector(selectUser);
 
   useEffect(() => {
-    getSavedPosts(user.profile_id).then((res) => {
-      if (res.status === 200) {
-        let array : Post[] = []
-        res.data.map((elt: any) => {
-          const singlePost : Post = {
-            post_id: elt._id,
-            owner_id: elt.user,
-            title: elt.title,
-            description: elt.description,
-            city: elt.city,
-            country: elt.country,
-            startDate: elt.startDate,
-            endDate: elt.endDate,
-            price: elt.price,
-          }
-          array.push(singlePost);
-        })
+    getSavedPosts(user.profile_id)
+      .then((res) => {
+        if (res.status === 200) {
+          let array: PostPreview[] = [];
+          res.data.map((elt: any) => {
+            const singlePost: PostPreview = {
+              post_id: elt._id,
+              owner_id: elt.user,
+              title: elt.title,
+              city: elt.city,
+              country: elt.country,
+              startDate: elt.startDate,
+              endDate: elt.endDate,
+              price: elt.price,
+              images: elt.images,
+            };
+            array.push(singlePost);
+          });
 
-        setSavedPosts(array);
-        console.log(res.data)
-      }
-    }).catch((err) => console.log(err));
-  }, [isFocused])
+          setSavedPosts(array);
+          console.log(res.data);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [isFocused]);
 
   return (
-    <View>
-      {savedPosts.map((post) => <PostCard key={post.post_id} id={post.post_id} title={post.title} description={post.description} city={post.city} country={post.country} startDate={post.startDate} endDate={post.endDate} price={post.price} />)}
-    </View>
-  )
-}
+    <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "flex-start",
+          marginLeft: theme.sizes.padding,
+          marginVertical: theme.sizes.padding / 2,
+        }}
+      >
+        <Icon
+          name="leftcircle"
+          type="antdesign"
+          onPress={() => navigation.goBack()}
+        />
+        <Text h3 semibold style={{ paddingLeft: 95 }}>
+          Saved Posts
+        </Text>
+      </View>
+      <PostPreviewGallery posts={savedPosts} />
+    </SafeAreaView>
+  );
+};
 
-export default SavedPostsScreen
+export default SavedPostsScreen;

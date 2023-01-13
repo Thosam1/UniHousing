@@ -20,7 +20,7 @@ const RootStack = createNativeStackNavigator();
 
 const RootNavigator = () => {
   // The `state` arg is correctly typed as `RootState` already
-  const authStatus = useAppSelector(selectAuthStatus);
+  const authStatus = true; // useAppSelector(selectAuthStatus);
 
   return (
     <RootStack.Navigator
