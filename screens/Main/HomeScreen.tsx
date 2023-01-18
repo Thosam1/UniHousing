@@ -45,7 +45,9 @@ const HomeScreen = () => {
   let user = useAppSelector(selectUser);
 
   const [loading, setLoading] = useState(false);
-  const [displayedPosts, setDisplayedPosts] = useState<PostPreview[]>(dummy_post_preview_gallery);
+  const [displayedPosts, setDisplayedPosts] = useState<PostPreview[]>(
+    dummy_post_preview_gallery
+  );
 
   useEffect(() => {
     setLoading(true);
@@ -136,6 +138,18 @@ const HomeScreen = () => {
         }}
       >
         <Block flex={false} center space="between" style={styles.header}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              dispatch(
+                setUserState({
+                  authenticated: false,
+                  accessToken: "",
+                })
+              );
+            }}
+          >
+            <Text>Logout</Text>
+          </TouchableWithoutFeedback>
           <Text h1 bold style={{ paddingVertical: 25 }}>
             Explore
           </Text>

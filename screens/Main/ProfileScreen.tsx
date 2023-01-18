@@ -52,7 +52,6 @@ const ProfileScreen = () => {
     getPrivateProfile()
       .then((res) => {
         if (res.status === 200) {
-          console.log("WE GOT THE PRIVATE PROFILE DATA");
           console.log(res.data);
 
           // putting what we got in the global state in RTK

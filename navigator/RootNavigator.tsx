@@ -1,5 +1,5 @@
 /* rnfe - Parent file for navigation */
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // navigation
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -8,6 +8,7 @@ import AppNavigator from "./AppNavigator";
 import { useAppSelector } from "../features/hooks";
 import { selectAuthStatus } from "../features/auth/authSlice";
 import { theme } from "../constants";
+import * as SecureStore from 'expo-secure-store';
 
 // type definitions
 export type RootStackParamList = {
@@ -20,7 +21,16 @@ const RootStack = createNativeStackNavigator();
 
 const RootNavigator = () => {
   // The `state` arg is correctly typed as `RootState` already
-  const authStatus = true; // useAppSelector(selectAuthStatus);
+  const blocker = true;
+  let authStatus = useAppSelector(selectAuthStatus); // null;
+  
+  // useEffect(() => {
+  //   retrieveToken();
+  // })
+  
+  // async function retrieveToken () {
+  //   authStatus = await SecureStore.getItemAsync("accessToken"); 
+  // } 
 
   return (
     <RootStack.Navigator

@@ -11,7 +11,7 @@ import {
   ScrollView,
 } from "react-native";
 import Checkbox from "expo-checkbox";
-
+import * as SecureStore from "expo-secure-store";
 import { Button, Block, Input, Text } from "../../components";
 import { theme } from "../../constants";
 import React, { useState } from "react";
@@ -73,13 +73,12 @@ const SignInScreen = () => {
     login(email, password, rememberMe)
       .then((res) => {
         if (res.status === 200) {
-          // Toast.show({
-          //   type: "success",
-          //   text1: "Login successful",
-          // });
           setFailed(false);
           console.log(`new accessToken received : ${res.data.accessToken}`);
-          localStorage.setItem("accessToken", res.data.accessToken);
+          SecureStore.setItemAsync(
+            "accessToken",
+            JSON.stringify(res.data.accessToken)
+          );
 
           getPrivateProfile()
             .then((res) => {
@@ -119,13 +118,14 @@ const SignInScreen = () => {
           setFailed(true);
         }
       })
-      .catch((err) => console.log(err));
-
-    setLoading(false);
-    if (failed) return;
-    resetAllFields();
-    // todo change variable so we are redirected to home screen
-    return;
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setLoading(false);
+        if (failed) return;
+        resetAllFields();
+        // todo change variable so we are redirected to home screen
+        return;
+      });
   };
 
   const switchToSignUp = () => {

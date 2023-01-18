@@ -6,9 +6,12 @@ import { selectAccessToken } from "../features/auth/authSlice";
 const serverHostName = "localhost"; // (if not put to localhost, then the cookies cannot be saved !) // "172.23.208.1"; // "localhost"; // 
 const serverPort = "3000"; // todo change for production
 
+const ngrokTunnetToLocalHost = process.env.NGROK;
+
 export const BASE_URL = PROD_MODE
   ? ""
-  : `http://${serverHostName}:${serverPort}/api/`; // "http://localhost:3000/api/");
+  // : `http://${serverHostName}:${serverPort}/api/`; // "http://localhost:3000/api/");
+  :`${ngrokTunnetToLocalHost}/api/`
 
 export const POST = "POST";
 export const GET = "GET";

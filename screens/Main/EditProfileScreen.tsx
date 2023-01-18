@@ -21,6 +21,7 @@ import { Button, Block, Input, Text } from "../../components";
 import { theme } from "../../constants";
 import { Image } from "@rneui/themed";
 import Toast from "react-native-toast-message";
+import * as FileSystem from "expo-file-system";
 
 import { useTailwind } from "tailwind-rn/dist";
 import { useAppDispatch, useAppSelector } from "../../features/hooks";
@@ -62,8 +63,6 @@ const EditProfileScreen = () => {
     setLastName(user.last_name);
     setStatus(user.status);
     setBio(user.bio);
-
-    checkForCameraRollPermission();
   }, [antiInfiniteLoop]);
 
   const cancelButton = () => {
@@ -93,8 +92,8 @@ const EditProfileScreen = () => {
     editProfile(user.profile_id, firstName, lastName, status, bio)
       .then((res) => {
         if (res.status === 200) {
-          console.log("WE GOT THE PRIVATE PROFILE DATA");
-          console.log(res.data);
+          console.log(`res data is : ${res.data}`);
+          console.log(`res first name is : ${res.data.firstName}`);
 
           // putting what we got in the global state in RTK
           const user: PrivateProfile = {
@@ -107,6 +106,9 @@ const EditProfileScreen = () => {
             bio: res.data.bio as string,
           };
           dispatch(setUser({ user }));
+          console.log(`user dispatched is : ${user}`);
+
+          setLoading(false);
           navigation.navigate("Profile");
         } else {
           Toast.show({
@@ -117,10 +119,11 @@ const EditProfileScreen = () => {
         }
       })
       .catch((err) => console.log(err));
-    setLoading(false);
   };
 
   const pickAvatar = async () => {
+    if (!checkForCameraRollPermission()) return;
+
     let picked = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -132,23 +135,24 @@ const EditProfileScreen = () => {
     // an image has been picked
     if (!picked.canceled) {
       setAvatar(picked.assets[0]);
-      console.log(picked)
-      console.log(picked.assets)
+      console.log(picked);
+      console.log(picked.assets);
       setAvatarChanged(true);
 
-      console.log(avatar)
+      console.log(avatar);
 
       // uploading it to the server
-      if (picked.assets[0]) { // idk why but avatar is null at this moment
-        console.log("SENDING AVATAR")
+      if (picked.assets[0]) {
+        // idk why but avatar is null at this moment
+        console.log("SENDING AVATAR");
         editAvatar(user.profile_id, picked.assets[0])
-          .then((res) => {
+          .then((res: FileSystem.FileSystemUploadResult) => {
             Toast.show({
               type: "success",
-              text1: res.data,
+              text1: res.body,
             });
           })
-          .catch((err) => console.log(err))
+          .catch((err) => console.log(err));
       }
     }
   };
@@ -159,8 +163,10 @@ const EditProfileScreen = () => {
       alert(
         "Please grant camera roll permissions inside your system's settings"
       );
+      return false;
     } else {
       console.log("Media Permissions are granted");
+      return true;
     }
   };
   return (
