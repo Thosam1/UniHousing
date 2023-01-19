@@ -7,7 +7,7 @@ const serverHostName = "localhost"; // (if not put to localhost, then the cookie
 const serverPort = "3000"; // todo change for production
 
 
-const ngrokTunnetToLocalHost = "https://23d0-2001-620-618-5c0-2-80b3-0-9f9.eu.ngrok.io"
+const ngrokTunnetToLocalHost = "https://5866-213-55-220-11.eu.ngrok.io"
 
 export const BASE = PROD_MODE ? "" : ngrokTunnetToLocalHost + '/';
 

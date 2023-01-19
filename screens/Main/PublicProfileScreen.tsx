@@ -50,10 +50,8 @@ import { TabStackParamList } from "../../navigator/TabNavigator";
 
 import { AppStackParamList } from "../../navigator/AppNavigator";
 import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
-import {
-  createPost,
-  saveUnsavePost,
-} from "../../api/post/post";
+import { createPost, saveUnsavePost } from "../../api/post/post";
+import { BASE } from "../../api/RequestManager";
 
 type PublicProfileNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList>,
@@ -78,15 +76,16 @@ const PublicProfileScreen = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const [owner, setOwner] = useState<PublicProfile>({
-    profile_id: user_id,
-    avatar: "https://www.fgdc.gov/img/slider/slider-bg-network.jpg/image",
-    first_name: "Thösam",
-    last_name: "Norlha-Tsang",
-    status: "Student at EPFL",
-    bio: "Heyo this is my bio, asdfhasol qoph foaisdpéglkqrjtg oiasdfj ,ewt lksdnfkl jqwetq wef dm gkjqer tasmd fjsdfjkw erj owerflskdfjlwe sdf.",
-    owned_posts: ["656s2df6sdf89w5ef65sdf", "sdf6562we3f3sd0v3se6t"],
-  });
+  const [owner, setOwner] = useState<PublicProfile>();
+  //   {
+  //   profile_id: user_id,
+  //   avatar: "https://www.fgdc.gov/img/slider/slider-bg-network.jpg/image",
+  //   first_name: "Thösam",
+  //   last_name: "Norlha-Tsang",
+  //   status: "Student at EPFL",
+  //   bio: "Heyo this is my bio, asdfhasol qoph foaisdpéglkqrjtg oiasdfj ,ewt lksdnfkl jqwetq wef dm gkjqer tasmd fjsdfjkw erj owerflskdfjlwe sdf.",
+  //   owned_posts: ["656s2df6sdf89w5ef65sdf", "sdf6562we3f3sd0v3se6t"],
+  // }
 
   useEffect(() => {
     setLoading(true);
@@ -97,13 +96,13 @@ const PublicProfileScreen = () => {
         if (res.status === 200) {
           setOwner({
             profile_id: user_id,
-            avatar: res.data.avatar,
+            avatar: BASE + res.data.avatar,
             first_name: res.data.firstName,
             last_name: res.data.lastName,
             status: res.data.status,
             bio: res.data.bio,
             owned_posts: res.data.ownedPosts, // todo check
-          })
+          });
           console.log(res.data);
         }
       })
@@ -114,11 +113,18 @@ const PublicProfileScreen = () => {
   const shareButton = () => {};
 
   return (
-    <Block padding={[theme.sizes.padding, theme.sizes.padding, theme.sizes.padding/2]} space="between">
+    <Block
+      padding={[
+        theme.sizes.padding,
+        theme.sizes.padding,
+        theme.sizes.padding / 2,
+      ]}
+      space="between"
+    >
       <View
         style={{
           flexDirection: "row",
-          justifyContent: "flex-start"
+          justifyContent: "flex-start",
         }}
       >
         <Icon
@@ -129,31 +135,33 @@ const PublicProfileScreen = () => {
       </View>
 
       <ScrollView style={{ marginVertical: theme.sizes.padding }}>
-        <Block middle>
-          <Avatar size={140} rounded source={{ uri: owner.avatar }} />
-          <Text h1 bold style={{ marginTop: theme.sizes.base }}>
-            {owner.first_name} {owner.last_name}
-          </Text>
+        {owner && (
+          <Block middle>
+            <Avatar size={140} rounded source={{ uri: owner.avatar }} />
+            <Text h1 bold style={{ marginTop: theme.sizes.base }}>
+              {owner.first_name} {owner.last_name}
+            </Text>
 
-          <Text
-            h2
-            semibold
-            style={{ marginTop: theme.sizes.base, marginBottom: 5 }}
-          >
-            Status
-          </Text>
+            <Text
+              h2
+              semibold
+              style={{ marginTop: theme.sizes.base, marginBottom: 5 }}
+            >
+              Status
+            </Text>
 
-          <Text h2>{owner.status}</Text>
+            <Text h2>{owner.status}</Text>
 
-          <Text
-            h2
-            semibold
-            style={{ marginTop: theme.sizes.base, marginBottom: 5 }}
-          >
-            Bio
-          </Text>
-          <Text h2>{owner.bio}</Text>
-        </Block>
+            <Text
+              h2
+              semibold
+              style={{ marginTop: theme.sizes.base, marginBottom: 5 }}
+            >
+              Bio
+            </Text>
+            <Text h2>{owner.bio}</Text>
+          </Block>
+        )}
       </ScrollView>
 
       <Block middle padding={[theme.sizes.base / 2, 0]}>

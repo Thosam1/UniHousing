@@ -152,7 +152,7 @@ const HomeScreen = () => {
           </Text>
           {renderSearch()}
         </Block>
-        <PostPreviewGallery posts={displayedPosts} />
+        { displayedPosts && <PostPreviewGallery posts={displayedPosts} /> }
       </Block>
     </TouchableWithoutFeedback>
   );

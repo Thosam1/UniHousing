@@ -25,6 +25,7 @@ import { TabStackParamList } from "../../navigator/TabNavigator";
 
 import { AppStackParamList } from "../../navigator/AppNavigator";
 import { getPost, saveUnsavePost } from "../../api/post/post";
+import { BASE } from "../../api/RequestManager";
 
 type PostNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList>,
@@ -46,21 +47,17 @@ const PostScreen = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const [owner_firstName, setOwnerFirstName] = useState("Thösam");
-  const [owner_lastName, setOwnerLastName] = useState("Norlha-Tsang");
-  const [owner_avatar, setOwnerAvatar] = useState(
-    "https://www.fgdc.gov/img/slider/slider-bg-network.jpg/image"
-  );
-  const [description, setDescription] = useState(
-    "This is the dummies description ever, idk what the fuck i am doing with my life, got a lot of revision to do and the exams are coming to destroy me and my other personalities. please help me, i am undar da water, weeeeeeeeeeehlp"
-  );
-  const [share_link, setShareLink] = useState(
-    "https://www.fgdc.gov/img/slider/slider-bg-network.jpg/image"
-  );
+  const [owner_firstName, setOwnerFirstName] = useState("");
+  const [owner_lastName, setOwnerLastName] = useState("");
+  const [owner_avatar, setOwnerAvatar] = useState("");
+  const [description, setDescription] = useState("");
+  const [share_link, setShareLink] = useState("");
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     setLoading(true);
+    console.log("in the use effect")
+    console.log(props.post_id)
 
     // tp get the details
     getPost(props.post_id)
@@ -68,13 +65,11 @@ const PostScreen = () => {
         if (res.status === 200) {
           setOwnerFirstName(res.data.owner_firstName);
           setOwnerLastName(res.data.owner_lastName);
-          setOwnerAvatar(res.data.owner_avatar);
-          setDescription(res.data.descrption);
+          setOwnerAvatar(BASE + res.data.owner_avatar);
+          setDescription(res.data.description);
 
           setShareLink(res.data.shareLink);
           setSaved(res.data.saved);
-
-          console.log(res.data);
         }
       })
       .catch((err) => console.log(err))
@@ -82,8 +77,9 @@ const PostScreen = () => {
   }, [isFocused]);
 
   const saveButton = () => {
+    console.log("saved button pressed")
     // sends request to server
-    saveUnsavePost(props.post_id, props.owner_id)
+    saveUnsavePost(props.post_id)
       .then((res) => {
         if (res.status === 200) {
           setSaved(res.data.saved);
@@ -213,7 +209,7 @@ const PostScreen = () => {
               paddingVertical: 25,
             }}
           >
-            <Avatar size={64} rounded source={{ uri: owner_avatar }} />
+            <Avatar size={64} rounded source={(owner_avatar === "" ? require("../../assets/images/anonymous-avatar.jpg") : { uri: owner_avatar })} />
             <Text body bold style={{ marginTop: theme.sizes.base }}>
               {owner_firstName} {owner_lastName}
             </Text>
@@ -228,6 +224,7 @@ const PostScreen = () => {
           </Text>
         </Button>
       </Block>
+      <Toast />
     </Block>
   );
 };

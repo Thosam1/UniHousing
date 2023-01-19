@@ -71,7 +71,7 @@ export const deletePost = (user_id: string, post_id: string) => {
 };
 
 export const getPost = (post_id: string) => {
-  return axiosClient.post(`post/get/${post_id}`, { withCredentials: true });
+  return axiosClient.get(`post/get/${post_id}`, { withCredentials: true });
 };
 
 
@@ -103,13 +103,8 @@ export const getPost = (post_id: string) => {
 // add post to saved posts
 export const saveUnsavePost = (
   post_id: string,
-  user_id: string,
 ) => {
-  const body = JSON.stringify({
-    user_id,
-    post_id,
-  });
-  return axiosClient.post("post/save-unsave", body, { withCredentials: true });
+  return axiosClient.get(`post/save-unsave/${post_id}`, { withCredentials: true });
 };
 
 // add post to saved posts
