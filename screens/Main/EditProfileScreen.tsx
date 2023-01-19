@@ -19,7 +19,7 @@ import {
 } from "react-native";
 import { Button, Block, Input, Text } from "../../components";
 import { theme } from "../../constants";
-import { Image } from "@rneui/themed";
+import { Avatar, Image } from "@rneui/themed";
 import Toast from "react-native-toast-message";
 import * as FileSystem from "expo-file-system";
 
@@ -35,6 +35,7 @@ import { TabStackParamList } from "../../navigator/TabNavigator";
 
 import { AppStackParamList } from "../../navigator/AppNavigator";
 import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
+import { BASE } from "../../api/RequestManager";
 
 type EditProfileScreenNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<AppStackParamList, "EditProfile">,
@@ -58,6 +59,7 @@ const EditProfileScreen = () => {
   const [antiInfiniteLoop, setAntiInfiniteLoop] = useState("");
 
   let user = useAppSelector(selectUser);
+
   useEffect(() => {
     setFirstName(user.first_name);
     setLastName(user.last_name);
@@ -98,7 +100,7 @@ const EditProfileScreen = () => {
           // putting what we got in the global state in RTK
           const user: PrivateProfile = {
             profile_id: res.data._id,
-            avatar: res.data.avatar,
+            avatar: BASE + res.data.avatar,
             first_name: res.data.firstName as string,
             last_name: res.data.lastName as string,
             email: res.data.email as string,
@@ -129,7 +131,7 @@ const EditProfileScreen = () => {
       allowsEditing: true,
       allowsMultipleSelection: false,
       aspect: [4, 3],
-      quality: 0.8, // [0-1] % quality
+      quality: 0.6, // [0-1] % quality
     });
 
     // an image has been picked
@@ -181,23 +183,24 @@ const EditProfileScreen = () => {
         <ScrollView>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <Block style={{ flex: 1 }} padding={[0, theme.sizes.base * 2]}>
-              <View style={{ paddingTop: 30 }}>
+              <View style={{ paddingVertical: theme.sizes.padding }}>
                 <Text center h1 bold>
                   Edit Profile
                 </Text>
               </View>
 
               <View style={styles.container}>
-                {avatar && (
-                  <Image
-                    source={{ uri: avatar.uri }}
-                    style={{ width: 200, height: 200 }}
-                  />
-                )}
-                {!avatar && (
-                  <Image
-                    source={require("../../assets/images/anonymous-avatar.jpg")}
-                    style={{ width: 200, height: 200 }}
+                {avatar ? (
+                  <Avatar size={200} rounded source={{ uri: avatar.uri }} />
+                ) : (
+                  <Avatar
+                    size={200}
+                    rounded
+                    source={
+                      user.avatar === ""
+                        ? require("../../assets/images/anonymous-avatar.jpg")
+                        : { uri: user.avatar }
+                    }
                   />
                 )}
 

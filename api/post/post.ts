@@ -1,5 +1,7 @@
-import { axiosClient } from "../RequestManager";
+import { ImagePickerAsset } from "expo-image-picker";
+import { axiosClient, BASE_URL } from "../RequestManager";
 import { Date, Location } from "../typesAPI";
+import * as FileSystem from 'expo-file-system';
 
 // when creating a post
 export const createPost = (
@@ -25,6 +27,26 @@ export const createPost = (
 
   return axiosClient.post("post/create", body, { withCredentials: true });
 };
+
+export const editImages = (post_id: string, images: ImagePickerAsset[]) => {
+
+  let lastResponse = null;
+  if(images == null) return;
+
+  try {
+    images.map(async (image) => {
+      lastResponse = await FileSystem.uploadAsync(`${BASE_URL}post/edit-images/${post_id}`, image.uri, {
+        httpMethod: 'POST',
+        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        fieldName: 'image'
+      });
+    })
+  } catch(e) {
+    console.log(e);
+  }
+  
+  return lastResponse;
+}
 
 export const editPost = (input: {
   user: string;

@@ -15,6 +15,9 @@ import {
   ActivityIndicator,
   StyleSheet,
   ScrollView,
+  FlatList,
+  TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { Button, Block, Input, Text } from "../../components";
 import Toast from "react-native-toast-message";
@@ -31,14 +34,17 @@ import { TabStackParamList } from "../../navigator/TabNavigator";
 
 import { AppStackParamList } from "../../navigator/AppNavigator";
 import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
-import { createPost } from "../../api/post/post";
+import { createPost, editImages } from "../../api/post/post";
 import { theme } from "../../constants";
 import { Icon } from "@rneui/base";
+import { Image } from "@rneui/themed";
 
 type CreateScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList>,
   NativeStackNavigationProp<AppStackParamList>
 >;
+
+const { width, height } = Dimensions.get("window");
 
 const CreateScreen = () => {
   const navigation = useNavigation<CreateScreenNavigationProp>(); // maybe to modify profile
@@ -50,6 +56,7 @@ const CreateScreen = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [price, setPrice] = useState("");
+  const [images, setImages] = useState<ImagePickerAsset[] | null>(null);
 
   const [loading, setLoading] = useState(false);
 
@@ -69,6 +76,8 @@ const CreateScreen = () => {
       return;
     }
 
+    if(images == null) return;
+
     createPost(
       user.profile_id,
       title,
@@ -81,15 +90,24 @@ const CreateScreen = () => {
     )
       .then((res) => {
         if (res.status === 200) {
-          Toast.show({
-            type: "success",
-            text1: res.data,
-          });
+  
+          // if(images != null){
+          //   editImages(res.data.post._id, images).then((res) => {
 
-          // to clear fields
-          cancelButton();
-          setLoading(false);
-          return;
+          //   })
+          // }
+        
+          
+          // Toast.show({
+          //   type: "success",
+          //   text1: res.data.message,
+          // });
+
+          // // to clear fields
+          // cancelButton();
+          // setLoading(false);
+          // navigation.goBack();
+          // return;
         } else {
           Toast.show({
             type: "error",
@@ -113,6 +131,69 @@ const CreateScreen = () => {
     setLoading(false);
   };
 
+  const imagePressed = () => {};
+
+  const pickImages = async () => {
+    if (!checkForCameraRollPermission()) return;
+
+    let picked = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      // allowsEditing: true,
+      allowsMultipleSelection: true,
+      selectionLimit: 10,
+      aspect: [4, 3],
+      quality: 0.6, // [0-1] % quality
+    });
+
+    // an image has been picked
+    if (!picked.canceled) {
+      setImages(picked.assets);
+      console.log(images);
+
+      // upload it to the server, after the post is created !!!
+    }
+  };
+
+  const checkForCameraRollPermission = async () => {
+    const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert(
+        "Please grant camera roll permissions inside your system's settings"
+      );
+      return false;
+    } else {
+      console.log("Media Permissions are granted");
+      return true;
+    }
+  };
+
+  // const addImageGalery = () => {
+  //   return <FlatList
+  //       horizontal
+  //       pagingEnabled
+  //       scrollEnabled
+  //       showsHorizontalScrollIndicator={true}
+  //       scrollEventThrottle={16}
+  //       snapToAlignment="center"
+  //       data={props.images}
+  //       keyExtractor={(item, index) => `${index}`}
+  //       renderItem={({ item }) => (
+  //         <TouchableOpacity activeOpacity={1} onPress={imagePressed}>
+  //           <Image
+  //             source={{ uri: item }}
+  //             style={{
+  //               width: width,
+  //               height: 240,
+  //               borderRadius: 10,
+  //               resizeMode: "cover",
+  //             }}
+  //             PlaceholderContent={<ActivityIndicator />}
+  //           />
+  //         </TouchableOpacity>
+  //       )}
+  //     />
+  // }
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -120,23 +201,27 @@ const CreateScreen = () => {
     >
       <SafeAreaView style={[styles.container]}>
         <ScrollView>
-          
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <Block padding={[theme.sizes.padding, theme.sizes.padding, theme.sizes.padding/2]}>
-
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "flex-start",
-              }}
+            <Block
+              padding={[
+                theme.sizes.padding,
+                theme.sizes.padding,
+                theme.sizes.padding / 2,
+              ]}
             >
-              <Icon
-                name="closecircle"
-                type="antdesign"
-                onPress={() => navigation.goBack()}
-              />
-            </View>
-              
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <Icon
+                  name="closecircle"
+                  type="antdesign"
+                  onPress={() => navigation.goBack()}
+                />
+              </View>
+
               <View style={{ paddingTop: 30 }}>
                 <Text center h1 bold>
                   Create a Post
@@ -182,6 +267,12 @@ const CreateScreen = () => {
                   style={[styles.input]}
                   onChangeText={(text: string) => setPrice(text)}
                 />
+
+                <Button onPress={pickImages}>
+                  <Text bold white center>
+                    Add Images
+                  </Text>
+                </Button>
 
                 <Button shadow onPress={cancelButton}>
                   {loading ? (

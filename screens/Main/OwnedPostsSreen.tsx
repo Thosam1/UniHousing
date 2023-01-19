@@ -4,41 +4,23 @@ import {
   useNavigation,
 } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import * as ImagePicker from "expo-image-picker";
 import {
   View,
-  TextInput,
   SafeAreaView,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
-  ScrollView,
-  Modal,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
 } from "react-native";
-import { Button, Icon, Image } from "@rneui/themed";
-import Toast from "react-native-toast-message";
+import { Icon, Image } from "@rneui/themed";
 
-import { useTailwind } from "tailwind-rn/dist";
-import { useAppDispatch, useAppSelector } from "../../features/hooks";
-import { editProfile, getOwnedPosts } from "../../api/user/user";
-import { selectUser, setUser } from "../../features/auth/authSlice";
-import { validateRegister } from "../../utils/client_side_validation/auth_validation";
-import { Post, PostPreview, PrivateProfile } from "../../api/typesAPI";
+import { useAppSelector } from "../../features/hooks";
+import { getOwnedPosts } from "../../api/user/user";
+import { selectUser } from "../../features/auth/authSlice";
+import { PostPreview } from "../../api/typesAPI";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { TabStackParamList } from "../../navigator/TabNavigator";
 
 import { AppStackParamList } from "../../navigator/AppNavigator";
-import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
-import { createPost } from "../../api/post/post";
-import { Block, PostCard, Text } from "../../components";
+import { Text } from "../../components";
 import { theme } from "../../constants";
-import { dummy_post_preview_gallery } from "../../data/dummy_data";
 import PostPreviewGallery from "../../components/PostPreviewGallery";
 
 type OwnedPostsNavigationProp = CompositeNavigationProp<
@@ -49,9 +31,7 @@ type OwnedPostsNavigationProp = CompositeNavigationProp<
 const OwnedPostsSreen = () => {
   const navigation = useNavigation<OwnedPostsNavigationProp>(); // maybe to modify profile
 
-  const [ownedPosts, setOwnedPosts] = useState<PostPreview[]>(
-    dummy_post_preview_gallery
-  ); // todo remove
+  const [ownedPosts, setOwnedPosts] = useState<PostPreview[]>();
   const isFocused = useIsFocused();
 
   let user = useAppSelector(selectUser);
@@ -98,11 +78,11 @@ const OwnedPostsSreen = () => {
           type="antdesign"
           onPress={() => navigation.goBack()}
         />
-        <Text h3 semibold style={{ paddingLeft: 95}}>
+        <Text h3 semibold style={{ paddingLeft: 95 }}>
           Owned Posts
         </Text>
       </View>
-      <PostPreviewGallery posts={ownedPosts} />
+      {ownedPosts && <PostPreviewGallery posts={ownedPosts} />}
     </SafeAreaView>
   );
 };

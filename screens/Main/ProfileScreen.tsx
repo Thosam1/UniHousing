@@ -34,6 +34,7 @@ import { TabStackParamList } from "../../navigator/TabNavigator";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useIsFocused } from "@react-navigation/native";
 import { AppStackParamList } from "../../navigator/AppNavigator";
+import { BASE } from "../../api/RequestManager";
 
 type ProfileScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList, "Profile">,
@@ -57,7 +58,7 @@ const ProfileScreen = () => {
           // putting what we got in the global state in RTK
           const user: PrivateProfile = {
             profile_id: res.data._id,
-            avatar: res.data.avatar,
+            avatar: BASE + res.data.avatar,
             first_name: res.data.firstName as string,
             last_name: res.data.lastName as string,
             email: res.data.email as string,
@@ -65,6 +66,8 @@ const ProfileScreen = () => {
             bio: res.data.bio as string,
           };
           dispatch(setUser({ user }));
+
+          console.log(user.avatar)
         } else {
           console.log("NOT an OK response, couldn't get the user data");
         }
@@ -105,7 +108,7 @@ const ProfileScreen = () => {
 
           <Block middle padding={[theme.sizes.padding, 0]}>
             
-          <Avatar size={170} rounded source={(user.avatar === "" ? require("../../assets/images/anonymous-avatar.jpg") : { uri: user.avatar })} />
+          <Avatar size={200} rounded source={(user.avatar === "" ? require("../../assets/images/anonymous-avatar.jpg") : { uri: user.avatar })} />
 
           <Text h1 bold style={{ marginTop: theme.sizes.base }}>
             {user.first_name} {user.last_name}

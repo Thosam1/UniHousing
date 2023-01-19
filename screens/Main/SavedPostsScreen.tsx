@@ -38,7 +38,6 @@ import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
 import { createPost } from "../../api/post/post";
 import { Block, PostCard, Text } from "../../components";
 import { theme } from "../../constants";
-import { dummy_post_preview_gallery } from "../../data/dummy_data";
 import PostPreviewGallery from "../../components/PostPreviewGallery";
 
 type SavedPostsNavigationProp = CompositeNavigationProp<
@@ -49,9 +48,7 @@ type SavedPostsNavigationProp = CompositeNavigationProp<
 const SavedPostsScreen = () => {
   const navigation = useNavigation<SavedPostsNavigationProp>(); // maybe to modify profile
 
-  const [savedPosts, setSavedPosts] = useState<PostPreview[]>(
-    dummy_post_preview_gallery
-  ); // todo remove
+  const [savedPosts, setSavedPosts] = useState<PostPreview[]>(); 
   const isFocused = useIsFocused();
 
   let user = useAppSelector(selectUser);
@@ -102,7 +99,7 @@ const SavedPostsScreen = () => {
           Saved Posts
         </Text>
       </View>
-      <PostPreviewGallery posts={savedPosts} />
+      {savedPosts && <PostPreviewGallery posts={savedPosts} />}
     </SafeAreaView>
   );
 };

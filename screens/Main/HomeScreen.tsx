@@ -31,7 +31,6 @@ import { useIsFocused } from "@react-navigation/native";
 import { getHomePosts } from "../../api/post/post";
 import { PostPreview } from "../../api/typesAPI";
 import PostPreviewGallery from "../../components/PostPreviewGallery";
-import { dummy_post_preview_gallery } from "../../data/dummy_data";
 
 type HomeScreenNavigationProp = BottomTabNavigationProp<
   TabStackParamList,
@@ -45,9 +44,7 @@ const HomeScreen = () => {
   let user = useAppSelector(selectUser);
 
   const [loading, setLoading] = useState(false);
-  const [displayedPosts, setDisplayedPosts] = useState<PostPreview[]>(
-    dummy_post_preview_gallery
-  );
+  const [displayedPosts, setDisplayedPosts] = useState<PostPreview[]>();
 
   useEffect(() => {
     setLoading(true);
