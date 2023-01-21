@@ -171,7 +171,7 @@ const PostScreen = () => {
       padding={[
         theme.sizes.padding * 1.3,
         theme.sizes.padding,
-        theme.sizes.padding * 2,
+        theme.sizes.padding/2,
       ]}
       space="between"
     >
@@ -263,15 +263,15 @@ const PostScreen = () => {
         </TouchableOpacity>
       </ScrollView>
 
-      <Block middle padding={[theme.sizes.base / 2, 0, 0]}>
+      {/* <Block middle padding={[theme.sizes.base / 2, 0, 0]}> */}
         {owned === true ? (
-          <View>
-            <Button gradient onPress={editButton}>
+          <View style={{ marginTop: 0, paddingTop: 0 }}>
+            <Button gradient onPress={editButton} style={{ marginTop: 0, paddingTop: 0 }}>
               <Text center white>
                 Edit
               </Text>
             </Button>
-            <Button gradient onPress={deleteButton}>
+            <Button gradient onPress={deleteButton} style={{ marginTop: theme.sizes.padding/4 }}>
               <Text center white>
                 Delete
               </Text>
@@ -284,7 +284,7 @@ const PostScreen = () => {
             </Text>
           </Button>
         )}
-      </Block>
+      {/* </Block> */}
       <Toast />
     </Block>
   );
