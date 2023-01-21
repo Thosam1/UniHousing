@@ -24,8 +24,10 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { TabStackParamList } from "../../navigator/TabNavigator";
 
 import { AppStackParamList } from "../../navigator/AppNavigator";
-import { getPost, saveUnsavePost } from "../../api/post/post";
+import { deletePost, getPost, saveUnsavePost } from "../../api/post/post";
 import { BASE } from "../../api/RequestManager";
+import { useAppSelector } from "../../features/hooks";
+import { selectUserID } from "../../features/auth/authSlice";
 
 type PostNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList>,
@@ -54,10 +56,22 @@ const PostScreen = () => {
   const [share_link, setShareLink] = useState("");
   const [saved, setSaved] = useState(false);
 
+  const [owned, setOwned] = useState(false);
+  let userID = useAppSelector(selectUserID);
+
   useEffect(() => {
     setLoading(true);
-    console.log("in the use effect")
-    console.log(props.post_id)
+    console.log("in the use effect");
+    // console.log(props.post_id);
+
+    console.log(userID)
+    console.log(props.owner_id)
+
+    if (userID === props.owner_id) {
+      setOwned(true);
+    } else {
+      setOwned(false);
+    }
 
     // tp get the details
     getPost(props.post_id)
@@ -77,7 +91,7 @@ const PostScreen = () => {
   }, [isFocused]);
 
   const saveButton = () => {
-    console.log("saved button pressed")
+    console.log("saved button pressed");
     // sends request to server
     saveUnsavePost(props.post_id)
       .then((res) => {
@@ -113,7 +127,7 @@ const PostScreen = () => {
         renderItem={({ item }) => (
           // <TouchableOpacity onPress={() => console.log("hey")}>
           <Image
-            source={{ uri: item }}
+            source={{ uri: BASE + item }}
             style={{
               width: width,
               height: 240,
@@ -126,6 +140,30 @@ const PostScreen = () => {
         )}
       />
     );
+  };
+
+  const editButton = () => {
+
+  };
+
+  const deleteButton = () => {
+    console.log("delete button")
+    deletePost(props.post_id).then((res) => {
+      if (res.status === 200) {
+        setSaved(res.data.saved);
+        Toast.show({
+          type: "success",
+          text1: res.data,
+        });
+      } else {
+        Toast.show({
+          type: "error",
+          text1: res.data,
+        });
+      }
+    })
+    .catch((err) => console.log(err))
+    .finally(() => navigation.goBack())
   };
 
   return (
@@ -209,7 +247,15 @@ const PostScreen = () => {
               paddingVertical: 25,
             }}
           >
-            <Avatar size={64} rounded source={(owner_avatar === "" ? require("../../assets/images/anonymous-avatar.jpg") : { uri: owner_avatar })} />
+            <Avatar
+              size={64}
+              rounded
+              source={
+                owner_avatar === ""
+                  ? require("../../assets/images/anonymous-avatar.jpg")
+                  : { uri: owner_avatar }
+              }
+            />
             <Text body bold style={{ marginTop: theme.sizes.base }}>
               {owner_firstName} {owner_lastName}
             </Text>
@@ -217,12 +263,27 @@ const PostScreen = () => {
         </TouchableOpacity>
       </ScrollView>
 
-      <Block middle padding={[theme.sizes.base / 2, 0]}>
-        <Button gradient onPress={() => console.log("YO, I AM INTERESTED")}>
-          <Text center white>
-            I am interested !
-          </Text>
-        </Button>
+      <Block middle padding={[theme.sizes.base / 2, 0, 0]}>
+        {owned === true ? (
+          <View>
+            <Button gradient onPress={editButton}>
+              <Text center white>
+                Edit
+              </Text>
+            </Button>
+            <Button gradient onPress={deleteButton}>
+              <Text center white>
+                Delete
+              </Text>
+            </Button>
+          </View>
+        ) : (
+          <Button gradient onPress={() => console.log("YO, I AM INTERESTED")}>
+            <Text center white>
+              I am interested !
+            </Text>
+          </Button>
+        )}
       </Block>
       <Toast />
     </Block>

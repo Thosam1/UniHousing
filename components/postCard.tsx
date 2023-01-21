@@ -19,6 +19,7 @@ import { TabStackParamList } from "../navigator/TabNavigator";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "../navigator/AppNavigator";
 import { PostPreview } from "../api/typesAPI";
+import { BASE } from "../api/RequestManager";
 
 type PostCardProps = PostPreview;
 
@@ -54,7 +55,7 @@ const PostCard = (props: PostCardProps) => {
         renderItem={({ item }) => (
           <TouchableOpacity activeOpacity={1} onPress={cardPressed}>
             <Image
-              source={{ uri: item }}
+              source={{ uri: BASE + item }}
               style={{
                 width: width,
                 height: 240,

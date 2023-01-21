@@ -30,7 +30,7 @@ export const createPost = (
 
 export const editImages = (post_id: string, images: ImagePickerAsset[]) => {
 
-  let lastResponse = null;
+  let lastResponse // : FileSystem.FileSystemUploadResult;
   if(images == null) return;
 
   try {
@@ -49,7 +49,6 @@ export const editImages = (post_id: string, images: ImagePickerAsset[]) => {
 }
 
 export const editPost = (input: {
-  user: string;
   title: string;
   city: string;
   country: string;
@@ -57,17 +56,13 @@ export const editPost = (input: {
   endDate: string;
   description: string;
   price: string;
-}) => {
-  return axiosClient.post("post/edit", input, { withCredentials: true });
+}, post_id: string) => {
+  return axiosClient.post(`post/edit/${post_id}`, input, { withCredentials: true });
 };
 
-export const deletePost = (user_id: string, post_id: string) => {
+export const deletePost = (post_id: string) => {
   // from security perspective would be good to add a second factor authentification like a code to avoid attacks
-  const body = JSON.stringify({
-    user_id,
-    post_id,
-  });
-  return axiosClient.post("post/delete", body, { withCredentials: true });
+  return axiosClient.delete(`post/delete/${post_id}`, { withCredentials: true });
 };
 
 export const getPost = (post_id: string) => {
@@ -114,7 +109,7 @@ export const getHomePosts = (
   const body = JSON.stringify({
     user_id
   });
-  return axiosClient.post("post/home", body, { withCredentials: true });
+  return axiosClient.get("post/home", { withCredentials: true });
 };
 
 

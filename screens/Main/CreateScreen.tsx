@@ -76,7 +76,7 @@ const CreateScreen = () => {
       return;
     }
 
-    if(images == null) return;
+    // if(images == null) return;
 
     createPost(
       user.profile_id,
@@ -90,24 +90,36 @@ const CreateScreen = () => {
     )
       .then((res) => {
         if (res.status === 200) {
-  
-          // if(images != null){
-          //   editImages(res.data.post._id, images).then((res) => {
 
-          //   })
-          // }
+          console.log(" --------- IMAGES ---------------- \n")
+          console.log(images)
+          console.log(" --------- IMAGES ---------------- \n")
+
+  
+          if(images != null){
+
+            console.log(" --------- post_id ---------------- \n")
+            console.log(res.data.post_id);
+            console.log(" --------- post_id ---------------- \n")
+
+
+            editImages(res.data.post_id, images);
+            // editImages(res.data.post._id, images).then((res) => {
+
+            // })
+          }
         
           
-          // Toast.show({
-          //   type: "success",
-          //   text1: res.data.message,
-          // });
+          Toast.show({
+            type: "success",
+            text1: res.data.message,
+          });
 
-          // // to clear fields
-          // cancelButton();
-          // setLoading(false);
-          // navigation.goBack();
-          // return;
+          // to clear fields
+          cancelButton();
+          setLoading(false);
+          navigation.goBack();
+          return;
         } else {
           Toast.show({
             type: "error",
@@ -268,7 +280,7 @@ const CreateScreen = () => {
                   onChangeText={(text: string) => setPrice(text)}
                 />
 
-                <Button onPress={pickImages}>
+                <Button gradient onPress={pickImages}>
                   <Text bold white center>
                     Add Images
                   </Text>

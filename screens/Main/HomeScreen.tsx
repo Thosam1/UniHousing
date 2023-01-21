@@ -30,6 +30,8 @@ import { Icon } from "@rneui/themed";
 import { useIsFocused } from "@react-navigation/native";
 import { getHomePosts } from "../../api/post/post";
 import { PostPreview } from "../../api/typesAPI";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
+
 import PostPreviewGallery from "../../components/PostPreviewGallery";
 
 type HomeScreenNavigationProp = BottomTabNavigationProp<
@@ -152,7 +154,8 @@ const HomeScreen = () => {
           </Text>
           {renderSearch()}
         </Block>
-        { displayedPosts && <PostPreviewGallery posts={displayedPosts} /> }
+        {displayedPosts && <PostPreviewGallery posts={displayedPosts} />}
+        <Toast />
       </Block>
     </TouchableWithoutFeedback>
   );
