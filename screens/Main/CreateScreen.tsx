@@ -90,26 +90,9 @@ const CreateScreen = () => {
     )
       .then((res) => {
         if (res.status === 200) {
-
-          console.log(" --------- IMAGES ---------------- \n")
-          console.log(images)
-          console.log(" --------- IMAGES ---------------- \n")
-
-  
           if(images != null){
-
-            console.log(" --------- post_id ---------------- \n")
-            console.log(res.data.post_id);
-            console.log(" --------- post_id ---------------- \n")
-
-
             editImages(res.data.post_id, images);
-            // editImages(res.data.post._id, images).then((res) => {
-
-            // })
-          }
-        
-          
+          } 
           Toast.show({
             type: "success",
             text1: res.data.message,
@@ -160,8 +143,6 @@ const CreateScreen = () => {
     // an image has been picked
     if (!picked.canceled) {
       setImages(picked.assets);
-      console.log(images);
-
       // upload it to the server, after the post is created !!!
     }
   };
@@ -179,32 +160,32 @@ const CreateScreen = () => {
     }
   };
 
-  // const addImageGalery = () => {
-  //   return <FlatList
-  //       horizontal
-  //       pagingEnabled
-  //       scrollEnabled
-  //       showsHorizontalScrollIndicator={true}
-  //       scrollEventThrottle={16}
-  //       snapToAlignment="center"
-  //       data={props.images}
-  //       keyExtractor={(item, index) => `${index}`}
-  //       renderItem={({ item }) => (
-  //         <TouchableOpacity activeOpacity={1} onPress={imagePressed}>
-  //           <Image
-  //             source={{ uri: item }}
-  //             style={{
-  //               width: width,
-  //               height: 240,
-  //               borderRadius: 10,
-  //               resizeMode: "cover",
-  //             }}
-  //             PlaceholderContent={<ActivityIndicator />}
-  //           />
-  //         </TouchableOpacity>
-  //       )}
-  //     />
-  // }
+  const addImageGalery = (width: number) => {
+    return <FlatList
+        horizontal
+        pagingEnabled
+        scrollEnabled
+        showsHorizontalScrollIndicator={true}
+        scrollEventThrottle={16}
+        snapToAlignment="center"
+        data={images}
+        keyExtractor={(item, index) => `${index}`}
+        renderItem={({ item }) => (
+          <TouchableOpacity activeOpacity={1} onPress={imagePressed}>
+            <Image
+              source={{ uri: item.uri }}
+              style={{
+                width: width,
+                height: 240,
+                borderRadius: 10,
+                resizeMode: "cover",
+              }}
+              PlaceholderContent={<ActivityIndicator />}
+            />
+          </TouchableOpacity>
+        )}
+      />
+  }
 
   return (
     <KeyboardAvoidingView
@@ -280,13 +261,22 @@ const CreateScreen = () => {
                   onChangeText={(text: string) => setPrice(text)}
                 />
 
-                <Button gradient onPress={pickImages}>
-                  <Text bold white center>
-                    Add Images
+                {images && addImageGalery(width - theme.sizes.padding * 2)}
+
+                {images ? 
+                <Button shadow onPress={pickImages}>
+                  <Text semibold center>
+                    Reselect Images
                   </Text>
                 </Button>
+                :
+                <Button shadow onPress={pickImages}>
+                  <Text semibold center>
+                    Add Images
+                  </Text>
+                </Button>}
 
-                <Button shadow onPress={cancelButton}>
+                {/* <Button shadow onPress={cancelButton}>
                   {loading ? (
                     <ActivityIndicator size="small" color="white" />
                   ) : (
@@ -294,7 +284,7 @@ const CreateScreen = () => {
                       Cancel
                     </Text>
                   )}
-                </Button>
+                </Button> */}
 
                 <Button
                   gradient

@@ -266,11 +266,11 @@ const PostScreen = () => {
       {/* <Block middle padding={[theme.sizes.base / 2, 0, 0]}> */}
         {owned === true ? (
           <View style={{ marginTop: 0, paddingTop: 0 }}>
-            <Button gradient onPress={editButton} style={{ marginTop: 0, paddingTop: 0 }}>
+            {/* <Button gradient onPress={editButton} style={{ marginTop: 0, paddingTop: 0 }}>
               <Text center white>
                 Edit
               </Text>
-            </Button>
+            </Button> */}
             <Button gradient onPress={deleteButton} style={{ marginTop: theme.sizes.padding/4 }}>
               <Text center white>
                 Delete
