@@ -89,7 +89,7 @@ const EmailVerificationScreen = () => {
     Keyboard.dismiss();
     resetAllFields();
     navigation.navigate("SignUp");
-  }; 
+  };
 
   return (
     <KeyboardAvoidingView
@@ -105,11 +105,13 @@ const EmailVerificationScreen = () => {
                   Register : Verification
                 </Text>
               </View>
-              <Image
-                source={require("../../assets/images/login_image.png")}
-                style={[{ height: 300, width: 300 }]}
-                PlaceholderContent={<ActivityIndicator />}
-              />
+              <Block center>
+                <Image
+                  source={require("../../assets/images/login_image.png")}
+                  style={[{ height: 300, width: 300 }]}
+                  PlaceholderContent={<ActivityIndicator />}
+                />
+              </Block>
 
               <Block middle>
                 <Text gray caption center>

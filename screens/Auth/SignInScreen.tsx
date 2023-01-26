@@ -10,7 +10,6 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import Checkbox from "expo-checkbox";
 import * as SecureStore from "expo-secure-store";
 import { Button, Block, Input, Text } from "../../components";
 import { theme } from "../../constants";
@@ -162,12 +161,13 @@ const SignInScreen = () => {
                   Login
                 </Text>
               </View>
-
-              <Image
-                source={require("../../assets/images/login_image.png")}
-                style={[{ height: 280, width: 280 }]}
-                PlaceholderContent={<ActivityIndicator />}
-              />
+              <Block center>
+                <Image
+                  source={require("../../assets/images/login_image.png")}
+                  style={[{ height: 280, width: 280 }]}
+                  PlaceholderContent={<ActivityIndicator />}
+                />
+              </Block>
 
               <Block middle>
                 <Input

@@ -21,16 +21,8 @@ const RootStack = createNativeStackNavigator();
 
 const RootNavigator = () => {
   // The `state` arg is correctly typed as `RootState` already
-  const blocker = true;
+
   let authStatus = useAppSelector(selectAuthStatus); // null;
-  
-  // useEffect(() => {
-  //   retrieveToken();
-  // })
-  
-  // async function retrieveToken () {
-  //   authStatus = await SecureStore.getItemAsync("accessToken"); 
-  // } 
 
   return (
     <RootStack.Navigator

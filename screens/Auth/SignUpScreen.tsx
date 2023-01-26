@@ -25,15 +25,12 @@ import Toast from "react-native-toast-message";
 
 import { register } from "../../api/auth/auth";
 
-import { useAppDispatch } from "../../features/hooks";
-
 type IntroductionSignUpScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
   "SignUp"
 >;
 
 const SignUpScreen = () => {
-  const tw = useTailwind();
   const navigation = useNavigation<IntroductionSignUpScreenNavigationProp>();
 
   const [firstName, setFirstName] = useState("");
@@ -129,12 +126,13 @@ const SignUpScreen = () => {
                   Sign Up
                 </Text>
               </View>
-
-              <Image
-                source={require("../../assets/images/register_image.png")}
-                style={[{ height: 300, width: 300 }]}
-                PlaceholderContent={<ActivityIndicator />}
-              />
+              <Block center>
+                <Image
+                  source={require("../../assets/images/register_image.png")}
+                  style={[{ height: 300, width: 300 }]}
+                  PlaceholderContent={<ActivityIndicator />}
+                />
+              </Block>
 
               <Block middle>
                 <Input

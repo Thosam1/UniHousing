@@ -108,11 +108,13 @@ const ResetPasswordScreen = () => {
                 </Text>
               </View>
 
-              <Image
-                source={require("../../assets/images/login_image.png")}
-                style={[{ height: 300, width: 300 }]}
-                PlaceholderContent={<ActivityIndicator />}
-              />
+              <Block center>
+                <Image
+                  source={require("../../assets/images/login_image.png")}
+                  style={[{ height: 300, width: 300 }]}
+                  PlaceholderContent={<ActivityIndicator />}
+                />
+              </Block>
 
               <Block middle>
                 <Text gray caption center>
@@ -130,12 +132,12 @@ const ResetPasswordScreen = () => {
                   onChangeText={(text: string) => setVerificationCode(text)}
                 />
                 <Input
-                  label="User Id"
+                  label="Password"
                   style={[styles.input]}
                   onChangeText={(text: string) => setPassword(text)}
                 />
                 <Input
-                  label="Verification Code"
+                  label="Confirm Password"
                   style={[styles.input]}
                   onChangeText={(text: string) => setConfirmPassword(text)}
                 />

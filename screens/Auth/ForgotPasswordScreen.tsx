@@ -34,7 +34,6 @@ type forgotPasswordObject = {
 };
 
 const ForgotPasswordScreen = () => {
-  const tw = useTailwind();
   const navigation = useNavigation<SignInScreenNavigationProp>();
 
   const [email, setEmail] = useState("");
@@ -110,11 +109,13 @@ const ForgotPasswordScreen = () => {
                   Forgot Password
                 </Text>
               </View>
-              <Image
-                source={require("../../assets/images/login_image.png")}
-                style={[{ height: 300, width: 300 }]}
-                PlaceholderContent={<ActivityIndicator />}
-              />
+              <Block center>
+                <Image
+                  source={require("../../assets/images/login_image.png")}
+                  style={[{ height: 300, width: 300 }]}
+                  PlaceholderContent={<ActivityIndicator />}
+                />
+              </Block>
 
               <Block middle>
                 <Text gray caption center>
