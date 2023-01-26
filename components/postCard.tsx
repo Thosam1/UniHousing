@@ -9,7 +9,6 @@ import { Image } from "@rneui/themed";
 import { theme } from "../constants";
 import React from "react";
 import { Block, Button, Text } from ".";
-import { Toast } from "react-native-toast-message/lib/src/Toast";
 import {
   CompositeNavigationProp,
   useNavigation,
@@ -116,7 +115,6 @@ const PostCard = (props: PostCardProps) => {
           {props.price} CHF/month
         </Text>
       </TouchableOpacity>
-      <Toast />
     </View>
   );
 };
