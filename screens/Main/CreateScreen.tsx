@@ -244,16 +244,19 @@ const CreateScreen = () => {
                   label="Country"
                   style={[styles.input]}
                   onChangeText={(text: string) => setCountry(text)}
+                  defaultValue="Switzerland"
                 />
                 <Input
                   label="Start Date"
                   style={[styles.input]}
                   onChangeText={(text: string) => setStartDate(text)}
+                  defaultValue="dd.mm.yy"
                 />
                 <Input
                   label="End Date"
                   style={[styles.input]}
                   onChangeText={(text: string) => setEndDate(text)}
+                  defaultValue="dd.mm.yy"
                 />
                 <Input
                   label="Price per month"
