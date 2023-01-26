@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "unihousingapp",
     "name": "UniHousing",
     "slug": "UniHousing",
     "version": "1.0.0",
