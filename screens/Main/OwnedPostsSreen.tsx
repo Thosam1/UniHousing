@@ -8,7 +8,7 @@ import {
   View,
   SafeAreaView,
 } from "react-native";
-import { Icon, Image } from "@rneui/themed";
+import { Icon } from "@rneui/themed";
 
 import { useAppSelector } from "../../features/hooks";
 import { getOwnedPosts } from "../../api/user/user";

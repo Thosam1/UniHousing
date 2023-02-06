@@ -3,6 +3,7 @@ import React from "react";
 import { PostPreview } from "../api/typesAPI";
 import { theme } from "../constants";
 import CreateScreen from "../screens/Main/CreateScreen";
+import EditPostScreen from "../screens/Main/EditPostScreen";
 import EditProfileScreen from "../screens/Main/EditProfileScreen";
 import OwnedPostsSreen from "../screens/Main/OwnedPostsSreen";
 import PostScreen from "../screens/Main/PostScreen";
@@ -16,6 +17,7 @@ export type AppStackParamList = {
   // will check if the names param are correct
   Main: undefined;
   Create: undefined;
+  EditPost: { post_id: string };
   EditProfile: undefined;
   OwnedPosts: undefined;
   SavedPosts: undefined;
@@ -79,10 +81,19 @@ const AppNavigator = () => {
             name="Create"
             component={CreateScreen}
             options={{
-              title: "Create",
+              title: "Create Post",
               headerShown: false,
             }}
           />
+
+          {/* <AppStack.Screen
+            name="EditPost"
+            component={EditPostScreen}
+            options={{
+              title: "Edit Post",
+              headerShown: false,
+            }}
+          /> */}
 
           <AppStack.Screen
             name="PublicProfile"

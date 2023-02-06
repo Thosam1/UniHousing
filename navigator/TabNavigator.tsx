@@ -11,7 +11,6 @@ import ProfileScreen from "../screens/Main/ProfileScreen";
 
 // icons
 import { Icon } from "@rneui/themed";
-import EditProfileScreen from "../screens/Main/EditProfileScreen";
 import CreateScreen from "../screens/Main/CreateScreen";
 import { theme } from "../constants";
 

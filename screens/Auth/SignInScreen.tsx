@@ -172,30 +172,16 @@ const SignInScreen = () => {
               <Block middle>
                 <Input
                   label="Email"
-                  // error={hasErrors("email")}
-                  style={[styles.input]} // style={[styles.input, hasErrors("email")]}
-                  // defaultValue={this.state.email}
+                  style={[styles.input]}
                   onChangeText={(text: string) => setEmail(text)}
                 />
                 <Input
                   secure
                   label="Password"
-                  // error={hasErrors("password")}
                   style={[styles.input]}
-                  // defaultValue={this.state.password}
                   onChangeText={(text: string) => setPassword(text)}
                 />
 
-                {/* <View style={tw("flex flex-row py-3")}>
-                <Checkbox
-                  value={rememberMe}
-                  onValueChange={setRememberMe}
-                  disabled={loading}
-                />
-                <Text style={{ paddingLeft: 10, fontSize: 14 }}>
-                  Remember Me
-                </Text>
-              </View> */}
                 <Button
                   disabled={email.length === 0 || password.length === 0}
                   gradient
@@ -241,7 +227,6 @@ const SignInScreen = () => {
               </Block>
               <Toast />
             </Block>
-            {/* </View> */}
           </TouchableWithoutFeedback>
         </ScrollView>
       </SafeAreaView>

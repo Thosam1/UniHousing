@@ -32,10 +32,6 @@ const IntroductionScreen = () => {
 
   const illustrations = [
     { id: 1, source: require("../assets/images/introduction_image.png") },
-    // { id: 2, source: require("../assets/images/email_verification_image.png") }, // todo erase that one later
-    // { id: 1, source: require("../assets/images/illustration_1.png") },
-    // { id: 2, source: require("../assets/images/illustration_2.png") },
-    // { id: 3, source: require("../assets/images/illustration_3.png") }
   ];
 
   const switchToSignIn = () => {

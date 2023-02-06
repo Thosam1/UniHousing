@@ -1,14 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import {
   View,
-  TextInput,
   SafeAreaView,
-  KeyboardAvoidingView,
-  Platform,
-  Keyboard,
-  TouchableWithoutFeedback,
-  ActivityIndicator,
   StyleSheet,
   ScrollView,
 } from "react-native";
@@ -24,7 +18,6 @@ import { useAppDispatch, useAppSelector } from "../../features/hooks";
 import { selectUser, setUser } from "../../features/auth/authSlice";
 import {
   BottomTabNavigationProp,
-  BottomTabScreenProps,
 } from "@react-navigation/bottom-tabs";
 import {
   CompositeNavigationProp,
@@ -42,7 +35,6 @@ type ProfileScreenNavigationProp = CompositeNavigationProp<
 >;
 
 const ProfileScreen = () => {
-  const tw = useTailwind();
   const navigation = useNavigation<ProfileScreenNavigationProp>(); // maybe to modify profile
   const dispatch = useAppDispatch();
   const isFocused = useIsFocused();
@@ -97,14 +89,6 @@ const ProfileScreen = () => {
               Profile
             </Text>
           </View>
-
-          {/* <View style={[styles.container, tw("flex items-center")]}>
-            <Image
-              // source={ ( user.avatar === "" ? require("../../assets/images/anonymous-avatar.jpg") : require(`${user.avatar}`)) }
-              source={require("../../assets/images/anonymous-avatar.jpg")}
-              style={{ width: 200, height: 200 }}
-            />
-          </View> */}
 
           <Block middle padding={[theme.sizes.padding, 0]}>
             

@@ -1,12 +1,14 @@
 import {
   CompositeNavigationProp,
+  RouteProp,
+  useIsFocused,
   useNavigation,
+  useRoute,
 } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import {
   View,
-  TextInput,
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
@@ -21,28 +23,37 @@ import {
 } from "react-native";
 import { Button, Block, Input, Text } from "../../components";
 import Toast from "react-native-toast-message";
+
 import { useAppSelector } from "../../features/hooks";
 import { selectUser } from "../../features/auth/authSlice";
+
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { TabStackParamList } from "../../navigator/TabNavigator";
 
 import { AppStackParamList } from "../../navigator/AppNavigator";
 import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
-import { createPost, editImages } from "../../api/post/post";
+import { createPost, editImages, getPost } from "../../api/post/post";
 import { theme } from "../../constants";
 import { Icon } from "@rneui/base";
 import { Image } from "@rneui/themed";
 
-type CreateScreenNavigationProp = CompositeNavigationProp<
+type EditPostScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList>,
   NativeStackNavigationProp<AppStackParamList>
 >;
+type EditPostScreenRouteProp = RouteProp<AppStackParamList, "EditPost">;
 
 const { width, height } = Dimensions.get("window");
 
-const CreateScreen = () => {
-  const navigation = useNavigation<CreateScreenNavigationProp>(); // maybe to modify profile
+const EditPostScreen = () => {
+  const navigation = useNavigation<EditPostScreenNavigationProp>(); // maybe to modify profile
+
+  const {
+    params: { post_id },
+  } = useRoute<EditPostScreenRouteProp>();
+
+  const isFocused = useIsFocused();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -56,6 +67,26 @@ const CreateScreen = () => {
   const [loading, setLoading] = useState(false);
 
   let user = useAppSelector(selectUser);
+
+  useEffect(() => {
+    setLoading(true);
+
+    // tp get the details
+    getPost(post_id)
+      .then((res) => {
+        if (res.status === 200) {
+          setTitle(res.data.title);
+          setDescription(res.data.description);
+          setCity(res.data.city);
+          setCountry(res.data.country);
+          setStartDate(res.data.startDate);
+          setEndDate(res.data.endDate);
+          setPrice(res.data.price);
+        }
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
+  }, [isFocused]);
 
   const createButton = () => {
     setLoading(true);
@@ -71,6 +102,8 @@ const CreateScreen = () => {
       return;
     }
 
+    // if(images == null) return;
+
     createPost(
       user.profile_id,
       title,
@@ -83,9 +116,9 @@ const CreateScreen = () => {
     )
       .then((res) => {
         if (res.status === 200) {
-          if(images != null){
+          if (images != null) {
             editImages(res.data.post_id, images);
-          } 
+          }
           Toast.show({
             type: "success",
             text1: res.data.message,
@@ -154,7 +187,8 @@ const CreateScreen = () => {
   };
 
   const addImageGalery = (width: number) => {
-    return <FlatList
+    return (
+      <FlatList
         horizontal
         pagingEnabled
         scrollEnabled
@@ -178,7 +212,8 @@ const CreateScreen = () => {
           </TouchableOpacity>
         )}
       />
-  }
+    );
+  };
 
   return (
     <KeyboardAvoidingView
@@ -210,7 +245,7 @@ const CreateScreen = () => {
 
               <View style={{ paddingTop: 30 }}>
                 <Text center h1 bold>
-                  Create a Post
+                  Edit Post
                 </Text>
               </View>
 
@@ -259,18 +294,19 @@ const CreateScreen = () => {
 
                 {images && addImageGalery(width - theme.sizes.padding * 2)}
 
-                {images ? 
-                <Button shadow onPress={pickImages}>
-                  <Text semibold center>
-                    Reselect Images
-                  </Text>
-                </Button>
-                :
-                <Button shadow onPress={pickImages}>
-                  <Text semibold center>
-                    Add Images
-                  </Text>
-                </Button>}
+                {images ? (
+                  <Button shadow onPress={pickImages}>
+                    <Text semibold center>
+                      Reselect Images
+                    </Text>
+                  </Button>
+                ) : (
+                  <Button shadow onPress={pickImages}>
+                    <Text semibold center>
+                      Add Images
+                    </Text>
+                  </Button>
+                )}
 
                 <Button
                   gradient
@@ -303,7 +339,7 @@ const CreateScreen = () => {
   );
 };
 
-export default CreateScreen;
+export default EditPostScreen;
 
 const styles = StyleSheet.create({
   container: {

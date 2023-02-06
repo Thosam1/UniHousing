@@ -1,19 +1,14 @@
 /* Home Screen : the screen we show if the user is already signed in. */
 import {
   StyleSheet,
-  View,
-  Button,
   Animated,
   Dimensions,
-  SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
-  ScrollView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import {
   BottomTabNavigationProp,
-  BottomTabScreenProps,
 } from "@react-navigation/bottom-tabs";
 import { TabStackParamList } from "../../navigator/TabNavigator";
 
@@ -23,9 +18,8 @@ import {
   selectUser,
   setUserState,
 } from "../../features/auth/authSlice";
-import { getPrivateProfile } from "../../api/user/user";
 import { theme } from "../../constants";
-import { Block, Input, PostCard, Text } from "../../components";
+import { Block, Input, Text } from "../../components";
 import { Icon } from "@rneui/themed";
 import { useIsFocused } from "@react-navigation/native";
 import { getHomePosts } from "../../api/post/post";

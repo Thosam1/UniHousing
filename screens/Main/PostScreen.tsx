@@ -61,11 +61,6 @@ const PostScreen = () => {
 
   useEffect(() => {
     setLoading(true);
-    console.log("in the use effect");
-    // console.log(props.post_id);
-
-    console.log(userID)
-    console.log(props.owner_id)
 
     if (userID === props.owner_id) {
       setOwned(true);
@@ -125,7 +120,6 @@ const PostScreen = () => {
         data={props.images}
         keyExtractor={(item, index) => `${index}`}
         renderItem={({ item }) => (
-          // <TouchableOpacity onPress={() => console.log("hey")}>
           <Image
             source={{ uri: BASE + item }}
             style={{
@@ -136,14 +130,9 @@ const PostScreen = () => {
             }}
             PlaceholderContent={<ActivityIndicator />}
           />
-          // </TouchableOpacity>
         )}
       />
     );
-  };
-
-  const editButton = () => {
-
   };
 
   const deleteButton = () => {
@@ -263,15 +252,14 @@ const PostScreen = () => {
         </TouchableOpacity>
       </ScrollView>
 
-      {/* <Block middle padding={[theme.sizes.base / 2, 0, 0]}> */}
         {owned === true ? (
           <View style={{ marginTop: 0, paddingTop: 0 }}>
-            {/* <Button gradient onPress={editButton} style={{ marginTop: 0, paddingTop: 0 }}>
+            {/* <Button gradient onPress={navigation.navigate("EditPost", { post_id: props.post_id })} style={{ marginTop: 0, paddingTop: 0 }}>
               <Text center white>
                 Edit
               </Text>
             </Button> */}
-            <Button gradient onPress={deleteButton} style={{ marginTop: theme.sizes.padding/4 }}>
+            <Button onPress={deleteButton} style={{ marginTop: theme.sizes.padding/4, backgroundColor: theme.colors.negative }}>
               <Text center white>
                 Delete
               </Text>
@@ -284,7 +272,6 @@ const PostScreen = () => {
             </Text>
           </Button>
         )}
-      {/* </Block> */}
       <Toast />
     </Block>
   );

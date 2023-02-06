@@ -43,7 +43,6 @@ type EditProfileScreenNavigationProp = CompositeNavigationProp<
 >;
 
 const EditProfileScreen = () => {
-  const tw = useTailwind();
   const navigation = useNavigation<EditProfileScreenNavigationProp>(); // maybe to modify profile
   const dispatch = useAppDispatch();
 
@@ -210,7 +209,6 @@ const EditProfileScreen = () => {
                     style={styles.uploadBtn}
                   >
                     <Text>{avatar ? "Edit" : "Upload"} Image</Text>
-                    {/* <AntDesign name="camera" size={20} color="black" /> */}
                   </TouchableOpacity>
                 </View>
               </View>

@@ -6,42 +6,19 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import * as ImagePicker from "expo-image-picker";
 import {
   View,
-  TextInput,
-  SafeAreaView,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
   ScrollView,
-  Modal,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
   Dimensions,
-  FlatList,
 } from "react-native";
-import { Avatar, Divider, Icon, Image } from "@rneui/themed";
-import Toast from "react-native-toast-message";
+import { Avatar, Icon} from "@rneui/themed";
 import { Block, Button, Text } from "../../components";
 import { theme } from "../../constants";
 
-import { useTailwind } from "tailwind-rn/dist";
-import { useAppDispatch, useAppSelector } from "../../features/hooks";
 import {
-  editProfile,
-  getOwnedPosts,
   getPublicProfile,
 } from "../../api/user/user";
-import { selectUser, setUser } from "../../features/auth/authSlice";
-import { validateRegister } from "../../utils/client_side_validation/auth_validation";
 import {
-  Post,
-  PostPreview,
-  PrivateProfile,
   PublicProfile,
 } from "../../api/typesAPI";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
@@ -49,8 +26,6 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { TabStackParamList } from "../../navigator/TabNavigator";
 
 import { AppStackParamList } from "../../navigator/AppNavigator";
-import { ImagePickerAsset } from "expo-image-picker/build/ImagePicker.types";
-import { createPost, saveUnsavePost } from "../../api/post/post";
 import { BASE } from "../../api/RequestManager";
 
 type PublicProfileNavigationProp = CompositeNavigationProp<
@@ -77,15 +52,6 @@ const PublicProfileScreen = () => {
   const [loading, setLoading] = useState(false);
 
   const [owner, setOwner] = useState<PublicProfile>();
-  //   {
-  //   profile_id: user_id,
-  //   avatar: "https://www.fgdc.gov/img/slider/slider-bg-network.jpg/image",
-  //   first_name: "Thösam",
-  //   last_name: "Norlha-Tsang",
-  //   status: "Student at EPFL",
-  //   bio: "Heyo this is my bio, asdfhasol qoph foaisdpéglkqrjtg oiasdfj ,ewt lksdnfkl jqwetq wef dm gkjqer tasmd fjsdfjkw erj owerflskdfjlwe sdf.",
-  //   owned_posts: ["656s2df6sdf89w5ef65sdf", "sdf6562we3f3sd0v3se6t"],
-  // }
 
   useEffect(() => {
     setLoading(true);
